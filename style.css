@@ -275,18 +275,17 @@ code {
 }
 
 .theme-toggle {
-  display: inline-flex;
+  display: inline-grid;
   align-items: center;
-  gap: 8px;
-  min-height: 42px;
-  padding: 8px 12px;
-  color: var(--text);
-  font-size: 0.88rem;
-  font-weight: 800;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  color: var(--accent-dark);
   cursor: pointer;
   background: rgba(255, 255, 255, 0.72);
   border: 1px solid var(--line);
-  border-radius: 999px;
+  border-radius: var(--radius);
   transition:
     color 180ms ease,
     background 180ms ease,
@@ -301,17 +300,40 @@ code {
   transform: translateY(-1px);
 }
 
-.theme-toggle-indicator {
-  display: inline-block;
-  width: 15px;
-  height: 15px;
-  background: var(--accent-gradient);
-  border-radius: 999px;
-  box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.32);
+.theme-icon {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+.theme-icon-moon path {
+  fill: currentColor;
+}
+
+.theme-icon-sun {
+  display: none;
+}
+
+.theme-icon-sun circle,
+.theme-icon-sun path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+:root[data-theme="dark"] .theme-icon-moon {
+  display: none;
+}
+
+:root[data-theme="dark"] .theme-icon-sun {
+  display: block;
 }
 
 :root[data-theme="dark"] .theme-toggle,
 :root[data-theme="dark"] .nav-toggle {
+  color: var(--text);
   background: rgba(255, 255, 255, 0.06);
   border-color: rgba(255, 255, 255, 0.1);
 }
@@ -1597,23 +1619,6 @@ h3 {
     justify-content: flex-start;
   }
 
-  .theme-toggle {
-    width: 42px;
-    padding: 0;
-    justify-content: center;
-  }
-
-  .theme-toggle-text {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

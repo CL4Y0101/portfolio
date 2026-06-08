@@ -56,7 +56,6 @@ const navMenu = document.querySelector("#nav-menu");
 const siteHeader = document.querySelector(".site-header");
 const heroSection = document.querySelector(".hero");
 const themeToggle = document.querySelector(".theme-toggle");
-const themeToggleText = document.querySelector(".theme-toggle-text");
 const themeColorMeta = document.querySelector('meta[name="theme-color"]');
 const projectGrid = document.querySelector("#projectGrid");
 const filterButtons = document.querySelectorAll(".filter-btn");
@@ -97,10 +96,6 @@ const applyTheme = (theme) => {
   if (themeToggle) {
     themeToggle.setAttribute("aria-pressed", String(isDark));
     themeToggle.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
-  }
-
-  if (themeToggleText) {
-    themeToggleText.textContent = isDark ? "Light" : "Dark";
   }
 
   if (themeColorMeta) {
