@@ -55,6 +55,9 @@ const navToggle = document.querySelector(".nav-toggle");
 const navMenu = document.querySelector("#nav-menu");
 const siteHeader = document.querySelector(".site-header");
 const heroSection = document.querySelector(".hero");
+const themeToggle = document.querySelector(".theme-toggle");
+const themeToggleText = document.querySelector(".theme-toggle-text");
+const themeColorMeta = document.querySelector('meta[name="theme-color"]');
 const projectGrid = document.querySelector("#projectGrid");
 const filterButtons = document.querySelectorAll(".filter-btn");
 const contributionGrid = document.querySelector("#contributionGrid");
@@ -66,7 +69,46 @@ const githubFollowers = document.querySelector("#githubFollowers");
 const githubStars = document.querySelector("#githubStars");
 const githubLatest = document.querySelector("#githubLatest");
 const githubUsername = "CL4Y0101";
+const themeStorageKey = "portfolio-theme";
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+const getStoredTheme = () => {
+  try {
+    return localStorage.getItem(themeStorageKey);
+  } catch (error) {
+    return null;
+  }
+};
+
+const storeTheme = (theme) => {
+  try {
+    localStorage.setItem(themeStorageKey, theme);
+  } catch (error) {
+    // Ignore storage failures so the toggle still works for the current page view.
+  }
+};
+
+const applyTheme = (theme) => {
+  const nextTheme = theme === "dark" ? "dark" : "light";
+  const isDark = nextTheme === "dark";
+
+  document.documentElement.dataset.theme = nextTheme;
+
+  if (themeToggle) {
+    themeToggle.setAttribute("aria-pressed", String(isDark));
+    themeToggle.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
+  }
+
+  if (themeToggleText) {
+    themeToggleText.textContent = isDark ? "Light" : "Dark";
+  }
+
+  if (themeColorMeta) {
+    themeColorMeta.setAttribute("content", isDark ? "#0b0f14" : "#fbfdff");
+  }
+};
+
+applyTheme(document.documentElement.dataset.theme === "dark" ? "dark" : getStoredTheme() || "light");
 
 const escapeHtml = (value) =>
   String(value).replace(
@@ -154,6 +196,15 @@ navMenu.addEventListener("click", (event) => {
     closeMobileMenu();
   }
 });
+
+if (themeToggle) {
+  themeToggle.addEventListener("click", () => {
+    const nextTheme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+
+    applyTheme(nextTheme);
+    storeTheme(nextTheme);
+  });
+}
 
 filterButtons.forEach((button) => {
   button.addEventListener("click", () => {

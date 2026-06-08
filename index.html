@@ -20,6 +20,17 @@
     <meta property="og:type" content="website" />
     <meta name="theme-color" content="#fbfdff" />
     <title>Aditya Fadni Athaullah | Software Engineering Portfolio</title>
+    <script>
+      (() => {
+        try {
+          if (localStorage.getItem("portfolio-theme") === "dark") {
+            document.documentElement.dataset.theme = "dark";
+          }
+        } catch (error) {
+          document.documentElement.dataset.theme = "light";
+        }
+      })();
+    </script>
     <link rel="stylesheet" href="style.css" />
     <script type="application/ld+json">
       {
@@ -75,20 +86,27 @@
           <span>Aditya Fadni</span>
         </a>
 
-        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu">
-          <span></span>
-          <span></span>
-          <span></span>
-          <span class="sr-only">Toggle menu</span>
-        </button>
+        <div class="nav-actions">
+          <ul class="nav-menu" id="nav-menu">
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
 
-        <ul class="nav-menu" id="nav-menu">
-          <li><a href="#about">About</a></li>
-          <li><a href="#skills">Skills</a></li>
-          <li><a href="#experience">Experience</a></li>
-          <li><a href="#projects">Projects</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
+          <button class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false">
+            <span class="theme-toggle-indicator" aria-hidden="true"></span>
+            <span class="theme-toggle-text">Dark</span>
+          </button>
+
+          <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span class="sr-only">Toggle menu</span>
+          </button>
+        </div>
       </nav>
     </header>
 
