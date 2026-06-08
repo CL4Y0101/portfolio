@@ -11,6 +11,8 @@
   --accent: #6f8faa;
   --accent-dark: #486a84;
   --accent-soft: rgba(111, 143, 170, 0.14);
+  --accent-gradient: linear-gradient(135deg, var(--accent-dark), var(--accent));
+  --accent-gradient-hover: linear-gradient(135deg, #3f5f78, #6386a3);
   --shadow: 0 24px 70px rgba(30, 41, 59, 0.12);
   --radius: 8px;
   --radius-lg: 18px;
@@ -380,13 +382,13 @@ h3 {
 
 .btn-primary {
   color: #ffffff;
-  background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+  background: var(--accent-gradient);
   box-shadow: 0 18px 42px rgba(72, 106, 132, 0.18);
 }
 
 .btn-primary:hover,
 .btn-primary:focus-visible {
-  background: linear-gradient(135deg, #3f5f78, #6386a3);
+  background: var(--accent-gradient-hover);
 }
 
 .btn-ghost {
@@ -469,7 +471,7 @@ h3 {
   color: #ffffff;
   font-size: 3rem;
   font-weight: 900;
-  background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+  background: var(--accent-gradient);
   border-radius: 24px;
   box-shadow: 0 20px 48px rgba(111, 143, 170, 0.18);
   transition:
@@ -584,7 +586,7 @@ h3 {
 .profile-list span {
   padding: 10px 12px;
   color: #ffffff;
-  background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+  background: var(--accent-gradient);
   border: 1px solid transparent;
   border-radius: var(--radius);
   box-shadow: 0 18px 42px rgba(72, 106, 132, 0.18);
@@ -687,10 +689,15 @@ h3 {
 .achievement-card,
 .skill-card,
 .cert-list article,
-.project-card {
-  background: var(--bg-card-strong);
-  border: 1px solid var(--line);
+.project-card,
+.profile-panel,
+.github-card,
+.contact-card {
+  color: #ffffff;
+  background: var(--accent-gradient);
+  border: 1px solid transparent;
   border-radius: var(--radius);
+  box-shadow: 0 18px 42px rgba(72, 106, 132, 0.18);
   transition:
     transform 220ms ease,
     border-color 220ms ease,
@@ -702,10 +709,14 @@ h3 {
 .timeline-card:hover,
 .achievement-card:hover,
 .skill-card:hover,
-.cert-list article:hover {
-  background: #ffffff;
-  border-color: rgba(111, 143, 170, 0.32);
-  box-shadow: 0 20px 48px rgba(30, 41, 59, 0.1);
+.cert-list article:hover,
+.project-card:hover,
+.profile-panel:hover,
+.github-card:hover,
+.contact-card:hover {
+  background: var(--accent-gradient-hover);
+  border-color: transparent;
+  box-shadow: 0 20px 48px rgba(72, 106, 132, 0.2);
   transform: translateY(-4px);
 }
 
@@ -714,6 +725,48 @@ h3 {
 .skill-card,
 .cert-list article {
   padding: 20px;
+}
+
+.education-list article .timeline,
+.timeline-card .timeline,
+.education-list article h3,
+.timeline-card h3,
+.achievement-card h3,
+.skill-card h3,
+.cert-list article h3,
+.project-card h3,
+.profile-panel h3,
+.github-card h3,
+.contact-card strong,
+.contact-label,
+.text-link {
+  color: #ffffff;
+}
+
+.education-list article p,
+.timeline-card p,
+.achievement-card p,
+.skill-card p,
+.cert-list article p,
+.project-card p,
+.profile-panel p,
+.github-card p,
+.contact-section .contact-card p,
+.timeline-card li,
+.check-list li,
+.check-list.subtle li {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.education-list article p,
+.timeline-card p,
+.achievement-card p,
+.skill-card p,
+.cert-list article p,
+.project-card p,
+.profile-panel p,
+.github-card p {
+  opacity: 0.88;
 }
 
 .timeline {
@@ -757,15 +810,15 @@ h3 {
 }
 
 .check-list li {
-  color: var(--soft);
+  color: rgba(255, 255, 255, 0.88);
 }
 
 .check-list li::marker {
-  color: var(--accent);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .check-list.subtle li {
-  color: var(--muted);
+  color: rgba(255, 255, 255, 0.78);
 }
 
 .timeline-list {
@@ -785,11 +838,11 @@ h3 {
 }
 
 .timeline-card li {
-  color: var(--soft);
+  color: rgba(255, 255, 255, 0.88);
 }
 
 .timeline-card li::marker {
-  color: var(--accent);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .achievement-grid {
@@ -801,7 +854,7 @@ h3 {
 .achievement-card span {
   display: inline-flex;
   margin-bottom: 26px;
-  color: rgba(111, 143, 170, 0.76);
+  color: rgba(255, 255, 255, 0.78);
   font-size: 0.9rem;
   font-weight: 900;
 }
@@ -851,8 +904,8 @@ h3 {
 }
 
 .project-card:hover {
-  border-color: rgba(111, 143, 170, 0.38);
-  box-shadow: 0 24px 70px rgba(30, 41, 59, 0.12);
+  border-color: transparent;
+  box-shadow: 0 24px 70px rgba(72, 106, 132, 0.2);
   transform: translateY(-6px);
 }
 
@@ -882,12 +935,12 @@ h3 {
 .project-category {
   width: fit-content;
   padding: 5px 9px;
-  color: var(--accent);
+  color: #ffffff;
   font-size: 0.75rem;
   font-weight: 900;
   text-transform: uppercase;
-  background: var(--accent-soft);
-  border: 1px solid rgba(148, 163, 184, 0.24);
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.24);
   border-radius: 999px;
 }
 
@@ -901,6 +954,23 @@ h3 {
   min-height: 40px;
   padding: 9px 12px;
   font-size: 0.9rem;
+}
+
+.project-card .btn-primary {
+  color: var(--text);
+  background: #ffffff;
+  box-shadow: none;
+}
+
+.project-card .btn-primary:hover,
+.project-card .btn-primary:focus-visible {
+  background: #f4f8fb;
+}
+
+.project-card .btn-ghost {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.28);
 }
 
 .github-card {
@@ -949,7 +1019,7 @@ h3 {
 .text-link {
   display: inline-flex;
   flex: 0 0 auto;
-  color: var(--accent);
+  color: #ffffff;
   font-weight: 800;
 }
 
@@ -1001,7 +1071,7 @@ h3 {
   justify-content: flex-end;
   gap: 7px;
   margin-top: 14px;
-  color: var(--muted);
+  color: rgba(255, 255, 255, 0.78);
   font-size: 0.82rem;
 }
 
@@ -1047,7 +1117,7 @@ h3 {
 
 .contact-link:hover,
 .contact-link:focus-visible {
-  background: rgba(244, 248, 251, 0.86);
+  background: rgba(255, 255, 255, 0.14);
   transform: translateX(3px);
 }
 
@@ -1095,7 +1165,7 @@ h3 {
 }
 
 .contact-label {
-  color: var(--accent);
+  color: rgba(255, 255, 255, 0.78);
   font-size: 0.78rem;
   font-weight: 900;
   letter-spacing: 0.08em;
@@ -1103,7 +1173,7 @@ h3 {
 }
 
 .contact-card strong {
-  color: var(--soft);
+  color: #ffffff;
   font-size: 1rem;
   overflow-wrap: anywhere;
 }
