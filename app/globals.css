@@ -653,6 +653,7 @@ h3 {
 
 .project-card-body {
   display: grid;
+  align-content: start;
   gap: 20px;
   padding: clamp(22px, 3vw, 31px);
 }
@@ -694,6 +695,12 @@ h3 {
   padding: 0;
 }
 
+.project-stack {
+  align-self: start;
+  align-items: flex-start;
+  align-content: flex-start;
+}
+
 .project-stack li,
 .skill-list li {
   list-style: none;
@@ -704,6 +711,12 @@ h3 {
   background: var(--background-raised);
   border: 1px solid var(--line);
   border-radius: 999px;
+}
+
+.project-stack li {
+  flex: 0 0 auto;
+  align-self: flex-start;
+  line-height: 1.25;
 }
 
 .project-card-actions {
@@ -965,15 +978,20 @@ h3 {
 
 .achievement-featured {
   color: #eef8f5;
-  background: var(--accent-strong) !important;
-  border-color: var(--accent-strong) !important;
+  background: #18352f !important;
+  border-color: #2f5c52 !important;
 }
 
+.achievement-featured h3,
 .achievement-featured > svg,
 .achievement-featured > span,
 .achievement-featured p,
 .achievement-featured strong {
   color: #b8d9d1 !important;
+}
+
+.achievement-featured h3 {
+  color: #f4faf8 !important;
 }
 
 .leadership-card {
@@ -1606,12 +1624,27 @@ h3 {
   }
 
   .hero-profile {
-    width: min(82vw, 380px);
+    display: grid;
+    width: min(100%, 420px);
+    max-width: 420px;
+    gap: 12px;
+    justify-self: center;
+  }
+
+  .portrait-frame {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 26px;
+  }
+
+  .portrait-frame img {
+    object-position: center;
   }
 
   .focus-card {
-    right: -8px;
-    bottom: 16px;
+    position: static;
+    width: 100%;
+    min-width: 0;
   }
 
   .section-heading {
@@ -1695,12 +1728,8 @@ h3 {
   }
 
   .focus-card {
-    position: relative;
-    right: auto;
-    bottom: auto;
-    width: calc(100% - 20px);
-    min-width: 0;
-    margin: -35px 10px 0;
+    width: 100%;
+    margin: 0;
   }
 
   .project-card {
@@ -1945,6 +1974,10 @@ kbd {
   display: grid;
   grid-column: 1 / -1;
   grid-template-columns: minmax(0, 1.12fr) minmax(330px, 0.88fr);
+}
+
+.project-card-prominent .project-card-body {
+  align-content: space-between;
 }
 
 .project-card-prominent .project-media,

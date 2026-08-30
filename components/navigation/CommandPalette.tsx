@@ -18,7 +18,7 @@ import {
   X,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState, type KeyboardEvent, type ComponentType } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent, type ComponentType } from "react";
 import { Dialog } from "@/components/ui/Dialog";
 import { profile } from "@/data/profile";
 import { projects } from "@/data/projects";
@@ -68,9 +68,9 @@ export function CommandPalette({ open, onOpen, onClose }: CommandPaletteProps) {
     if (statusTimeout.current) clearTimeout(statusTimeout.current);
   }, []);
 
-  function navigate(href: string) {
+  const navigate = useCallback((href: string) => {
     router.push(href);
-  }
+  }, [router]);
 
   const commands = useMemo<Command[]>(() => [
     { id: "home", label: "Go to Home", group: "Navigate", keywords: "start intro", icon: Home, run: () => navigate("/#home") },
@@ -122,7 +122,7 @@ export function CommandPalette({ open, onOpen, onClose }: CommandPaletteProps) {
         return "stay";
       },
     },
-  ], [router]);
+  ], [navigate]);
 
   const normalizedQuery = query.trim().toLowerCase();
   const filteredCommands = commands.filter((command) =>

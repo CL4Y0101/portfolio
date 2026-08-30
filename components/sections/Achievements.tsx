@@ -6,7 +6,7 @@ const achievementIcons = [Award, GraduationCap, GraduationCap];
 
 export function Achievements() {
   return (
-    <section className="section" aria-labelledby="achievements-title">
+    <section id="achievements" className="section" aria-labelledby="achievements-title">
       <div className="shell">
         <SectionHeading
           eyebrow="Achievements"
