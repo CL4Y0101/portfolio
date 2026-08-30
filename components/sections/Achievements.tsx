@@ -15,7 +15,7 @@ export function Achievements() {
           description="Results and formal competency evidence take priority over generic personality claims."
         />
 
-        <div className="achievements-grid">
+        <div className="achievements-grid" data-scroll-reveal="stagger">
           {achievements.map((achievement, index) => {
             const Icon = achievementIcons[index];
             return (
@@ -30,7 +30,7 @@ export function Achievements() {
           })}
         </div>
 
-        <article className="leadership-card">
+        <article className="leadership-card" data-scroll-reveal>
           <UsersRound aria-hidden="true" size={24} />
           <div>
             <p className="eyebrow">Leadership</p>

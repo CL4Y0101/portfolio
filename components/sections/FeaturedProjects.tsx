@@ -52,7 +52,7 @@ export function FeaturedProjects() {
         <p className="filter-status sr-only" aria-live="polite">
           Showing {visibleProjects.length} {visibleProjects.length === 1 ? "project" : "projects"} for {activeCategory}.
         </p>
-        <div className="projects-grid">
+        <div className="projects-grid" data-scroll-reveal="stagger">
           {visibleProjects.map((project, index) => (
             <ProjectCard
               key={`${activeCategory}-${project.slug}`}

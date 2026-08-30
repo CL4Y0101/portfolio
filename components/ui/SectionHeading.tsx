@@ -18,7 +18,7 @@ export function SectionHeading({
   titleId,
 }: SectionHeadingProps) {
   return (
-    <div className={`section-heading ${align === "center" ? "section-heading-centered" : ""}`}>
+    <div data-scroll-reveal className={`section-heading ${align === "center" ? "section-heading-centered" : ""}`}>
       <div>
         <p className="eyebrow">{eyebrow}</p>
         <h2 id={titleId}>{title}</h2>

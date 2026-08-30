@@ -23,7 +23,7 @@ export function CapabilityExplorer({ groups }: { groups: SkillGroup[] }) {
   }
 
   return (
-    <div className="capability-explorer">
+    <div className="capability-explorer" data-scroll-reveal>
       <div className="capability-tabs" role="tablist" aria-label="Technical capability categories" aria-orientation="vertical">
         {groups.map((group, index) => (
           <button

@@ -12,14 +12,14 @@ export function About() {
           title="Product thinking with a systems foundation."
           description="My work has moved from networks and computer systems toward full-stack product development, without losing the operational perspective that makes production debugging practical."
         />
-        <div className="about-copy">
+        <div className="about-copy" data-scroll-reveal>
           {profile.about.map((paragraph) => (
             <p key={paragraph}>{paragraph}</p>
           ))}
         </div>
       </div>
 
-      <div className="shell education-wrap" id="education">
+      <div className="shell education-wrap" id="education" data-scroll-reveal>
         <p className="eyebrow">Education</p>
         <div className="education-grid">
           {education.map((item) => (

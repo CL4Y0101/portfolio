@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import type { ReactNode } from "react";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { profile } from "@/data/profile";
 import { SITE_URL } from "@/lib/constants";
 import "./globals.css";
@@ -121,6 +122,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         <Navbar />
         {children}
         <Footer />
+        <ScrollReveal />
       </body>
     </html>
   );

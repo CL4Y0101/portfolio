@@ -18,14 +18,14 @@ export function Contact() {
   return (
     <section className="contact-section" id="contact" aria-labelledby="contact-title">
       <div className="shell contact-grid">
-        <div>
+        <div data-scroll-reveal>
           <p className="eyebrow">Contact</p>
           <h2 id="contact-title">Let’s talk about practical software work.</h2>
           <p>
             For product development, web systems, or engineering collaboration, email is the most direct way to reach me.
           </p>
         </div>
-        <div className="contact-links">
+        <div className="contact-links" data-scroll-reveal>
           {contactLinks.map((item) => {
             const Icon = item.icon;
             return (

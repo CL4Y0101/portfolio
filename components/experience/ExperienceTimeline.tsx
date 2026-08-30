@@ -23,7 +23,7 @@ export function ExperienceTimeline({ items }: { items: Experience[] }) {
   }
 
   return (
-    <div className="experience-explorer">
+    <div className="experience-explorer" data-scroll-reveal>
       <div className="experience-timeline" role="tablist" aria-label="Experience timeline" aria-orientation="vertical">
         {items.map((item, index) => (
           <button

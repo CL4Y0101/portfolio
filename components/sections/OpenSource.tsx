@@ -15,7 +15,7 @@ export function OpenSource() {
           title="Public code, curated locally."
           description="The portfolio links to relevant public repositories without relying on live follower counts or rate-limited profile requests."
         />
-        <div className="repo-card">
+        <div className="repo-card" data-scroll-reveal>
           <div className="repo-card-top">
             <GitFork aria-hidden="true" size={27} />
             <a href={profile.github} target="_blank" rel="noreferrer">

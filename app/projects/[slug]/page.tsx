@@ -105,7 +105,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       <CaseStudyNavigation sections={caseStudySections} />
 
       {project.screenshots[0] ? (
-        <section className="shell case-cover" aria-label={`${project.title} screenshot`}>
+        <section className="shell case-cover" aria-label={`${project.title} screenshot`} data-scroll-reveal>
           <Image
             src={project.screenshots[0].src}
             alt={project.screenshots[0].alt}
@@ -117,14 +117,14 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           <p>{project.screenshots[0].caption}</p>
         </section>
       ) : (
-        <div className="shell case-no-cover" aria-label="Project media note">
+        <div className="shell case-no-cover" aria-label="Project media note" data-scroll-reveal>
           <span>Project media</span>
           <p>No verified project screenshot is published here. The public repository is linked for implementation evidence.</p>
         </div>
       )}
 
       <section className="section case-overview" id="overview">
-        <div className="shell case-narrative">
+        <div className="shell case-narrative" data-scroll-reveal>
           <div>
             <p className="eyebrow">Overview</p>
             <h2>What the project needed to solve.</h2>
@@ -143,7 +143,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       </section>
 
       <section className="section section-tinted" id="contribution">
-        <div className="shell case-content-grid">
+        <div className="shell case-content-grid" data-scroll-reveal>
           <div>
             <p className="eyebrow">Contribution</p>
             <h2>Responsibilities and shipped work.</h2>
@@ -161,7 +161,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       </section>
 
       <section className="section case-technology" id="technology">
-        <div className="shell case-content-grid">
+        <div className="shell case-content-grid" data-scroll-reveal>
           <div>
             <p className="eyebrow">Technology</p>
             <h2>Trace the stack back to the work.</h2>
@@ -177,7 +177,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             <p className="eyebrow">Engineering areas</p>
             <h2>Challenges handled in context.</h2>
           </div>
-          <div className="challenge-grid">
+          <div className="challenge-grid" data-scroll-reveal="stagger">
             {project.challenges.map((challenge, index) => (
               <article key={challenge.title}>
                 <span>{String(index + 1).padStart(2, "0")}</span>
@@ -190,7 +190,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       </section>
 
       <section className="section case-highlights" id="results">
-        <div className="shell case-content-grid">
+        <div className="shell case-content-grid" data-scroll-reveal>
           <div>
             <p className="eyebrow">Highlights</p>
             <h2>What is evidenced by the work.</h2>
@@ -210,7 +210,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               <p className="eyebrow">Project views</p>
               <h2>More from the product.</h2>
             </div>
-            <div className="screenshot-grid">
+            <div className="screenshot-grid" data-scroll-reveal="stagger">
               {project.screenshots.slice(1).map((screenshot) => (
                 <figure key={screenshot.src}>
                   <Image src={screenshot.src} alt={screenshot.alt} width={1440} height={1100} sizes="(max-width: 900px) 100vw, 60vw" />
@@ -223,7 +223,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       ) : null}
 
       <section className="case-cta">
-        <div className="shell">
+        <div className="shell" data-scroll-reveal>
           <p className="eyebrow">Next project</p>
           <h2>Explore the rest of the work.</h2>
           <Link className="button button-primary" href="/#work">
