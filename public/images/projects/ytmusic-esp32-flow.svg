@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1000" viewBox="0 0 1440 1000" role="img" aria-labelledby="title description">
+  <title id="title">YouTube Music to ESP32 project data flow</title>
+  <desc id="description">A block-style architecture diagram showing a browser player sending now-playing JSON over Wi-Fi to an ESP32 display.</desc>
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#315b52" stroke-opacity=".18" stroke-width="2"/>
+    </pattern>
+    <filter id="shadow" x="-20%" y="-20%" width="150%" height="160%">
+      <feDropShadow dx="0" dy="16" stdDeviation="0" flood-color="#07120f" flood-opacity=".75"/>
+    </filter>
+  </defs>
+
+  <rect width="1440" height="1000" fill="#0c1714"/>
+  <rect width="1440" height="1000" fill="url(#grid)"/>
+  <path d="M0 0h380l-44 44H0z" fill="#183229"/>
+  <path d="M1440 1000h-380l44-44h336z" fill="#183229"/>
+
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
+    <text x="104" y="115" fill="#95d8c2" font-size="25" font-weight="700" letter-spacing="5">PROJECT SIGNAL PATH</text>
+    <text x="104" y="174" fill="#f4f7f5" font-size="50" font-weight="800">NOW PLAYING → ESP32</text>
+    <text x="106" y="217" fill="#91a69f" font-size="21">Manifest V3 · HTTP · JSON · local Wi-Fi</text>
+
+    <g transform="translate(104 314)" filter="url(#shadow)">
+      <rect width="355" height="400" rx="4" fill="#172720" stroke="#94cdb9" stroke-width="6"/>
+      <rect x="26" y="27" width="303" height="48" fill="#29463b"/>
+      <circle cx="54" cy="51" r="8" fill="#d1735f"/>
+      <circle cx="80" cy="51" r="8" fill="#d7ae58"/>
+      <circle cx="106" cy="51" r="8" fill="#71b78e"/>
+      <text x="28" y="119" fill="#91a69f" font-size="16" letter-spacing="3">BROWSER PLAYER</text>
+      <rect x="28" y="146" width="94" height="94" fill="#d25f54"/>
+      <rect x="52" y="170" width="46" height="46" fill="#f6e4de"/>
+      <path d="m68 180 22 13-22 13z" fill="#d25f54"/>
+      <text x="145" y="178" fill="#f4f7f5" font-size="24" font-weight="700">Track title</text>
+      <text x="145" y="211" fill="#91a69f" font-size="18">Artist name</text>
+      <rect x="28" y="273" width="299" height="12" fill="#2b443b"/>
+      <rect x="28" y="273" width="183" height="12" fill="#d7ae58"/>
+      <text x="28" y="330" fill="#95d8c2" font-size="18">content.js</text>
+      <text x="28" y="363" fill="#91a69f" font-size="17">reads media state every 500 ms</text>
+    </g>
+
+    <g transform="translate(542 363)">
+      <path d="M0 64h230v-42l102 90-102 90v-42H0z" fill="#d7ae58"/>
+      <text x="71" y="104" fill="#18241f" font-size="20" font-weight="800">HTTP POST</text>
+      <rect x="22" y="233" width="286" height="143" fill="#13221c" stroke="#527a6c" stroke-width="4"/>
+      <text x="43" y="269" fill="#95d8c2" font-size="16">{</text>
+      <text x="61" y="297" fill="#f4f7f5" font-size="15">title, artist,</text>
+      <text x="61" y="324" fill="#f4f7f5" font-size="15">position, duration,</text>
+      <text x="61" y="351" fill="#f4f7f5" font-size="15">paused</text>
+      <text x="43" y="369" fill="#95d8c2" font-size="16">}</text>
+    </g>
+
+    <g transform="translate(946 314)" filter="url(#shadow)">
+      <rect width="390" height="400" rx="4" fill="#172720" stroke="#94cdb9" stroke-width="6"/>
+      <text x="31" y="59" fill="#91a69f" font-size="16" letter-spacing="3">LOCAL DEVICE</text>
+      <rect x="54" y="100" width="282" height="197" fill="#244438" stroke="#6cb18c" stroke-width="9"/>
+      <rect x="81" y="126" width="228" height="144" fill="#09110f"/>
+      <text x="103" y="166" fill="#d7ae58" font-size="15" letter-spacing="2">NOW PLAYING</text>
+      <text x="103" y="205" fill="#f4f7f5" font-size="22" font-weight="700">Track title</text>
+      <text x="103" y="237" fill="#95d8c2" font-size="17">Artist name</text>
+      <g fill="#d7ae58">
+        <rect x="28" y="121" width="14" height="34"/><rect x="28" y="174" width="14" height="34"/><rect x="28" y="227" width="14" height="34"/>
+        <rect x="348" y="121" width="14" height="34"/><rect x="348" y="174" width="14" height="34"/><rect x="348" y="227" width="14" height="34"/>
+      </g>
+      <text x="31" y="347" fill="#95d8c2" font-size="21" font-weight="700">ESP32 DISPLAY</text>
+      <text x="31" y="376" fill="#91a69f" font-size="17">192.168.x.x / nowplaying</text>
+    </g>
+
+    <g transform="translate(104 817)">
+      <rect width="1232" height="77" fill="#13251e" stroke="#315b52" stroke-width="3"/>
+      <rect width="14" height="77" fill="#d7ae58"/>
+      <text x="40" y="47" fill="#dbe7e2" font-size="18">BROWSER STATE</text>
+      <text x="259" y="47" fill="#6f8f83" font-size="22">›</text>
+      <text x="302" y="47" fill="#dbe7e2" font-size="18">SERVICE WORKER</text>
+      <text x="548" y="47" fill="#6f8f83" font-size="22">›</text>
+      <text x="591" y="47" fill="#dbe7e2" font-size="18">LOCAL NETWORK</text>
+      <text x="811" y="47" fill="#6f8f83" font-size="22">›</text>
+      <text x="854" y="47" fill="#dbe7e2" font-size="18">HARDWARE DISPLAY</text>
+    </g>
+  </g>
+</svg>

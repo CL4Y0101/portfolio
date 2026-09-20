@@ -223,7 +223,13 @@ export const projects: Project[] = [
           "Prepare a Next.js application with API routes for a Cloudflare deployment model through OpenNext.",
       },
     ],
-    screenshots: [],
+    screenshots: [
+      {
+        src: withBasePath("/images/projects/time-capsule-world.png"),
+        alt: "Time Capsule interactive 3D world with block-style characters and memory landmarks",
+        caption: "The live 3D memory world with interactive characters and landmarks",
+      },
+    ],
     links: [
       {
         label: "Visit Website",
@@ -284,7 +290,13 @@ export const projects: Project[] = [
           "The public repository currently demonstrates the browser-side prototype; hardware firmware and a complete packaged workflow are not presented as finished.",
       },
     ],
-    screenshots: [],
+    screenshots: [
+      {
+        src: withBasePath("/images/projects/ytmusic-esp32-flow.svg"),
+        alt: "Architecture diagram of browser playback metadata sent as JSON to an ESP32 display",
+        caption: "Browser-to-device now-playing data flow",
+      },
+    ],
     links: [
       {
         label: "View Repository",
