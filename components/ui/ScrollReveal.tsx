@@ -21,7 +21,7 @@ export function ScrollReveal() {
       root.classList.remove("scroll-reveal-ready");
       elements.forEach((element) => element.classList.remove("is-revealed"));
 
-      if (reducedMotion.matches || root.dataset.motion === "off" || !("IntersectionObserver" in window)) {
+      if (reducedMotion.matches || root.dataset.motion !== "full" || !("IntersectionObserver" in window)) {
         elements.forEach((element) => element.classList.add("is-revealed"));
         return;
       }

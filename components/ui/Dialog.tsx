@@ -45,7 +45,7 @@ export function Dialog({ open, onClose, onAfterClose, labelledBy, children, clas
     } else if (!open && dialog.open) {
       dialog.dataset.state = "closing";
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
-        document.documentElement.dataset.motion === "off";
+        document.documentElement.dataset.motion !== "full";
       closeTimerRef.current = setTimeout(finishClose, reduceMotion ? 0 : motionDurations.fast);
     }
 

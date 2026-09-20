@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import type { ReactNode } from "react";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
+import { MainMenuScreen } from "@/components/game-menu/MainMenuScreen";
 import { MotionProvider } from "@/components/motion/MotionProvider";
 import { PageTransition } from "@/components/motion/PageTransition";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
@@ -72,9 +73,26 @@ const themeScript = `
   (() => {
     try {
       const stored = localStorage.getItem("portfolio-theme");
-      const theme = stored || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      const preference = stored === "light" || stored === "dark" ? stored : "system";
+      const theme = preference === "system"
+        ? (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+        : preference;
       document.documentElement.dataset.theme = theme;
+      document.documentElement.dataset.themePreference = preference;
       document.documentElement.style.colorScheme = theme;
+      let savedPreferences = {};
+      try {
+        savedPreferences = JSON.parse(localStorage.getItem("portfolio-game-preferences") || "{}");
+      } catch (_) {}
+      const systemReduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const motion = ["full", "reduced", "minimal"].includes(savedPreferences.motion)
+        ? savedPreferences.motion
+        : systemReduced ? "reduced" : "full";
+      const graphics = ["high", "balanced", "low"].includes(savedPreferences.graphics)
+        ? savedPreferences.graphics
+        : "balanced";
+      document.documentElement.dataset.motion = new URLSearchParams(location.search).get("motion") === "off" ? "off" : motion;
+      document.documentElement.dataset.graphics = graphics;
     } catch (_) {}
   })();
 `;
@@ -119,6 +137,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
       </head>
       <body>
         <MotionProvider />
+        <MainMenuScreen />
         <a className="skip-link" href="#main-content">
           Skip to main content
         </a>

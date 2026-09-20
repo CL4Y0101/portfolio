@@ -10,7 +10,7 @@ export function useReducedMotion() {
   useEffect(() => {
     const mediaQuery = window.matchMedia(reducedMotionQuery);
     const update = () => {
-      setReducedMotion(mediaQuery.matches || document.documentElement.dataset.motion === "off");
+      setReducedMotion(mediaQuery.matches || document.documentElement.dataset.motion !== "full");
     };
 
     update();

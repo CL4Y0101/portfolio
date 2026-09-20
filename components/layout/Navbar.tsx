@@ -1,12 +1,13 @@
 "use client";
 
-import { Menu, Search, X } from "lucide-react";
+import { Gamepad2, Menu, Search, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { profile } from "@/data/profile";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { CommandPalette } from "@/components/navigation/CommandPalette";
+import { openMainMenuEvent } from "@/lib/preferences";
 
 const navigation = [
   { label: "Home", href: "/#home" },
@@ -102,6 +103,15 @@ export function Navbar() {
         </div>
 
         <div className="nav-controls">
+          <button
+            className="icon-button main-menu-trigger"
+            type="button"
+            onClick={() => window.dispatchEvent(new Event(openMainMenuEvent))}
+            aria-label="Open portfolio main menu"
+            title="Open main menu"
+          >
+            <Gamepad2 aria-hidden="true" size={18} />
+          </button>
           <button className="command-trigger" type="button" onClick={openPalette} aria-label="Open command palette">
             <Search aria-hidden="true" size={17} />
             <span>Command</span>

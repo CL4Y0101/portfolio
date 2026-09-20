@@ -20,7 +20,7 @@ export function HeroMotion() {
     };
 
     const handlePointer = (event: PointerEvent) => {
-      if (reducedMotion.matches || !desktopPointer.matches || document.documentElement.dataset.motion === "off") return;
+      if (reducedMotion.matches || !desktopPointer.matches || document.documentElement.dataset.motion !== "full") return;
       window.cancelAnimationFrame(frame);
       frame = window.requestAnimationFrame(() => {
         const bounds = hero.getBoundingClientRect();
