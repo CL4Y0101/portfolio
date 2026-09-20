@@ -36,7 +36,7 @@ export function Hero() {
           <div className="portrait-frame">
             <Image
               src={profile.profileImage}
-              alt="Aditya Fadni Athaullah"
+              alt="Voxel-style portrait of Aditya Fadni Athaullah"
               width={1280}
               height={1280}
               priority

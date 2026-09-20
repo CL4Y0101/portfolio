@@ -13,7 +13,7 @@ export const profile = {
   email: "aditya.fadni@gmail.com",
   github: "https://github.com/CL4Y0101",
   linkedin: "https://www.linkedin.com/in/aditya-fadni-312373308/",
-  profileImage: withBasePath("/images/profile.jpg"),
+  profileImage: withBasePath("/images/profile-voxel.webp"),
   cv: withBasePath("/cv/aditya-fadni-athaullah-cv.pdf"),
   about: [
     "My current work sits at the intersection of product development and operations: building Next.js interfaces, connecting application data, and maintaining the environments that deliver those systems.",
