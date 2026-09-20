@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, type RefObject } from "react";
+import { useEffect, useRef, type RefObject } from "react";
 
 const focusableSelector = "[data-game-focusable]:not([disabled])";
 
@@ -10,6 +10,9 @@ export function useMenuFocusManager(
   focusKey: string,
   onEscape: () => void,
 ) {
+  const escapeRef = useRef(onEscape);
+  useEffect(() => { escapeRef.current = onEscape; }, [onEscape]);
+
   useEffect(() => {
     if (!active) return;
     const container = containerRef.current;
@@ -31,7 +34,7 @@ export function useMenuFocusManager(
 
       if (event.key === "Escape") {
         event.preventDefault();
-        onEscape();
+        escapeRef.current();
         return;
       }
 
@@ -65,5 +68,5 @@ export function useMenuFocusManager(
       window.cancelAnimationFrame(focusFrame);
       container.removeEventListener("keydown", handleKeyDown);
     };
-  }, [active, containerRef, focusKey, onEscape]);
+  }, [active, containerRef, focusKey]);
 }

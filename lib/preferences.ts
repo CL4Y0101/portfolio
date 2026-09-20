@@ -34,7 +34,10 @@ export function readGamePreferences(): GamePreferences {
   let stored: Partial<GamePreferences> = {};
 
   try {
-    stored = JSON.parse(localStorage.getItem(gamePreferencesKey) ?? "{}") as Partial<GamePreferences>;
+    const parsed: unknown = JSON.parse(localStorage.getItem(gamePreferencesKey) ?? "{}");
+    if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+      stored = parsed as Partial<GamePreferences>;
+    }
   } catch {
     // Invalid or unavailable storage falls back to safe defaults.
   }

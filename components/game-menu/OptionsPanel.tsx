@@ -1,5 +1,7 @@
-import { ArrowLeft, RotateCcw, Volume2, VolumeX } from "lucide-react";
+import { Volume2, VolumeX } from "lucide-react";
 import { GameMenuButton } from "@/components/game-menu/GameMenuButton";
+import { GlassPanel } from "@/components/game-ui/GlassPanel";
+import ui from "@/components/game-ui/minecraft.module.css";
 import type { GamePreferences, GraphicsPreference, MotionPreference } from "@/lib/preferences";
 import type { ThemePreference } from "@/lib/theme";
 
@@ -12,8 +14,8 @@ type OptionsPanelProps = {
 
 export function OptionsPanel({ preferences, onBack, onChange, onReset }: OptionsPanelProps) {
   return (
-    <section className="game-panel options-panel" aria-labelledby="options-title">
-      <div className="game-panel-heading">
+    <GlassPanel className="game-panel options-panel" aria-labelledby="options-title">
+      <div className={`game-panel-heading ${ui.heading}`}>
         <div>
           <p>World settings</p>
           <h2 id="options-title">Options</h2>
@@ -37,7 +39,7 @@ export function OptionsPanel({ preferences, onBack, onChange, onReset }: Options
       />
       <OptionGroup
         label="Graphics"
-        description="Controls ambient clouds, fog, depth, and particles."
+        description="High adds glass refraction on supported desktops. Balanced uses frosted panels; Low removes glass and ambient detail."
         options={["high", "balanced", "low"] as GraphicsPreference[]}
         value={preferences.graphics}
         onSelect={(graphics) => onChange({ ...preferences, graphics })}
@@ -49,7 +51,7 @@ export function OptionsPanel({ preferences, onBack, onChange, onReset }: Options
           <p>Optional procedural menu feedback. Off by default.</p>
         </div>
         <button
-          className="option-sound-toggle"
+          className={`option-sound-toggle ${ui.control}`}
           data-game-focusable
           type="button"
           aria-pressed={preferences.sound}
@@ -61,10 +63,10 @@ export function OptionsPanel({ preferences, onBack, onChange, onReset }: Options
       </div>
 
       <div className="game-panel-actions">
-        <GameMenuButton icon={ArrowLeft} onClick={onBack}>Back</GameMenuButton>
-        <GameMenuButton icon={RotateCcw} variant="danger" onClick={onReset}>Reset preferences</GameMenuButton>
+        <GameMenuButton icon="arrow" onClick={onBack}>Back</GameMenuButton>
+        <GameMenuButton icon="compass" variant="danger" onClick={onReset}>Reset preferences</GameMenuButton>
       </div>
-    </section>
+    </GlassPanel>
   );
 }
 
@@ -89,6 +91,7 @@ function OptionGroup<T extends string>({
         {options.map((option) => (
           <button
             key={option}
+            className={ui.control}
             data-game-focusable
             type="button"
             aria-pressed={value === option}

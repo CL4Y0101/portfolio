@@ -1,0 +1,38 @@
+/* Material recipe adapted from deepika-builds/liquid-glass (MIT).
+ * Copyright (c) 2026 Deepika Rao. See public/vendor/liquid-glass/LICENSE.
+ */
+.glass.glass {
+  position: relative;
+  background: linear-gradient(135deg, #b9dfc41a, transparent 42%), linear-gradient(#14251ee8, #101c17f0);
+  -webkit-backdrop-filter: var(--portfolio-glass-filter, blur(12px) saturate(1.15));
+  backdrop-filter: var(--portfolio-glass-filter, blur(12px) saturate(1.15));
+  box-shadow: inset 2px 2px #e4ffe955, inset -2px -5px #0008, 8px 8px 0 #0b130b55, 0 28px 70px #07110b55;
+}
+
+.glass.glass[data-glass="refracted"] {
+  background: linear-gradient(135deg, #b9dfc426, transparent 42%), linear-gradient(#14251ed9, #101c17eb);
+}
+
+:global(html[data-graphics="low"]) .glass.glass,
+:global(html[data-motion="minimal"]) .glass.glass,
+:global(html[data-motion="off"]) .glass.glass {
+  background: #17241d;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+  .glass.glass { background: #17241d; }
+}
+
+@media (max-width: 820px), (prefers-reduced-motion: reduce) {
+  .glass.glass {
+    background: #17241df5;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .glass.glass { background: Canvas; color: CanvasText; backdrop-filter: none; }
+}

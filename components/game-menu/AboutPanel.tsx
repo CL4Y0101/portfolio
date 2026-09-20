@@ -1,13 +1,15 @@
-import { ArrowLeft, ArrowUpRight, Mail, Play } from "lucide-react";
+import { ArrowUpRight, Mail } from "lucide-react";
 import Image from "next/image";
 import { education } from "@/data/education";
 import { profile } from "@/data/profile";
 import { GameMenuButton } from "@/components/game-menu/GameMenuButton";
+import { GlassPanel } from "@/components/game-ui/GlassPanel";
+import ui from "@/components/game-ui/minecraft.module.css";
 
 export function AboutPanel({ onBack, onEnter }: { onBack: () => void; onEnter: () => void }) {
   return (
-    <section className="game-panel about-menu-panel" aria-labelledby="menu-about-title">
-      <div className="game-panel-heading">
+    <GlassPanel className="game-panel about-menu-panel" aria-labelledby="menu-about-title">
+      <div className={`game-panel-heading ${ui.heading}`}>
         <div>
           <p>Player profile</p>
           <h2 id="menu-about-title">About</h2>
@@ -37,9 +39,9 @@ export function AboutPanel({ onBack, onEnter }: { onBack: () => void; onEnter: (
       </div>
 
       <div className="game-panel-actions">
-        <GameMenuButton icon={ArrowLeft} onClick={onBack}>Back</GameMenuButton>
-        <GameMenuButton icon={Play} variant="primary" onClick={onEnter}>Enter portfolio</GameMenuButton>
+        <GameMenuButton icon="arrow" onClick={onBack}>Back</GameMenuButton>
+        <GameMenuButton icon="diamond" variant="primary" onClick={onEnter}>Enter portfolio</GameMenuButton>
       </div>
-    </section>
+    </GlassPanel>
   );
 }

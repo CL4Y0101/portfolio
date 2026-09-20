@@ -24,6 +24,7 @@ import { profile } from "@/data/profile";
 import { projects } from "@/data/projects";
 import { copyText } from "@/lib/clipboard";
 import { toggleTheme } from "@/lib/theme";
+import ui from "@/components/game-ui/minecraft.module.css";
 
 type Command = {
   id: string;
@@ -53,7 +54,7 @@ export function CommandPalette({ open, onOpen, onClose }: CommandPaletteProps) {
       const isTyping = target instanceof HTMLElement &&
         (target.matches("input, textarea, select") || target.isContentEditable);
 
-      if (isTyping) return;
+      if (isTyping || document.body.classList.contains("game-menu-open")) return;
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
         event.preventDefault();
         onOpen();
@@ -157,7 +158,7 @@ export function CommandPalette({ open, onOpen, onClose }: CommandPaletteProps) {
 
   return (
     <Dialog open={open} onClose={closePalette} labelledBy="command-palette-title" className="command-dialog">
-      <div className="dialog-panel command-panel">
+      <div className={`dialog-panel command-panel ${ui.dialog}`}>
         <div className="command-heading">
           <div>
             <p className="eyebrow">Quick navigation</p>

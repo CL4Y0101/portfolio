@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type MouseEvent, type ReactNode } from "react";
+import { useEffect, useRef, type KeyboardEvent, type MouseEvent, type ReactNode } from "react";
 import { motionDurations } from "@/components/motion/motion";
 
 type DialogProps = {
@@ -63,6 +63,26 @@ export function Dialog({ open, onClose, onAfterClose, labelledBy, children, clas
     if (event.target === event.currentTarget) onClose();
   }
 
+  function handleTab(event: KeyboardEvent<HTMLDialogElement>) {
+    if (event.key !== "Tab") return;
+    const items = Array.from(event.currentTarget.querySelectorAll<HTMLElement>(
+      'a[href], button, input, select, textarea, [tabindex]',
+    )).filter((element) => element.tabIndex >= 0 && !element.matches(":disabled, [inert]") && element.getClientRects().length > 0);
+    const first = items[0];
+    const last = items[items.length - 1];
+    if (!first || !last) {
+      event.preventDefault();
+      return;
+    }
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+
   return (
     <dialog
       ref={dialogRef}
@@ -73,6 +93,7 @@ export function Dialog({ open, onClose, onAfterClose, labelledBy, children, clas
         onClose();
       }}
       onMouseDown={handleBackdrop}
+      onKeyDown={handleTab}
     >
       {children}
     </dialog>

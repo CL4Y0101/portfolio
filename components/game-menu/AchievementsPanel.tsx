@@ -1,11 +1,14 @@
-import { ArrowLeft, CheckCircle2, Trophy, UsersRound } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import { achievements, leadership } from "@/data/achievements";
 import { GameMenuButton } from "@/components/game-menu/GameMenuButton";
+import { GameIcon } from "@/components/game-ui/GameIcon";
+import { GlassPanel } from "@/components/game-ui/GlassPanel";
+import ui from "@/components/game-ui/minecraft.module.css";
 
 export function AchievementsPanel({ onBack }: { onBack: () => void }) {
   return (
-    <section className="game-panel achievements-panel" aria-labelledby="menu-achievements-title">
-      <div className="game-panel-heading">
+    <GlassPanel className="game-panel achievements-panel" aria-labelledby="menu-achievements-title">
+      <div className={`game-panel-heading ${ui.heading}`}>
         <div>
           <p>Verified progress</p>
           <h2 id="menu-achievements-title">Achievements</h2>
@@ -15,8 +18,8 @@ export function AchievementsPanel({ onBack }: { onBack: () => void }) {
 
       <div className="menu-achievement-grid">
         {achievements.map((achievement, index) => (
-          <article key={achievement.title} className={achievement.featured ? "menu-achievement-featured" : ""}>
-            <div className="menu-achievement-icon"><Trophy aria-hidden="true" size={21} /></div>
+          <article key={achievement.title} className={`${ui.slot} ${achievement.featured ? "menu-achievement-featured" : ""}`}>
+            <div className="menu-achievement-icon"><GameIcon name="nether-star" /></div>
             <div>
               <span>Milestone {String(index + 1).padStart(2, "0")}</span>
               <h3>{achievement.title}</h3>
@@ -26,8 +29,8 @@ export function AchievementsPanel({ onBack }: { onBack: () => void }) {
             <small><CheckCircle2 aria-hidden="true" size={14} /> Verified</small>
           </article>
         ))}
-        <article>
-          <div className="menu-achievement-icon"><UsersRound aria-hidden="true" size={21} /></div>
+        <article className={ui.slot}>
+          <div className="menu-achievement-icon"><GameIcon name="emerald" /></div>
           <div>
             <span>Leadership</span>
             <h3>{leadership.title}</h3>
@@ -39,8 +42,8 @@ export function AchievementsPanel({ onBack }: { onBack: () => void }) {
       </div>
 
       <div className="game-panel-actions">
-        <GameMenuButton icon={ArrowLeft} onClick={onBack}>Back to main menu</GameMenuButton>
+        <GameMenuButton icon="arrow" onClick={onBack}>Back to main menu</GameMenuButton>
       </div>
-    </section>
+    </GlassPanel>
   );
 }

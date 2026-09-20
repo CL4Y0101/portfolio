@@ -1,0 +1,154 @@
+/* Adapted from Jiyath5516F/Minecraft-CSS src/components and base tokens.
+ * This Source Code Form is subject to the Mozilla Public License, v. 2.0.
+ * See public/vendor/Minecraft-CSS/LICENSE. Modified for scoped Next.js UI,
+ * existing typography, theme tokens, keyboard focus, and reduced motion.
+ */
+.button.button {
+  --mc-face: #d0d1d4;
+  --mc-hover: #e3e5e8;
+  --mc-edge: #1e1e1f;
+  --mc-depth: #58585a;
+  --mc-highlight: #ecedeebf;
+  --mc-lower: #a4a6a9;
+  --mc-ink: #202522;
+  grid-template-columns: 10px 28px minmax(0, 1fr) auto;
+  gap: 12px;
+  min-height: 56px;
+  padding: 10px 16px 16px;
+  color: var(--mc-ink);
+  background: var(--mc-face);
+  border: 3px solid var(--mc-edge);
+  box-shadow: inset 0 -6px var(--mc-depth), inset 3px 3px var(--mc-highlight), inset -3px -9px var(--mc-lower);
+  transform: none;
+}
+
+.button.button[data-variant="primary"] {
+  --mc-face: #3c8527;
+  --mc-hover: #2a641c;
+  --mc-depth: #1d4d13;
+  --mc-highlight: #77b660;
+  --mc-lower: #639d52;
+  --mc-ink: #fff;
+}
+
+.button.button[data-variant="danger"] {
+  --mc-face: #4a3c3c;
+  --mc-hover: #655050;
+  --mc-depth: #241c1c;
+  --mc-highlight: #7a6363;
+  --mc-lower: #5b4646;
+  --mc-ink: #fff0e9;
+}
+
+.button.button:is(:hover, :focus-visible, [data-selected="true"]):not(:disabled) {
+  color: var(--mc-ink);
+  background: var(--mc-hover);
+  border-color: #e9f6df;
+  box-shadow: inset 0 -6px var(--mc-depth), inset 3px 3px var(--mc-highlight), inset -3px -9px var(--mc-lower), 0 0 0 2px #17211a;
+  transform: translateY(-1px);
+}
+
+.button.button:focus-visible {
+  outline: 3px solid #e9cd7b;
+  outline-offset: 3px;
+}
+
+.button.button:active:not(:disabled) {
+  box-shadow: inset 3px 3px var(--mc-highlight), inset -3px -3px var(--mc-lower);
+  transform: translateY(2px);
+}
+
+.button.button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.panel.panel {
+  border: 3px solid #18211c;
+  box-shadow: inset 2px 2px #d5e8dc55, inset -2px -5px #0008, 8px 8px 0 #0b130b55;
+}
+
+.heading.heading {
+  margin: -4px -4px 0;
+  padding: 0 4px 18px;
+  border-bottom: 3px solid #101812;
+  box-shadow: 0 2px #b8d5bf33;
+}
+
+.slot.slot {
+  background: #313b31;
+  border: 2px solid #141e16;
+  box-shadow: inset 2px 2px #b7c7ac44, inset -2px -3px #121b1480;
+}
+
+.control.control {
+  border: 2px solid #111c16;
+  box-shadow: inset 2px 2px #dae7d14d, inset -2px -3px #050e0a66;
+  min-height: 44px;
+}
+
+.control.control:is(:hover, :focus-visible, [aria-pressed="true"]) {
+  box-shadow: inset 2px 2px #f1ffe4a8, inset -2px -3px #3d694e66;
+}
+
+.control.control:focus-visible {
+  outline: 3px solid #e9cd7b;
+  outline-offset: 2px;
+}
+
+.control.control:active { transform: translateY(1px); }
+
+.hud.hud {
+  border-bottom: 3px solid var(--line-strong);
+  box-shadow: inset 0 -5px color-mix(in srgb, var(--line) 55%, transparent), 0 5px 0 #00000008;
+}
+
+.hudLink.hudLink {
+  border: 2px solid transparent;
+}
+
+.hudLink.hudLink:is(:hover, :focus-visible, [aria-current="location"]) {
+  border-color: var(--line-strong);
+  box-shadow: inset 2px 2px var(--surface-strong), inset -2px -3px var(--line);
+}
+
+.card.card,
+.dialog.dialog {
+  border: 2px solid var(--line-strong);
+  box-shadow: inset 2px 2px var(--surface-strong), inset -2px -5px var(--line), var(--shadow-sm);
+}
+
+.card.card:is(:hover, :focus-within) {
+  border-color: var(--accent);
+  box-shadow: inset 2px 2px var(--surface-strong), inset -2px -5px var(--line), var(--depth-2);
+}
+
+.category {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+@media (max-width: 640px) {
+  .button.button { gap: 8px; padding-inline: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button.button,
+  .control.control,
+  .card.card { transform: none !important; }
+}
+
+:global(html[data-motion="reduced"]) .button.button,
+:global(html[data-motion="minimal"]) .button.button,
+:global(html[data-motion="off"]) .button.button {
+  transform: none !important;
+}
+
+@media (forced-colors: active) {
+  .button.button:focus-visible,
+  .control.control:focus-visible { outline-color: Highlight; }
+  .button.button[data-selected="true"],
+  .control.control[aria-pressed="true"] { border-color: Highlight; }
+}

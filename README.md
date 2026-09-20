@@ -26,6 +26,12 @@ npm run build
 
 The production build is written to `out/`.
 
+## Game UI integration
+
+The main menu combines scoped Minecraft-CSS surfaces, selected local mcicons PNGs,
+and a bounded liquid-glass effect. See [the visual source audit](docs/VISUAL_SOURCES.md)
+for source attribution, component ownership, icon usage, and graphics/motion fallbacks.
+
 ## Content and assets
 
 Frequently updated content lives in `data/`. Project detail pages are generated from `data/projects.ts` through `app/projects/[slug]/page.tsx`.

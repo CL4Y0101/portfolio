@@ -3,6 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Project } from "@/lib/types";
 import { Badge } from "@/components/ui/Badge";
+import { GameIcon } from "@/components/game-ui/GameIcon";
+import ui from "@/components/game-ui/minecraft.module.css";
 
 export function ProjectCard({
   project,
@@ -20,7 +22,7 @@ export function ProjectCard({
 
   return (
     <article
-      className={`project-card ${project.categories.includes("Professional") ? "project-card-prominent" : ""}`}
+      className={`project-card ${ui.card} ${project.categories.includes("Professional") ? "project-card-prominent" : ""}`}
       data-build-index={`BUILD ${String(index + 1).padStart(2, "0")}`}
     >
       {project.screenshots[0] ? (
@@ -46,7 +48,10 @@ export function ProjectCard({
           <Badge tone={project.status === "production" ? "live" : project.status === "in-progress" ? "warm" : "default"}>
             {project.statusLabel}
           </Badge>
-          <span>{project.categories[0]}</span>
+          <span className={ui.category}>
+            <GameIcon name={project.categories.includes("IoT / Experiments") ? "redstone" : "chest"} size="sm" />
+            {project.categories[0]}
+          </span>
         </div>
 
         <div>

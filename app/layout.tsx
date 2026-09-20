@@ -8,7 +8,7 @@ import { MotionProvider } from "@/components/motion/MotionProvider";
 import { PageTransition } from "@/components/motion/PageTransition";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { profile } from "@/data/profile";
-import { SITE_URL } from "@/lib/constants";
+import { SITE_URL, withBasePath } from "@/lib/constants";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -82,7 +82,7 @@ const themeScript = `
       document.documentElement.style.colorScheme = theme;
       let savedPreferences = {};
       try {
-        savedPreferences = JSON.parse(localStorage.getItem("portfolio-game-preferences") || "{}");
+        savedPreferences = JSON.parse(localStorage.getItem("portfolio-game-preferences") || "{}") || {};
       } catch (_) {}
       const systemReduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
       const motion = ["full", "reduced", "minimal"].includes(savedPreferences.motion)
@@ -132,6 +132,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
   return (
     <html lang="en" suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable}`}>
       <head>
+        <link rel="stylesheet" href={withBasePath("/vendor/mcicons/mcicons.css")} />
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }} />
       </head>

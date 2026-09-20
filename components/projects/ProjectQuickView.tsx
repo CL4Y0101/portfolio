@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
 import { Dialog } from "@/components/ui/Dialog";
 import type { Project } from "@/lib/types";
+import ui from "@/components/game-ui/minecraft.module.css";
 
 type ProjectQuickViewProps = {
   project: Project | null;
@@ -19,7 +20,7 @@ export function ProjectQuickView({ project, open, onClose, onAfterClose }: Proje
   return (
     <Dialog open={open} onClose={onClose} onAfterClose={onAfterClose} labelledBy={titleId} className="quick-view-dialog">
       {project ? (
-        <div className="dialog-panel quick-view-panel">
+        <div className={`dialog-panel quick-view-panel ${ui.dialog}`}>
           <div className="dialog-heading">
             <div>
               <p className="eyebrow">Project quick view</p>

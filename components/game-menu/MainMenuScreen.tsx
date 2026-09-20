@@ -1,6 +1,5 @@
 "use client";
 
-import { Info, LogOut, Play, Settings, Trophy } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AboutPanel } from "@/components/game-menu/AboutPanel";
@@ -9,6 +8,7 @@ import { GameMenuButton } from "@/components/game-menu/GameMenuButton";
 import { useMenuFocusManager } from "@/components/game-menu/MenuFocusManager";
 import { OptionsPanel } from "@/components/game-menu/OptionsPanel";
 import { WorldBackground } from "@/components/game-menu/WorldBackground";
+import { GlassPanel } from "@/components/game-ui/GlassPanel";
 import { motionDurations } from "@/components/motion/motion";
 import { profile } from "@/data/profile";
 import {
@@ -193,7 +193,7 @@ export function MainMenuScreen() {
 
       <div className={`main-menu-shell ${panel === "main" ? "main-menu-shell-home" : "main-menu-shell-panel"}`}>
         {panel === "main" ? (
-          <div className="main-menu-content">
+          <GlassPanel className="main-menu-content">
             <header className="main-menu-brand">
               <p>Interactive developer portfolio</p>
               <h1 id="main-menu-title">{profile.shortName}</h1>
@@ -202,7 +202,7 @@ export function MainMenuScreen() {
 
             <div className="main-menu-buttons" aria-label="Portfolio main menu">
               <GameMenuButton
-                icon={Play}
+                icon="diamond"
                 variant="primary"
                 selected={selectedAction === "start"}
                 onFocus={() => setSelectedAction("start")}
@@ -212,7 +212,7 @@ export function MainMenuScreen() {
                 Start portfolio
               </GameMenuButton>
               <GameMenuButton
-                icon={Settings}
+                icon="crafting-table"
                 selected={selectedAction === "options"}
                 onFocus={() => setSelectedAction("options")}
                 onPointerEnter={() => setSelectedAction("options")}
@@ -221,7 +221,7 @@ export function MainMenuScreen() {
                 Options
               </GameMenuButton>
               <GameMenuButton
-                icon={Trophy}
+                icon="nether-star"
                 selected={selectedAction === "achievements"}
                 onFocus={() => setSelectedAction("achievements")}
                 onPointerEnter={() => setSelectedAction("achievements")}
@@ -230,7 +230,7 @@ export function MainMenuScreen() {
                 Achievements
               </GameMenuButton>
               <GameMenuButton
-                icon={Info}
+                icon="book"
                 selected={selectedAction === "about"}
                 onFocus={() => setSelectedAction("about")}
                 onPointerEnter={() => setSelectedAction("about")}
@@ -239,7 +239,7 @@ export function MainMenuScreen() {
                 About
               </GameMenuButton>
               <GameMenuButton
-                icon={LogOut}
+                icon={hasEntered ? "arrow" : "oak-door"}
                 variant="danger"
                 selected={selectedAction === "exit"}
                 onFocus={() => setSelectedAction("exit")}
@@ -255,7 +255,7 @@ export function MainMenuScreen() {
               <span><kbd>↑</kbd><kbd>↓</kbd> Select&nbsp;&nbsp; <kbd>Enter</kbd> Confirm&nbsp;&nbsp; <kbd>Esc</kbd> Back</span>
               <span>v2.0 · ONLINE</span>
             </footer>
-          </div>
+          </GlassPanel>
         ) : null}
 
         {panel === "options" ? (

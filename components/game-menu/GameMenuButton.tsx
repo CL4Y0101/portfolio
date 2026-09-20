@@ -1,7 +1,9 @@
-import type { ButtonHTMLAttributes, ComponentType } from "react";
+import type { ButtonHTMLAttributes } from "react";
+import { GameIcon, type GameIconName } from "@/components/game-ui/GameIcon";
+import ui from "@/components/game-ui/minecraft.module.css";
 
 type GameMenuButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  icon?: ComponentType<{ size?: number; "aria-hidden"?: boolean }>;
+  icon?: GameIconName;
   selected?: boolean;
   variant?: "primary" | "secondary" | "danger";
 };
@@ -9,7 +11,7 @@ type GameMenuButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 export function GameMenuButton({
   children,
   className = "",
-  icon: Icon,
+  icon,
   selected = false,
   variant = "secondary",
   ...props
@@ -17,13 +19,14 @@ export function GameMenuButton({
   return (
     <button
       {...props}
-      className={`game-menu-button game-menu-button-${variant} ${className}`.trim()}
+      className={`game-menu-button game-menu-button-${variant} ${ui.button} ${className}`.trim()}
+      data-variant={variant}
       data-game-focusable
       data-selected={selected ? "true" : "false"}
       type="button"
     >
       <span className="game-menu-cursor" aria-hidden="true" />
-      {Icon ? <Icon aria-hidden={true} size={19} /> : null}
+      {icon ? <GameIcon name={icon} /> : <span aria-hidden="true" />}
       <span>{children}</span>
       <span className="game-menu-key" aria-hidden="true">↵</span>
     </button>

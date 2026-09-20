@@ -1,0 +1,23 @@
+/* Subset adapted from themuhamed/mcicons resources/css/mcicons.css.
+ * See README.upstream.md for the supplied attribution and license declaration.
+ * Selectors are prefixed; relative URLs support subpath deployments.
+ */
+.mc-ui-icon {
+  display: inline-block;
+  flex: 0 0 auto;
+  vertical-align: middle;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  image-rendering: pixelated;
+}
+.mc-ui-diamond { background-image: url('./icons/minecraft_diamond.png'); }
+.mc-ui-crafting-table { background-image: url('./icons/minecraft_crafting_table.png'); }
+.mc-ui-nether-star { background-image: url('./icons/minecraft_nether_star.png'); }
+.mc-ui-book { background-image: url('./icons/minecraft_book.png'); }
+.mc-ui-arrow { background-image: url('./icons/minecraft_arrow.png'); }
+.mc-ui-oak-door { background-image: url('./icons/minecraft_oak_door.png'); }
+.mc-ui-compass { background-image: url('./icons/minecraft_compass.png'); }
+.mc-ui-emerald { background-image: url('./icons/minecraft_emerald.png'); }
+.mc-ui-redstone { background-image: url('./icons/minecraft_redstone.png'); }
+.mc-ui-chest { background-image: url('./icons/minecraft_chest.png'); }

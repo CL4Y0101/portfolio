@@ -1,6 +1,9 @@
 "use client";
 
-import { Gamepad2, Menu, Search, X } from "lucide-react";
+import { Menu, Search, X } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { GameIcon } from "@/components/game-ui/GameIcon";
+import ui from "@/components/game-ui/minecraft.module.css";
 import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
@@ -19,6 +22,7 @@ const navigation = [
 ];
 
 export function Navbar() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
@@ -77,7 +81,7 @@ export function Navbar() {
   }, []);
 
   return (
-    <header className="site-header" data-scrolled={isScrolled ? "true" : "false"} data-world-entry>
+    <header className={`site-header ${ui.hud}`} data-scrolled={isScrolled ? "true" : "false"} data-world-entry>
       <nav className="shell nav-shell" aria-label="Primary navigation">
         <Link className="site-brand" href="/#home" onClick={() => setIsOpen(false)}>
           <span className="brand-avatar"><Image src={profile.profileImage} alt="" width={40} height={40} priority /></span>
@@ -92,7 +96,7 @@ export function Navbar() {
             <Link
               key={item.label}
               href={item.href}
-              className={activeSection === item.href.split("#")[1] ? "nav-link-active" : ""}
+              className={`${ui.hudLink} ${activeSection === item.href.split("#")[1] ? "nav-link-active" : ""}`}
               aria-current={activeSection === item.href.split("#")[1] ? "location" : undefined}
               onClick={() => setIsOpen(false)}
             >
@@ -103,15 +107,17 @@ export function Navbar() {
         </div>
 
         <div className="nav-controls">
-          <button
+          {pathname === "/" ? <button
             className="icon-button main-menu-trigger"
             type="button"
             onClick={() => window.dispatchEvent(new Event(openMainMenuEvent))}
             aria-label="Open portfolio main menu"
             title="Open main menu"
           >
-            <Gamepad2 aria-hidden="true" size={18} />
-          </button>
+            <GameIcon name="compass" />
+          </button> : <Link className="icon-button main-menu-trigger" href="/" aria-label="Return to portfolio" title="Return to portfolio">
+            <GameIcon name="compass" />
+          </Link>}
           <button className="command-trigger" type="button" onClick={openPalette} aria-label="Open command palette">
             <Search aria-hidden="true" size={17} />
             <span>Command</span>
