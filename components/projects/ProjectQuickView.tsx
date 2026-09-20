@@ -8,14 +8,16 @@ import type { Project } from "@/lib/types";
 
 type ProjectQuickViewProps = {
   project: Project | null;
+  open: boolean;
   onClose: () => void;
+  onAfterClose: () => void;
 };
 
-export function ProjectQuickView({ project, onClose }: ProjectQuickViewProps) {
+export function ProjectQuickView({ project, open, onClose, onAfterClose }: ProjectQuickViewProps) {
   const titleId = "project-quick-view-title";
 
   return (
-    <Dialog open={Boolean(project)} onClose={onClose} labelledBy={titleId} className="quick-view-dialog">
+    <Dialog open={open} onClose={onClose} onAfterClose={onAfterClose} labelledBy={titleId} className="quick-view-dialog">
       {project ? (
         <div className="dialog-panel quick-view-panel">
           <div className="dialog-heading">

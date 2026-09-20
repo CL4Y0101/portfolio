@@ -21,6 +21,7 @@ export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const openPalette = useCallback(() => {
     setIsOpen(false);
@@ -38,6 +39,21 @@ export function Navbar() {
     }
     window.addEventListener("keydown", handleEscape);
     return () => window.removeEventListener("keydown", handleEscape);
+  }, []);
+
+  useEffect(() => {
+    let frame = 0;
+    const update = () => {
+      window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(() => setIsScrolled(window.scrollY > 12));
+    };
+
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", update);
+    };
   }, []);
 
   useEffect(() => {
@@ -60,11 +76,14 @@ export function Navbar() {
   }, []);
 
   return (
-    <header className="site-header">
+    <header className="site-header" data-scrolled={isScrolled ? "true" : "false"} data-world-entry>
       <nav className="shell nav-shell" aria-label="Primary navigation">
         <Link className="site-brand" href="/#home" onClick={() => setIsOpen(false)}>
-          <Image src={profile.profileImage} alt="" width={40} height={40} priority />
-          <span>{profile.shortName}</span>
+          <span className="brand-avatar"><Image src={profile.profileImage} alt="" width={40} height={40} priority /></span>
+          <span className="brand-copy">
+            <strong>{profile.shortName}</strong>
+            <small>WORLD / PORTFOLIO</small>
+          </span>
         </Link>
 
         <div className={`nav-links ${isOpen ? "nav-links-open" : ""}`} id="site-navigation">
@@ -76,6 +95,7 @@ export function Navbar() {
               aria-current={activeSection === item.href.split("#")[1] ? "location" : undefined}
               onClick={() => setIsOpen(false)}
             >
+              <span className="nav-slot-marker" aria-hidden="true" />
               {item.label}
             </Link>
           ))}

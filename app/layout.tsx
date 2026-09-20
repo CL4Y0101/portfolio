@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import type { ReactNode } from "react";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
+import { MotionProvider } from "@/components/motion/MotionProvider";
+import { PageTransition } from "@/components/motion/PageTransition";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { profile } from "@/data/profile";
 import { SITE_URL } from "@/lib/constants";
@@ -116,12 +118,14 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }} />
       </head>
       <body>
+        <MotionProvider />
         <a className="skip-link" href="#main-content">
           Skip to main content
         </a>
         <Navbar />
         {children}
         <Footer />
+        <PageTransition />
         <ScrollReveal />
       </body>
     </html>

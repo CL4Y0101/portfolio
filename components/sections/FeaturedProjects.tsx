@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { featuredProjects } from "@/data/projects";
 import type { Project, ProjectCategory } from "@/lib/types";
 import { ProjectCard } from "@/components/ui/ProjectCard";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ProjectQuickView } from "@/components/projects/ProjectQuickView";
+import { useReducedMotion } from "@/components/motion/useReducedMotion";
+import { motionDurations, motionStagger } from "@/components/motion/motion";
 
 const categories: Array<"All" | ProjectCategory> = [
   "All",
@@ -18,11 +20,46 @@ const categories: Array<"All" | ProjectCategory> = [
 
 export function FeaturedProjects() {
   const [activeCategory, setActiveCategory] = useState<(typeof categories)[number]>("All");
+  const [renderedCategory, setRenderedCategory] = useState<(typeof categories)[number]>("All");
+  const [filterPhase, setFilterPhase] = useState<"idle" | "out" | "in">("idle");
   const [quickViewProject, setQuickViewProject] = useState<Project | null>(null);
+  const [quickViewOpen, setQuickViewOpen] = useState(false);
+  const filterTimers = useRef<Array<ReturnType<typeof setTimeout>>>([]);
+  const reducedMotion = useReducedMotion();
   const visibleProjects =
-    activeCategory === "All"
+    renderedCategory === "All"
       ? featuredProjects
-      : featuredProjects.filter((project) => project.categories.includes(activeCategory));
+      : featuredProjects.filter((project) => project.categories.includes(renderedCategory));
+
+  useEffect(() => () => filterTimers.current.forEach(clearTimeout), []);
+
+  const openQuickView = useCallback((project: Project) => {
+    setQuickViewProject(project);
+    setQuickViewOpen(true);
+  }, []);
+
+  const clearQuickView = useCallback(() => setQuickViewProject(null), []);
+
+  function selectCategory(category: (typeof categories)[number]) {
+    if (category === activeCategory) return;
+    filterTimers.current.forEach(clearTimeout);
+    filterTimers.current = [];
+    setActiveCategory(category);
+
+    if (reducedMotion) {
+      setRenderedCategory(category);
+      setFilterPhase("idle");
+      return;
+    }
+
+    setFilterPhase("out");
+    filterTimers.current.push(setTimeout(() => {
+      setRenderedCategory(category);
+      setFilterPhase("in");
+      const incomingDuration = motionDurations.base + motionStagger.step * motionStagger.maximumItems;
+      filterTimers.current.push(setTimeout(() => setFilterPhase("idle"), incomingDuration));
+    }, motionDurations.fast));
+  }
 
   return (
     <section className="section section-work" id="work" aria-labelledby="work-title">
@@ -40,7 +77,7 @@ export function FeaturedProjects() {
                   type="button"
                   className={activeCategory === category ? "filter-active" : ""}
                   aria-pressed={activeCategory === category}
-                  onClick={() => setActiveCategory(category)}
+                  onClick={() => selectCategory(category)}
                 >
                   {category}
                 </button>
@@ -50,20 +87,26 @@ export function FeaturedProjects() {
         />
 
         <p className="filter-status sr-only" aria-live="polite">
-          Showing {visibleProjects.length} {visibleProjects.length === 1 ? "project" : "projects"} for {activeCategory}.
+          Showing {visibleProjects.length} {visibleProjects.length === 1 ? "project" : "projects"} for {renderedCategory}.
         </p>
-        <div className="projects-grid" data-scroll-reveal="stagger">
+        <div className="projects-grid" data-scroll-reveal="stagger" data-filter-phase={filterPhase} aria-busy={filterPhase === "out"}>
           {visibleProjects.map((project, index) => (
             <ProjectCard
-              key={`${activeCategory}-${project.slug}`}
+              key={project.slug}
               project={project}
+              index={index}
               priority={index === 0 && activeCategory === "All"}
-              onQuickView={setQuickViewProject}
+              onQuickView={openQuickView}
             />
           ))}
         </div>
       </div>
-      <ProjectQuickView project={quickViewProject} onClose={() => setQuickViewProject(null)} />
+      <ProjectQuickView
+        project={quickViewProject}
+        open={quickViewOpen}
+        onClose={() => setQuickViewOpen(false)}
+        onAfterClose={clearQuickView}
+      />
     </section>
   );
 }

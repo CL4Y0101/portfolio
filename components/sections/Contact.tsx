@@ -25,7 +25,7 @@ export function Contact() {
             For product development, web systems, or engineering collaboration, email is the most direct way to reach me.
           </p>
         </div>
-        <div className="contact-links" data-scroll-reveal>
+        <div className="contact-links" data-scroll-reveal="stagger">
           {contactLinks.map((item) => {
             const Icon = item.icon;
             return (

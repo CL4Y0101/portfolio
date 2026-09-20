@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Reveal } from "@/components/motion/Reveal";
 
 type SectionHeadingProps = {
   eyebrow: string;
@@ -18,13 +19,13 @@ export function SectionHeading({
   titleId,
 }: SectionHeadingProps) {
   return (
-    <div data-scroll-reveal className={`section-heading ${align === "center" ? "section-heading-centered" : ""}`}>
+    <Reveal variant="block-wipe" className={`section-heading ${align === "center" ? "section-heading-centered" : ""}`}>
       <div>
         <p className="eyebrow">{eyebrow}</p>
         <h2 id={titleId}>{title}</h2>
         {description ? <p className="section-description">{description}</p> : null}
       </div>
       {action ? <div className="section-action">{action}</div> : null}
-    </div>
+    </Reveal>
   );
 }

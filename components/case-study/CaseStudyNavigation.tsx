@@ -34,6 +34,7 @@ export function CaseStudyNavigation({ sections }: { sections: CaseStudySection[]
             aria-current={activeId === section.id ? "location" : undefined}
             onClick={() => setActiveId(section.id)}
           >
+            <span aria-hidden="true">{String(sections.indexOf(section) + 1).padStart(2, "0")}</span>
             {section.label}
           </a>
         ))}

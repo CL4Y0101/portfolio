@@ -22,7 +22,7 @@ export function OpenSource() {
               github.com/CL4Y0101 <ArrowUpRight aria-hidden="true" size={15} />
             </a>
           </div>
-          <ul>
+          <ul data-scroll-reveal="stagger">
             {publicProjects.map((project) => {
               const repository = project.links.find((link) => link.kind === "repository");
               return (

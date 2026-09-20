@@ -19,9 +19,9 @@ export function About() {
         </div>
       </div>
 
-      <div className="shell education-wrap" id="education" data-scroll-reveal>
+      <div className="shell education-wrap" id="education" data-scroll-reveal="fade-up">
         <p className="eyebrow">Education</p>
-        <div className="education-grid">
+        <div className="education-grid" data-scroll-reveal="stagger">
           {education.map((item) => (
             <article key={item.institution}>
               <span>{item.period ?? "Technical education"}</span>

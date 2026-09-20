@@ -27,7 +27,7 @@ export function ProjectTechnologyExplorer({ project, projects }: { project: Proj
         ))}
       </div>
 
-      <div className="technology-usage" aria-live="polite">
+      <div className="technology-usage" key={activeTechnology} aria-live="polite">
         <span>Where I used {activeTechnology}</span>
         <div>
           {relatedProjects.map((item) => (

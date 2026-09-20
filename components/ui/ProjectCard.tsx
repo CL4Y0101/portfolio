@@ -6,10 +6,12 @@ import { Badge } from "@/components/ui/Badge";
 
 export function ProjectCard({
   project,
+  index = 0,
   priority = false,
   onQuickView,
 }: {
   project: Project;
+  index?: number;
   priority?: boolean;
   onQuickView: (project: Project) => void;
 }) {
@@ -17,7 +19,10 @@ export function ProjectCard({
   const liveLink = project.links.find((link) => link.kind === "production" || link.kind === "demo");
 
   return (
-    <article className={`project-card ${project.categories.includes("Professional") ? "project-card-prominent" : ""}`}>
+    <article
+      className={`project-card ${project.categories.includes("Professional") ? "project-card-prominent" : ""}`}
+      data-build-index={`BUILD ${String(index + 1).padStart(2, "0")}`}
+    >
       {project.screenshots[0] ? (
         <Link className="project-media" href={`/projects/${project.slug}`} prefetch={false} aria-label={`Read ${project.title} case study`}>
           <Image

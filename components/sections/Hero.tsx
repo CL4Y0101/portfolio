@@ -2,18 +2,20 @@ import { ArrowDownRight, Download, MapPin } from "lucide-react";
 import Image from "next/image";
 import { profile } from "@/data/profile";
 import { Button } from "@/components/ui/Button";
+import { HeroMotion } from "@/components/motion/HeroMotion";
 
 export function Hero() {
   return (
-    <section className="hero-section" id="home" aria-labelledby="hero-title">
+    <section className="hero-section" id="home" aria-labelledby="hero-title" data-world-entry>
+      <HeroMotion />
       <div className="shell hero-grid">
         <div className="hero-copy">
-          <p className="eyebrow">{profile.eyebrow}</p>
-          <h1 id="hero-title">{profile.name}</h1>
-          <p className="hero-statement">{profile.headline}</p>
-          <p className="hero-intro">{profile.introduction}</p>
+          <p className="eyebrow hero-entry hero-entry-1">{profile.eyebrow}</p>
+          <h1 className="hero-entry hero-entry-2" id="hero-title">{profile.name}</h1>
+          <p className="hero-statement hero-entry hero-entry-3">{profile.headline}</p>
+          <p className="hero-intro hero-entry hero-entry-4">{profile.introduction}</p>
 
-          <div className="hero-actions">
+          <div className="hero-actions hero-entry hero-entry-5">
             <Button href="/#work">
               View selected work <ArrowDownRight aria-hidden="true" size={17} />
             </Button>
@@ -22,7 +24,7 @@ export function Hero() {
             </Button>
           </div>
 
-          <div className="hero-location">
+          <div className="hero-location hero-entry hero-entry-6">
             <MapPin aria-hidden="true" size={16} />
             <span>{profile.location}</span>
             <span className="hero-location-divider" aria-hidden="true" />
@@ -30,7 +32,7 @@ export function Hero() {
           </div>
         </div>
 
-        <aside className="hero-profile" aria-label="Aditya's current focus">
+        <aside className="hero-profile hero-entry hero-entry-portrait" aria-label="Aditya's current focus">
           <div className="portrait-frame">
             <Image
               src={profile.profileImage}

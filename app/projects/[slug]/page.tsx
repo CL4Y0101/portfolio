@@ -57,12 +57,15 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   if (!project) notFound();
 
+  const projectIndex = projects.findIndex((item) => item.slug === project.slug);
+  const nextProject = projects[(projectIndex + 1) % projects.length];
+
   return (
-    <main id="main-content" className="case-study">
+    <main id="main-content" className="case-study" data-case-entry>
       <ReadingProgress />
       <header className="case-hero">
         <div className="shell case-hero-grid">
-          <div>
+          <div className="case-hero-copy">
             <Link className="back-link" href="/#work">
               <ArrowLeft aria-hidden="true" size={16} /> Back to selected work
             </Link>
@@ -76,7 +79,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             <p className="case-subtitle">{project.subtitle}</p>
           </div>
 
-          <dl className="case-facts">
+          <dl className="case-facts" data-scroll-reveal="stagger">
             <div>
               <dt>Role</dt>
               <dd>{project.role}</dd>
@@ -92,7 +95,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           </dl>
         </div>
 
-        <div className="shell case-links">
+        <div className="shell case-links" data-scroll-reveal="fade-up">
           {project.links.map((link) => (
             <a key={link.label} className="button button-secondary" href={link.url} target="_blank" rel="noreferrer">
               {link.label} <ArrowUpRight aria-hidden="true" size={16} />
@@ -105,7 +108,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       <CaseStudyNavigation sections={caseStudySections} />
 
       {project.screenshots[0] ? (
-        <section className="shell case-cover" aria-label={`${project.title} screenshot`} data-scroll-reveal>
+        <section className="shell case-cover" aria-label={`${project.title} screenshot`} data-scroll-reveal="portal">
           <Image
             src={project.screenshots[0].src}
             alt={project.screenshots[0].alt}
@@ -117,14 +120,14 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           <p>{project.screenshots[0].caption}</p>
         </section>
       ) : (
-        <div className="shell case-no-cover" aria-label="Project media note" data-scroll-reveal>
+        <div className="shell case-no-cover" aria-label="Project media note" data-scroll-reveal="portal">
           <span>Project media</span>
           <p>No verified project screenshot is published here. The public repository is linked for implementation evidence.</p>
         </div>
       )}
 
       <section className="section case-overview" id="overview">
-        <div className="shell case-narrative" data-scroll-reveal>
+        <div className="shell case-narrative" data-scroll-reveal="block-wipe">
           <div>
             <p className="eyebrow">Overview</p>
             <h2>What the project needed to solve.</h2>
@@ -149,7 +152,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             <h2>Responsibilities and shipped work.</h2>
             <p className="section-description">The wording reflects contribution and maintenance work without claiming sole ownership.</p>
           </div>
-          <ul className="responsibility-list">
+          <ul className="responsibility-list" data-scroll-reveal="stagger">
             {project.responsibilities.map((responsibility) => (
               <li key={responsibility}>
                 <CheckCircle2 aria-hidden="true" size={19} />
@@ -173,7 +176,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
       <section className="section section-tinted" id="challenges">
         <div className="shell">
-          <div className="case-section-heading">
+          <div className="case-section-heading" data-scroll-reveal="block-wipe">
             <p className="eyebrow">Engineering areas</p>
             <h2>Challenges handled in context.</h2>
           </div>
@@ -223,12 +226,18 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       ) : null}
 
       <section className="case-cta">
-        <div className="shell" data-scroll-reveal>
+        <div className="shell" data-scroll-reveal="portal">
           <p className="eyebrow">Next project</p>
           <h2>Explore the rest of the work.</h2>
-          <Link className="button button-primary" href="/#work">
-            View selected work <ExternalLink aria-hidden="true" size={16} />
-          </Link>
+          <p className="case-cta-description">Next region: {nextProject.title}. You can also return to the complete selected work gallery.</p>
+          <div className="case-cta-actions">
+            <Link className="button button-primary" href={`/projects/${nextProject.slug}`} prefetch={false}>
+              Next case study <ExternalLink aria-hidden="true" size={16} />
+            </Link>
+            <Link className="button button-secondary" href="/#work">
+              View selected work
+            </Link>
+          </div>
         </div>
       </section>
     </main>
