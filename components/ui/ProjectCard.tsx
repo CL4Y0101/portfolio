@@ -44,6 +44,13 @@ export function ProjectCard({
       )}
 
       <div className="project-card-body">
+        <div className="project-card-summary">
+          <h3>
+            <Link href={`/projects/${project.slug}`} prefetch={false}>{project.title}</Link>
+          </h3>
+          <p>{project.description}</p>
+        </div>
+
         <div className="project-meta">
           <Badge tone={project.status === "production" ? "live" : project.status === "in-progress" ? "warm" : "default"}>
             {project.statusLabel}
@@ -54,13 +61,7 @@ export function ProjectCard({
           </span>
         </div>
 
-        <div>
-          <span className="project-card-period">{project.period}</span>
-          <h3>
-            <Link href={`/projects/${project.slug}`} prefetch={false}>{project.title}</Link>
-          </h3>
-          <p>{project.description}</p>
-        </div>
+        <span className="project-card-period">{project.period}</span>
 
         <ul className="project-stack" aria-label={`${project.title} technologies`}>
           {project.technologies.slice(0, 5).map((technology) => (

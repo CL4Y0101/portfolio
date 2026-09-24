@@ -70,11 +70,11 @@ export function FeaturedProjects() {
         <SectionHeading
           eyebrow="Selected work"
           titleId="work-title"
-          title="Products with real constraints, users, and infrastructure."
-          description="Production work comes first, followed by full-stack product development and clearly labeled experiments."
+          title="Selected projects"
+          description="Products with real constraints, users, and infrastructure. Production work comes first, followed by full-stack product development and clearly labeled experiments."
           action={
             <Button href="/#project-gallery" variant="secondary" className={styles.browseLink}>
-              Browse projects <MoveRight aria-hidden="true" size={17} />
+              View all projects <MoveRight aria-hidden="true" size={17} />
             </Button>
           }
         />
@@ -99,7 +99,7 @@ export function FeaturedProjects() {
         <p className="filter-status sr-only" aria-live="polite">
           Showing {visibleProjects.length} {visibleProjects.length === 1 ? "project" : "projects"} for {renderedCategory}.
         </p>
-        <div className={`projects-grid ${styles.grid}`} id="project-gallery" data-scroll-reveal="stagger" data-filter-phase={filterPhase} data-project-count={visibleProjects.length} aria-busy={filterPhase === "out"}>
+        <div className={`projects-grid ${styles.grid}`} id="project-gallery" data-scroll-reveal="stagger" data-filter-phase={filterPhase} aria-busy={filterPhase === "out"}>
           {visibleProjects.map((project, index) => (
             <ProjectCard
               key={project.slug}

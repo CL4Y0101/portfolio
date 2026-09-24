@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AboutPanel } from "@/components/game-menu/AboutPanel";
 import { AchievementsPanel } from "@/components/game-menu/AchievementsPanel";
+import { ExitPrompt } from "@/components/game-menu/ExitPrompt";
 import { GameMenuButton } from "@/components/game-menu/GameMenuButton";
 import { useMenuFocusManager } from "@/components/game-menu/MenuFocusManager";
 import { OptionsPanel } from "@/components/game-menu/OptionsPanel";
@@ -21,7 +22,7 @@ import {
   type GamePreferences,
 } from "@/lib/preferences";
 
-type MenuPanel = "main" | "options" | "achievements" | "about";
+type MenuPanel = "main" | "options" | "achievements" | "about" | "exit";
 type MenuState = "active" | "entering";
 type MenuAction = "start" | "options" | "achievements" | "about" | "exit";
 
@@ -149,12 +150,14 @@ export function MainMenuScreen() {
   const backToMain = useCallback(() => {
     playTick();
     setPanel("main");
+    setSelectedAction("start");
   }, [playTick]);
 
   const handleEscape = useCallback(() => {
     if (panel !== "main") backToMain();
-    else enterPortfolio(hasEntered);
-  }, [backToMain, enterPortfolio, hasEntered, panel]);
+    else if (hasEntered) enterPortfolio(true);
+    else openPanel("exit");
+  }, [backToMain, enterPortfolio, hasEntered, openPanel, panel]);
 
   useMenuFocusManager(containerRef, active, panel, handleEscape);
 
@@ -184,7 +187,10 @@ export function MainMenuScreen() {
           ? "options-title"
           : panel === "achievements"
             ? "menu-achievements-title"
-            : "menu-about-title"}
+            : panel === "about"
+              ? "menu-about-title"
+              : "menu-exit-title"}
+      aria-describedby={panel === "exit" ? "menu-exit-description" : undefined}
     >
       <WorldBackground paused={paused} />
 
@@ -245,7 +251,7 @@ export function MainMenuScreen() {
                 selected={selectedAction === "exit"}
                 onFocus={() => setSelectedAction("exit")}
                 onPointerEnter={() => setSelectedAction("exit")}
-                onClick={() => enterPortfolio(hasEntered)}
+                onClick={() => hasEntered ? enterPortfolio(true) : openPanel("exit")}
               >
                 {hasEntered ? "Back" : "Exit menu"}
               </GameMenuButton>
@@ -264,6 +270,7 @@ export function MainMenuScreen() {
         ) : null}
         {panel === "achievements" ? <AchievementsPanel onBack={backToMain} /> : null}
         {panel === "about" ? <AboutPanel onBack={backToMain} onEnter={() => enterPortfolio(false)} /> : null}
+        {panel === "exit" ? <ExitPrompt onBack={backToMain} onStart={() => enterPortfolio(false)} /> : null}
       </div>
     </section>
   );
