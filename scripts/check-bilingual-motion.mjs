@@ -1,0 +1,132 @@
+import fs from "node:fs";
+
+const baseUrl = process.argv[2] ?? "http://127.0.0.1:3031/";
+
+const tabs = await (await fetch("http://127.0.0.1:9229/json")).json();
+const tab = tabs.find((item) => item.type === "page");
+if (!tab) throw new Error("No browser tab");
+const socket = new WebSocket(tab.webSocketDebuggerUrl);
+await new Promise((resolve, reject) => { socket.onopen = resolve; socket.onerror = reject; });
+let nextId = 0;
+const pending = new Map();
+socket.onmessage = ({ data }) => {
+  const message = JSON.parse(data);
+  const handler = pending.get(message.id);
+  if (handler) { pending.delete(message.id); handler(message); }
+};
+const send = (method, params = {}) => new Promise((resolve, reject) => {
+  const id = ++nextId;
+  pending.set(id, (message) => message.error ? reject(new Error(JSON.stringify(message.error))) : resolve(message.result));
+  socket.send(JSON.stringify({ id, method, params }));
+});
+const pause = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const evalJs = async (expression) => (await send("Runtime.evaluate", { expression, returnByValue: true })).result.value;
+const screenshot = async (name) => {
+  if (process.argv[2]) return;
+  const result = await send("Page.captureScreenshot", { format: "png", captureBeyondViewport: false });
+  fs.writeFileSync(`${process.env.TEMP}\\${name}.png`, Buffer.from(result.data, "base64"));
+};
+const waitFor = async (expression) => {
+  for (let attempt = 0; attempt < 50; attempt += 1) {
+    if (await evalJs(expression)) return;
+    await pause(250);
+  }
+  throw new Error(`Timed out: ${expression}`);
+};
+const viewport = (width, height) => send("Emulation.setDeviceMetricsOverride", { width, height, deviceScaleFactor: 1, mobile: width < 700 });
+const navigate = async (url) => { await send("Page.navigate", { url }); await waitFor("document.readyState==='complete'"); };
+const start = async () => {
+  await waitFor("document.body.classList.contains('game-menu-open')");
+  await evalJs("document.querySelector('.main-menu-buttons .game-menu-button-primary')?.click()");
+  await waitFor("!document.querySelector('.main-menu-root')");
+};
+
+await send("Page.enable");
+await viewport(1440, 1000);
+await navigate(baseUrl);
+await waitFor("document.body.classList.contains('game-menu-open')");
+console.log("menu en", await evalJs("({lang:document.documentElement.lang,focus:document.activeElement?.getAttribute('aria-label')||document.activeElement?.innerText?.slice(0,22)})"));
+await evalJs("document.querySelector('.main-menu-root .language-toggle button:last-child')?.click()");
+await pause(300);
+console.log("menu id", await evalJs("({lang:document.documentElement.lang,start:document.querySelector('.main-menu-buttons .game-menu-button-primary')?.innerText,stored:localStorage.getItem('portfolio-language')})"));
+await screenshot("portfolio-bilingual-menu-desktop");
+await evalJs("document.querySelector('.main-menu-buttons .game-menu-button-danger')?.click()");
+await waitFor("!!document.querySelector('.exit-menu-panel')");
+console.log("exit prompt", await evalJs("({visible:!!document.querySelector('.exit-menu-panel'),menuOpen:document.body.classList.contains('game-menu-open'),title:document.querySelector('#menu-exit-title')?.innerText})"));
+await evalJs("document.querySelector('.exit-menu-actions button:last-child')?.click()");
+await waitFor("!!document.querySelector('.main-menu-buttons')");
+await start();
+await pause(1800);
+console.log("hero id", await evalJs("({lang:document.documentElement.lang,headline:document.querySelector('.hero-statement')?.innerText,scrollWidth:document.documentElement.scrollWidth,viewport:innerWidth})"));
+await screenshot("portfolio-bilingual-hero-desktop");
+await evalJs("document.documentElement.style.scrollBehavior='auto';document.querySelector('#work')?.scrollIntoView({block:'start',behavior:'instant'})");
+await pause(600);
+console.log("spread start", await evalJs("({visible:getComputedStyle(document.querySelector('[aria-label=\"Project previews\"]')).display,first:document.querySelector('[aria-label=\"Project previews\"] a')?.style.transform,scrollWidth:document.documentElement.scrollWidth})"));
+await screenshot("portfolio-spread-start-desktop");
+await evalJs("window.scrollBy({top:600,behavior:'instant'})");
+await pause(500);
+console.log("spread progress", await evalJs("({progress:document.querySelector('[aria-label=\"Project previews\"]')?.style.getPropertyValue('--spread-progress'),first:document.querySelector('[aria-label=\"Project previews\"] a')?.style.transform})"));
+await screenshot("portfolio-spread-mid-desktop");
+await evalJs("document.querySelector('#project-gallery')?.scrollIntoView({block:'start',behavior:'instant'})");
+await pause(650);
+console.log("grid id", await evalJs("({cards:document.querySelectorAll('.projects-grid .project-card').length,teaser:document.querySelector('.project-card-summary p')?.innerText,columns:getComputedStyle(document.querySelector('.projects-grid')).gridTemplateColumns.split(' ').length})"));
+await screenshot("portfolio-grid-id-desktop");
+await evalJs("[...document.querySelectorAll('.filter-list button')].find(button => button.getAttribute('aria-pressed')==='false'&&button.innerText.includes('Otomasi'))?.click()");
+await pause(650);
+console.log("filter id", await evalJs("({cards:document.querySelectorAll('.projects-grid .project-card').length,status:document.querySelector('.filter-status')?.innerText})"));
+await evalJs("document.querySelector('.projects-grid .quick-view-button')?.focus();document.querySelector('.projects-grid .quick-view-button')?.click()");
+await pause(350);
+console.log("quick view id", await evalJs("({open:document.querySelector('.quick-view-dialog')?.open,heading:document.querySelector('.quick-view-panel .eyebrow')?.innerText})"));
+await send("Input.dispatchKeyEvent", { type: "keyDown", key: "Escape", code: "Escape", windowsVirtualKeyCode: 27 });
+await send("Input.dispatchKeyEvent", { type: "keyUp", key: "Escape", code: "Escape", windowsVirtualKeyCode: 27 });
+await pause(300);
+console.log("quick view Escape", await evalJs("({open:document.querySelector('.quick-view-dialog')?.open,focus:document.activeElement?.className})"));
+await evalJs("document.querySelector('.command-trigger')?.focus();document.querySelector('.command-trigger')?.click()");
+await pause(250);
+console.log("palette id", await evalJs("({open:document.querySelector('.command-dialog')?.open,searchFocused:document.activeElement?.matches('.command-search input'),first:document.querySelector('.command-results button span')?.innerText})"));
+await send("Input.dispatchKeyEvent", { type: "keyDown", key: "Escape", code: "Escape", windowsVirtualKeyCode: 27 });
+await send("Input.dispatchKeyEvent", { type: "keyUp", key: "Escape", code: "Escape", windowsVirtualKeyCode: 27 });
+await pause(250);
+console.log("palette Escape", await evalJs("({open:document.querySelector('.command-dialog')?.open,focus:document.activeElement?.className})"));
+await evalJs("document.querySelector('.nav-controls .icon-button:not(.main-menu-trigger):not(.menu-button)')?.click()");
+await pause(150);
+console.log("theme toggled", await evalJs("({theme:document.documentElement.dataset.theme,preference:document.documentElement.dataset.themePreference})"));
+await evalJs("document.querySelector('#experience')?.scrollIntoView({block:'start',behavior:'instant'})");
+await pause(650);
+console.log("experience id", await evalJs("({heading:document.querySelector('#experience-title')?.innerText,progress:document.querySelector('.experience-explorer')?.style.getPropertyValue('--journey-progress'),tabs:document.querySelectorAll('.experience-timeline button').length})"));
+await screenshot("portfolio-experience-id-desktop");
+await evalJs("document.querySelectorAll('.experience-timeline button')[1]?.click()");
+await pause(200);
+console.log("experience tab", await evalJs("({selected:document.querySelector('.experience-timeline button[aria-selected=true]')?.innerText.slice(0,75),detailsOpen:document.querySelector('.experience-detail-panels article:not([hidden]) details')?.open})"));
+
+await viewport(390, 844);
+await navigate(baseUrl);
+await waitFor("document.body.classList.contains('game-menu-open')");
+console.log("mobile menu", await evalJs("({lang:document.documentElement.lang,scrollWidth:document.documentElement.scrollWidth,viewport:innerWidth})"));
+await screenshot("portfolio-bilingual-menu-mobile");
+await start();
+await pause(1800);
+await screenshot("portfolio-bilingual-hero-mobile");
+await evalJs("document.documentElement.style.scrollBehavior='auto';document.querySelector('#work')?.scrollIntoView({block:'start',behavior:'instant'})");
+await pause(600);
+console.log("mobile work", await evalJs("({spread:getComputedStyle(document.querySelector('[aria-label=\"Project previews\"]')).display,gridColumns:getComputedStyle(document.querySelector('.projects-grid')).gridTemplateColumns.split(' ').length,scrollWidth:document.documentElement.scrollWidth,viewport:innerWidth})"));
+await screenshot("portfolio-bilingual-work-mobile");
+await evalJs("document.querySelector('#experience')?.scrollIntoView({block:'start',behavior:'instant'})");
+await pause(500);
+console.log("mobile experience", await evalJs("({scrollWidth:document.documentElement.scrollWidth,viewport:innerWidth,trackColumns:getComputedStyle(document.querySelector('.experience-timeline')).gridTemplateColumns})"));
+await screenshot("portfolio-bilingual-experience-mobile");
+await navigate(new URL("projects/kandu", baseUrl).href);
+await waitFor("!!document.querySelector('.case-subtitle')");
+await pause(1800);
+console.log("case direct id", await evalJs("({path:location.pathname,lang:document.documentElement.lang,subtitle:document.querySelector('.case-subtitle')?.innerText,scrollWidth:document.documentElement.scrollWidth})"));
+await screenshot("portfolio-bilingual-case-mobile");
+await evalJs("history.back()");
+await waitFor(`location.pathname===${JSON.stringify(new URL(baseUrl).pathname)}`);
+console.log("browser back", await evalJs("({path:location.pathname,lang:document.documentElement.lang})"));
+await evalJs("document.querySelector('.nav-controls .language-toggle button:first-child')?.click()");
+await pause(200);
+console.log("language back to EN", await evalJs("({lang:document.documentElement.lang,heading:document.querySelector('#experience-title')?.innerText?.slice(0,40)})"));
+await send("Emulation.setEmulatedMedia", { features: [{ name: "prefers-reduced-motion", value: "reduce" }] });
+await pause(300);
+console.log("reduced motion", await evalJs("({enabled:matchMedia('(prefers-reduced-motion: reduce)').matches,spread:getComputedStyle(document.querySelector('[aria-label=\"Project previews\"]')).display})"));
+socket.close();

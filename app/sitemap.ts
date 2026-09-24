@@ -13,7 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     ...projects.map((project) => ({
-      url: `${SITE_URL}/projects/${project.slug}/`,
+      url: `${SITE_URL}/projects/${project.slug}`,
       lastModified: new Date(),
       changeFrequency: "monthly" as const,
       priority: project.featured ? 0.8 : 0.6,
