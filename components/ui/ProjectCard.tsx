@@ -55,6 +55,7 @@ export function ProjectCard({
         </div>
 
         <div>
+          <span className="project-card-period">{project.period}</span>
           <h3>
             <Link href={`/projects/${project.slug}`} prefetch={false}>{project.title}</Link>
           </h3>

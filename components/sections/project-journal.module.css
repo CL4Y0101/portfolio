@@ -1,0 +1,163 @@
+.journal :global(.section-heading) {
+  align-items: center;
+  margin-bottom: clamp(26px, 4vw, 42px);
+}
+
+.browseLink {
+  white-space: nowrap;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.toolbarLabel {
+  flex: 0 0 auto;
+  color: var(--muted);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.68rem;
+  font-weight: 650;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.journal .grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(14px, 1.7vw, 22px);
+  align-items: stretch;
+}
+
+.journal .grid[data-project-count="1"] {
+  max-width: 400px;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.journal .grid[data-project-count="2"] {
+  max-width: 780px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.journal .grid[data-project-count="3"] {
+  max-width: 1000px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.journal .grid :global(.project-card),
+.journal .grid :global(.project-card-prominent) {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  grid-column: auto;
+}
+
+.journal .grid :global(.project-media),
+.journal .grid :global(.project-placeholder),
+.journal .grid :global(.project-card-prominent .project-media),
+.journal .grid :global(.project-card-prominent .project-placeholder) {
+  min-height: 0;
+  flex: 0 0 auto;
+  aspect-ratio: 16 / 9;
+  border-right: 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.journal .grid :global(.project-media img) {
+  object-position: top center;
+  transition: opacity var(--motion-base) var(--ease-standard), transform var(--motion-base) var(--ease-standard);
+}
+
+.journal .grid :global(.project-card:hover .project-media img),
+.journal .grid :global(.project-card:focus-within .project-media img) {
+  opacity: 0.84;
+}
+
+.journal .grid :global(.project-card-body) {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  align-content: normal;
+  gap: 15px;
+  padding: clamp(17px, 1.8vw, 22px);
+}
+
+.journal .grid :global(.project-meta) {
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.journal .grid :global(.project-card-period) {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.journal .grid :global(.project-card h3) {
+  margin-bottom: 9px;
+  font-size: clamp(1.15rem, 1.5vw, 1.42rem);
+  line-height: 1.23;
+}
+
+.journal .grid :global(.project-card p) {
+  font-size: 0.87rem;
+  line-height: 1.6;
+}
+
+.journal .grid :global(.project-stack) {
+  gap: 5px;
+}
+
+.journal .grid :global(.project-card-actions) {
+  margin-top: auto;
+  padding-top: 14px;
+}
+
+.journal .grid :global(.project-action-links) {
+  flex-direction: column;
+  gap: 7px;
+}
+
+.journal .grid :global(.project-card-actions .text-link) {
+  font-size: 0.82rem;
+}
+
+@media (max-width: 1100px) {
+  .journal .grid,
+  .journal .grid[data-project-count] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .journal .grid[data-project-count="1"] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  .toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .journal .grid,
+  .journal .grid[data-project-count] {
+    max-width: none;
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .journal .grid :global(.project-media img) {
+    transition: none;
+  }
+}

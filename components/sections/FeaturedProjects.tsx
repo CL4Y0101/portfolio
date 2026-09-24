@@ -1,13 +1,16 @@
 "use client";
 
+import { MoveRight } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { featuredProjects } from "@/data/projects";
 import type { Project, ProjectCategory } from "@/lib/types";
+import { Button } from "@/components/ui/Button";
 import { ProjectCard } from "@/components/ui/ProjectCard";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ProjectQuickView } from "@/components/projects/ProjectQuickView";
 import { useReducedMotion } from "@/components/motion/useReducedMotion";
 import { motionDurations, motionStagger } from "@/components/motion/motion";
+import styles from "./project-journal.module.css";
 
 const categories: Array<"All" | ProjectCategory> = [
   "All",
@@ -62,7 +65,7 @@ export function FeaturedProjects() {
   }
 
   return (
-    <section className="section section-work" id="work" aria-labelledby="work-title">
+    <section className={`section section-work ${styles.journal}`} id="work" aria-labelledby="work-title">
       <div className="shell">
         <SectionHeading
           eyebrow="Selected work"
@@ -70,26 +73,33 @@ export function FeaturedProjects() {
           title="Products with real constraints, users, and infrastructure."
           description="Production work comes first, followed by full-stack product development and clearly labeled experiments."
           action={
-            <div className="filter-list" aria-label="Filter selected work">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  type="button"
-                  className={activeCategory === category ? "filter-active" : ""}
-                  aria-pressed={activeCategory === category}
-                  onClick={() => selectCategory(category)}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
+            <Button href="/#project-gallery" variant="secondary" className={styles.browseLink}>
+              Browse projects <MoveRight aria-hidden="true" size={17} />
+            </Button>
           }
         />
+
+        <div className={styles.toolbar}>
+          <span className={styles.toolbarLabel}>Filter by discipline</span>
+          <div className="filter-list" role="group" aria-label="Filter selected work">
+            {categories.map((category) => (
+              <button
+                key={category}
+                type="button"
+                className={activeCategory === category ? "filter-active" : ""}
+                aria-pressed={activeCategory === category}
+                onClick={() => selectCategory(category)}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+        </div>
 
         <p className="filter-status sr-only" aria-live="polite">
           Showing {visibleProjects.length} {visibleProjects.length === 1 ? "project" : "projects"} for {renderedCategory}.
         </p>
-        <div className="projects-grid" data-scroll-reveal="stagger" data-filter-phase={filterPhase} aria-busy={filterPhase === "out"}>
+        <div className={`projects-grid ${styles.grid}`} id="project-gallery" data-scroll-reveal="stagger" data-filter-phase={filterPhase} data-project-count={visibleProjects.length} aria-busy={filterPhase === "out"}>
           {visibleProjects.map((project, index) => (
             <ProjectCard
               key={project.slug}
