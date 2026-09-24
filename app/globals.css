@@ -2575,6 +2575,49 @@ body {
 @keyframes route-reveal { from { transform: scaleY(1); } to { transform: scaleY(0); } }
 @keyframes route-label { from { opacity: 0; } to { opacity: 1; } }
 
+/* Word reveal keeps each heading as server-rendered text for SEO and screen readers. */
+.reveal-text-word {
+  display: inline-block;
+}
+
+.reveal-text-word:not(:last-child) {
+  margin-inline-end: 0.1em;
+}
+
+[data-word-reveal="entrance"] .reveal-text-word {
+  animation: text-word-enter var(--word-duration) var(--ease-enter) var(--word-delay) both;
+}
+
+body:has(.main-menu-root) .hero-copy [data-word-reveal="entrance"] .reveal-text-word {
+  animation-play-state: paused;
+}
+
+@keyframes text-word-enter {
+  from {
+    opacity: 0;
+    filter: blur(var(--word-blur));
+    transform: translate3d(0, var(--word-offset), 0);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+html.scroll-reveal-ready [data-scroll-reveal="word"] .reveal-text-word {
+  transition:
+    opacity var(--word-duration) var(--ease-enter) var(--word-delay),
+    filter var(--word-duration) var(--ease-enter) var(--word-delay),
+    transform var(--word-duration) var(--ease-enter) var(--word-delay);
+}
+
+html.scroll-reveal-ready [data-scroll-reveal="word"]:not(.is-revealed) .reveal-text-word {
+  opacity: 0;
+  filter: blur(var(--word-blur));
+  transform: translate3d(0, var(--word-offset), 0);
+}
+
 html.scroll-reveal-ready [data-scroll-reveal]:not([data-scroll-reveal="stagger"]) {
   transition:
     opacity var(--motion-reveal) var(--ease-enter) var(--reveal-delay, 0ms),
@@ -2622,6 +2665,14 @@ html.scroll-reveal-ready [data-scroll-reveal="stagger"].is-revealed > :nth-child
 html.scroll-reveal-ready [data-scroll-reveal="stagger"].is-revealed > :nth-child(n + 6) { transition-delay: var(--motion-stagger-5); }
 
 @media (max-width: 820px) {
+  .reveal-text-word {
+    --word-duration: 360ms !important;
+    --word-offset: 12px !important;
+    --word-blur: 3px !important;
+    animation-delay: var(--word-delay-compact) !important;
+    transition-delay: var(--word-delay-compact) !important;
+  }
+
   :root {
     --motion-reveal: 360ms;
     --motion-page: 360ms;
@@ -2712,6 +2763,15 @@ html.scroll-reveal-ready [data-scroll-reveal="stagger"].is-revealed > :nth-child
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .reveal-text-word,
+  html.scroll-reveal-ready [data-scroll-reveal="word"] .reveal-text-word {
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+
   html {
     scroll-behavior: auto;
   }
@@ -2760,6 +2820,14 @@ html[data-motion="minimal"] *::after {
   animation-duration: 0.01ms !important;
   animation-iteration-count: 1 !important;
   transition-duration: 0.01ms !important;
+}
+
+html:not([data-motion="full"]) .reveal-text-word {
+  opacity: 1 !important;
+  filter: none !important;
+  transform: none !important;
+  animation: none !important;
+  transition: none !important;
 }
 
 html[data-motion="off"] [data-scroll-reveal],
@@ -3891,7 +3959,7 @@ body.game-menu-open {
   text-shadow: 5px 5px 0 rgba(3, 10, 8, 0.42);
 }
 
-.main-menu-brand span {
+.main-menu-brand > span {
   display: block;
   color: var(--menu-muted);
   font-size: clamp(0.86rem, 1.5vw, 1rem);

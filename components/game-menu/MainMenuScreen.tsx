@@ -10,6 +10,7 @@ import { OptionsPanel } from "@/components/game-menu/OptionsPanel";
 import { WorldBackground } from "@/components/game-menu/WorldBackground";
 import { GlassPanel } from "@/components/game-ui/GlassPanel";
 import { motionDurations } from "@/components/motion/motion";
+import { RevealText } from "@/components/ui/RevealText";
 import { profile } from "@/data/profile";
 import {
   applyGamePreferences,
@@ -196,7 +197,7 @@ export function MainMenuScreen() {
           <GlassPanel className="main-menu-content">
             <header className="main-menu-brand">
               <p>Interactive developer portfolio</p>
-              <h1 id="main-menu-title">{profile.shortName}</h1>
+              <RevealText as="h1" id="main-menu-title" text={profile.shortName} mode="entrance" delay={120} />
               <span>Build real systems. Explore the work.</span>
             </header>
 

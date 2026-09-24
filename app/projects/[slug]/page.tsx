@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/Badge";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { ReadingProgress } from "@/components/ui/ReadingProgress";
+import { RevealText } from "@/components/ui/RevealText";
 import { CaseStudyNavigation } from "@/components/case-study/CaseStudyNavigation";
 import { ProjectTechnologyExplorer } from "@/components/projects/ProjectTechnologyExplorer";
 import { projects, getProject } from "@/data/projects";
@@ -75,7 +76,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               </Badge>
               <span>{project.categories.join(" · ")}</span>
             </div>
-            <h1>{project.title}</h1>
+            <RevealText as="h1" text={project.title} mode="entrance" delay={120} />
             <p className="case-subtitle">{project.subtitle}</p>
           </div>
 
@@ -130,7 +131,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         <div className="shell case-narrative" data-scroll-reveal="block-wipe">
           <div>
             <p className="eyebrow">Overview</p>
-            <h2>What the project needed to solve.</h2>
+            <RevealText text="What the project needed to solve." />
           </div>
           <div className="case-problem-solution">
             <article>
@@ -149,7 +150,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         <div className="shell case-content-grid" data-scroll-reveal>
           <div>
             <p className="eyebrow">Contribution</p>
-            <h2>Responsibilities and shipped work.</h2>
+            <RevealText text="Responsibilities and shipped work." />
             <p className="section-description">The wording reflects contribution and maintenance work without claiming sole ownership.</p>
           </div>
           <ul className="responsibility-list" data-scroll-reveal="stagger">
@@ -167,7 +168,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         <div className="shell case-content-grid" data-scroll-reveal>
           <div>
             <p className="eyebrow">Technology</p>
-            <h2>Trace the stack back to the work.</h2>
+            <RevealText text="Trace the stack back to the work." />
             <p className="section-description">Select a technology to see the projects where it is evidenced.</p>
           </div>
           <ProjectTechnologyExplorer project={project} projects={projects} />
@@ -178,7 +179,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         <div className="shell">
           <div className="case-section-heading" data-scroll-reveal="block-wipe">
             <p className="eyebrow">Engineering areas</p>
-            <h2>Challenges handled in context.</h2>
+            <RevealText text="Challenges handled in context." />
           </div>
           <div className="challenge-grid" data-scroll-reveal="stagger">
             {project.challenges.map((challenge, index) => (
@@ -196,7 +197,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         <div className="shell case-content-grid" data-scroll-reveal>
           <div>
             <p className="eyebrow">Highlights</p>
-            <h2>What is evidenced by the work.</h2>
+            <RevealText text="What is evidenced by the work." />
           </div>
           <ul className="evidence-list evidence-list-large">
             {project.highlights.map((highlight) => (
@@ -211,7 +212,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           <div className="shell">
             <div className="case-section-heading">
               <p className="eyebrow">Project views</p>
-              <h2>More from the product.</h2>
+              <RevealText text="More from the product." />
             </div>
             <div className="screenshot-grid" data-scroll-reveal="stagger">
               {project.screenshots.slice(1).map((screenshot) => (
@@ -228,7 +229,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       <section className="case-cta">
         <div className="shell" data-scroll-reveal="portal">
           <p className="eyebrow">Next project</p>
-          <h2>Explore the rest of the work.</h2>
+          <RevealText text="Explore the rest of the work." />
           <p className="case-cta-description">Next region: {nextProject.title}. You can also return to the complete selected work gallery.</p>
           <div className="case-cta-actions">
             <Link className="button button-primary" href={`/projects/${nextProject.slug}`} prefetch={false}>

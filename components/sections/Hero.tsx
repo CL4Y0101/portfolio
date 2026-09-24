@@ -3,6 +3,7 @@ import Image from "next/image";
 import { profile } from "@/data/profile";
 import { Button } from "@/components/ui/Button";
 import { HeroMotion } from "@/components/motion/HeroMotion";
+import { RevealText } from "@/components/ui/RevealText";
 
 export function Hero() {
   return (
@@ -11,8 +12,8 @@ export function Hero() {
       <div className="shell hero-grid">
         <div className="hero-copy">
           <p className="eyebrow hero-entry hero-entry-1">{profile.eyebrow}</p>
-          <h1 className="hero-entry hero-entry-2" id="hero-title">{profile.name}</h1>
-          <p className="hero-statement hero-entry hero-entry-3">{profile.headline}</p>
+          <RevealText as="h1" id="hero-title" text={profile.name} mode="entrance" delay={110} />
+          <RevealText as="p" className="hero-statement" text={profile.headline} mode="entrance" delay={210} stagger={36} />
           <p className="hero-intro hero-entry hero-entry-4">{profile.introduction}</p>
 
           <div className="hero-actions hero-entry hero-entry-5">

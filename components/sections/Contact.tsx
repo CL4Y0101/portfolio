@@ -1,6 +1,7 @@
 import { ArrowUpRight, ContactRound, Download, GitFork, Mail } from "lucide-react";
 import { profile } from "@/data/profile";
 import { CopyButton } from "@/components/ui/CopyButton";
+import { RevealText } from "@/components/ui/RevealText";
 
 const contactLinks = [
   { label: "Email", value: profile.email, href: `mailto:${profile.email}`, icon: Mail },
@@ -20,7 +21,7 @@ export function Contact() {
       <div className="shell contact-grid">
         <div data-scroll-reveal>
           <p className="eyebrow">Contact</p>
-          <h2 id="contact-title">Let’s talk about practical software work.</h2>
+          <RevealText as="h2" id="contact-title" text="Let’s talk about practical software work." />
           <p>
             For product development, web systems, or engineering collaboration, email is the most direct way to reach me.
           </p>
