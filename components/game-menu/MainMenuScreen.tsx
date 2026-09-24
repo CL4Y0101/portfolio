@@ -12,6 +12,8 @@ import { WorldBackground } from "@/components/game-menu/WorldBackground";
 import { GlassPanel } from "@/components/game-ui/GlassPanel";
 import { motionDurations } from "@/components/motion/motion";
 import { RevealText } from "@/components/ui/RevealText";
+import { LanguageToggle } from "@/components/ui/LanguageToggle";
+import { LocalizedText } from "@/components/ui/LocalizedText";
 import { profile } from "@/data/profile";
 import {
   applyGamePreferences,
@@ -202,9 +204,12 @@ export function MainMenuScreen() {
         {panel === "main" ? (
           <GlassPanel className="main-menu-content">
             <header className="main-menu-brand">
-              <p>Interactive developer portfolio</p>
+              <div className="main-menu-topline">
+                <p><LocalizedText en="Interactive developer portfolio" /></p>
+                <LanguageToggle />
+              </div>
               <RevealText as="h1" id="main-menu-title" text={profile.shortName} mode="entrance" delay={120} />
-              <span>Build real systems. Explore the work.</span>
+              <span><LocalizedText en="Build real systems. Explore the work." /></span>
             </header>
 
             <div className="main-menu-buttons" aria-label="Portfolio main menu">
@@ -216,7 +221,7 @@ export function MainMenuScreen() {
                 onPointerEnter={() => setSelectedAction("start")}
                 onClick={() => enterPortfolio(false)}
               >
-                Start portfolio
+                <LocalizedText en="Start portfolio" />
               </GameMenuButton>
               <GameMenuButton
                 icon="crafting-table"
@@ -225,7 +230,7 @@ export function MainMenuScreen() {
                 onPointerEnter={() => setSelectedAction("options")}
                 onClick={() => openPanel("options")}
               >
-                Options
+                <LocalizedText en="Options" />
               </GameMenuButton>
               <GameMenuButton
                 icon="nether-star"
@@ -234,7 +239,7 @@ export function MainMenuScreen() {
                 onPointerEnter={() => setSelectedAction("achievements")}
                 onClick={() => openPanel("achievements")}
               >
-                Achievements
+                <LocalizedText en="Achievements" />
               </GameMenuButton>
               <GameMenuButton
                 icon="book"
@@ -243,7 +248,7 @@ export function MainMenuScreen() {
                 onPointerEnter={() => setSelectedAction("about")}
                 onClick={() => openPanel("about")}
               >
-                About
+                <LocalizedText en="About" />
               </GameMenuButton>
               <GameMenuButton
                 icon={hasEntered ? "arrow" : "oak-door"}
@@ -253,13 +258,13 @@ export function MainMenuScreen() {
                 onPointerEnter={() => setSelectedAction("exit")}
                 onClick={() => hasEntered ? enterPortfolio(true) : openPanel("exit")}
               >
-                {hasEntered ? "Back" : "Exit menu"}
+                <LocalizedText en={hasEntered ? "Back" : "Exit menu"} />
               </GameMenuButton>
             </div>
 
             <footer className="main-menu-footer">
               <span>WORLD / PORTFOLIO</span>
-              <span><kbd>↑</kbd><kbd>↓</kbd> Select&nbsp;&nbsp; <kbd>Enter</kbd> Confirm&nbsp;&nbsp; <kbd>Esc</kbd> Back</span>
+              <span><kbd>↑</kbd><kbd>↓</kbd> <LocalizedText en="Select" />&nbsp;&nbsp; <kbd>Enter</kbd> <LocalizedText en="Confirm" />&nbsp;&nbsp; <kbd>Esc</kbd> <LocalizedText en="Back" /></span>
               <span>v2.0 · ONLINE</span>
             </footer>
           </GlassPanel>

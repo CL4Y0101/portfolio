@@ -9,8 +9,8 @@ export function Experience() {
         <SectionHeading
           eyebrow="Experience"
           titleId="experience-title"
-          title="Development work that reaches past the editor."
-          description="Current responsibilities include product interfaces, application data, release environments, and the operational work needed to keep web systems available."
+          title="Experience in product and systems."
+          description="Building interfaces, connecting data, and keeping products online."
         />
 
         <ExperienceTimeline items={experience} />

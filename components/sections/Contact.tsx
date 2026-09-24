@@ -2,6 +2,7 @@ import { ArrowUpRight, ContactRound, Download, GitFork, Mail } from "lucide-reac
 import { profile } from "@/data/profile";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { RevealText } from "@/components/ui/RevealText";
+import { LocalizedText } from "@/components/ui/LocalizedText";
 
 const contactLinks = [
   { label: "Email", value: profile.email, href: `mailto:${profile.email}`, icon: Mail },
@@ -20,10 +21,10 @@ export function Contact() {
     <section className="contact-section" id="contact" aria-labelledby="contact-title">
       <div className="shell contact-grid">
         <div data-scroll-reveal>
-          <p className="eyebrow">Contact</p>
-          <RevealText as="h2" id="contact-title" text="Let’s talk about practical software work." />
+          <p className="eyebrow"><LocalizedText en="Contact" /></p>
+          <RevealText as="h2" id="contact-title" text="Let’s work together." />
           <p>
-            For product development, web systems, or engineering collaboration, email is the most direct way to reach me.
+            <LocalizedText en="For product work or engineering collaboration, email is the best place to start." />
           </p>
         </div>
         <div className="contact-links" data-scroll-reveal="stagger">
@@ -40,7 +41,7 @@ export function Contact() {
                 <Icon aria-hidden="true" size={21} />
                 <span>
                   <small>{item.label}</small>
-                  <strong>{item.value}</strong>
+                  <strong><LocalizedText en={item.value} /></strong>
                 </span>
                 <ArrowUpRight aria-hidden="true" size={18} />
               </a>

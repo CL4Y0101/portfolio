@@ -1,11 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { LocalizedText } from "@/components/ui/LocalizedText";
+import { useLanguage } from "@/components/ui/useLanguage";
 
 export type CaseStudySection = { id: string; label: string };
 
 export function CaseStudyNavigation({ sections }: { sections: CaseStudySection[] }) {
   const [activeId, setActiveId] = useState(sections[0]?.id ?? "");
+  const language = useLanguage();
 
   useEffect(() => {
     const elements = sections
@@ -25,7 +28,7 @@ export function CaseStudyNavigation({ sections }: { sections: CaseStudySection[]
   }, [sections]);
 
   return (
-    <nav className="case-study-navigation" aria-label="Case study sections">
+    <nav className="case-study-navigation" aria-label={language === "id" ? "Bagian studi kasus" : "Case study sections"}>
       <div className="shell">
         {sections.map((section) => (
           <a
@@ -35,7 +38,7 @@ export function CaseStudyNavigation({ sections }: { sections: CaseStudySection[]
             onClick={() => setActiveId(section.id)}
           >
             <span aria-hidden="true">{String(sections.indexOf(section) + 1).padStart(2, "0")}</span>
-            {section.label}
+            <LocalizedText en={section.label} />
           </a>
         ))}
       </div>

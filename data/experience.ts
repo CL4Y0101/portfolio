@@ -8,7 +8,7 @@ export const experience: Experience[] = [
     period: "2026 — Present",
     location: "Remote · South Korea-based product team",
     summary:
-      "Contributing to a multi-campus digital platform that helps international students find useful university and campus information in South Korea.",
+      "Building a multi-campus platform for international students in South Korea.",
     featured: true,
     statusLabel: "Current experience",
     projectSlug: "kandu",
@@ -29,7 +29,7 @@ export const experience: Experience[] = [
     period: "Internship / PKL",
     location: "Jember, Indonesia",
     summary:
-      "Supported administrative operations and digital documentation for public communication activities.",
+      "Supported digital documentation and administrative work for public communication.",
     technologies: ["Digital documentation", "YouTube Live", "Camera operations"],
     responsibilities: [
       "Handled administrative and operational data entry.",
@@ -45,7 +45,7 @@ export const experience: Experience[] = [
     period: "2025 — Present",
     location: "Jember, Indonesia",
     summary:
-      "Contributing to a digital waste-bank product that connects customer onboarding, recyclable deposits, balances, withdrawals, and administrative reporting.",
+      "Building waste-bank workflows for deposits, balances, and reporting.",
     projectSlug: "greenpoint",
     technologies: ["Laravel", "PHP", "JavaScript", "REST API", "PostgreSQL", "Supabase", "MySQL", "Flutter"],
     responsibilities: [

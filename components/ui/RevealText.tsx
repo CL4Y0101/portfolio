@@ -1,4 +1,5 @@
 import { Fragment, type CSSProperties, type ElementType } from "react";
+import { translate } from "@/lib/translations";
 
 type RevealTextProps = {
   as?: "h1" | "h2" | "h3" | "h4" | "p" | "span" | "div";
@@ -35,7 +36,31 @@ export function RevealText({
   blur = 6,
 }: RevealTextProps) {
   const Component: ElementType = as;
-  const words = text.trim().split(/\s+/);
+  const indonesia = translate(text);
+
+  const renderWords = (copy: string) => copy.trim().split(/\s+/).map((word, index, words) => {
+    const wordStyle: WordStyle = {
+      "--word-delay": `${Math.max(0, delay + index * stagger)}ms`,
+      "--word-delay-compact": `${Math.max(0, delay + index * Math.min(stagger, 30))}ms`,
+      "--word-duration": `${Math.max(0, duration)}ms`,
+      "--word-offset": `${Math.max(0, yOffset)}px`,
+      "--word-blur": `${Math.max(0, blur)}px`,
+    };
+
+    return (
+      <Fragment key={`${word}-${index}`}>
+        <span className="reveal-text-word" style={wordStyle}>{word}</span>
+        {index < words.length - 1 ? " " : null}
+      </Fragment>
+    );
+  });
+
+  const renderVariant = (copy: string, locale?: "en" | "id") => (
+    <span className={locale ? `localized-${locale}` : undefined} lang={locale}>
+      <span className="sr-only">{copy}</span>
+      <span className="reveal-text-visual" aria-hidden="true">{renderWords(copy)}</span>
+    </span>
+  );
 
   return (
     <Component
@@ -43,25 +68,7 @@ export function RevealText({
       className={`reveal-text ${className ?? ""}`.trim()}
       {...(mode === "scroll" ? { "data-scroll-reveal": "word" } : { "data-word-reveal": "entrance" })}
     >
-      <span className="sr-only">{text}</span>
-      <span className="reveal-text-visual" aria-hidden="true">
-        {words.map((word, index) => {
-          const wordStyle: WordStyle = {
-            "--word-delay": `${Math.max(0, delay + index * stagger)}ms`,
-            "--word-delay-compact": `${Math.max(0, delay + index * Math.min(stagger, 30))}ms`,
-            "--word-duration": `${Math.max(0, duration)}ms`,
-            "--word-offset": `${Math.max(0, yOffset)}px`,
-            "--word-blur": `${Math.max(0, blur)}px`,
-          };
-
-          return (
-            <Fragment key={`${word}-${index}`}>
-              <span className="reveal-text-word" style={wordStyle}>{word}</span>
-              {index < words.length - 1 ? " " : null}
-            </Fragment>
-          );
-        })}
-      </span>
+      {indonesia === text ? renderVariant(text) : <>{renderVariant(text, "en")}{renderVariant(indonesia, "id")}</>}
     </Component>
   );
 }

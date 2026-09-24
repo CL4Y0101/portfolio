@@ -19,7 +19,12 @@ export function useMenuFocusManager(
     if (!container) return;
 
     const focusables = () => Array.from(container.querySelectorAll<HTMLElement>(focusableSelector));
-    const focusFrame = window.requestAnimationFrame(() => focusables()[0]?.focus());
+    const focusFrame = window.requestAnimationFrame(() => {
+      const initialFocus = focusKey === "main"
+        ? container.querySelector<HTMLElement>(`.main-menu-buttons ${focusableSelector}`)
+        : null;
+      (initialFocus ?? focusables()[0])?.focus();
+    });
 
     const handleKeyDown = (event: KeyboardEvent) => {
       const items = focusables();

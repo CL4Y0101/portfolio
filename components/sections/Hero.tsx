@@ -4,6 +4,7 @@ import { profile } from "@/data/profile";
 import { Button } from "@/components/ui/Button";
 import { HeroMotion } from "@/components/motion/HeroMotion";
 import { RevealText } from "@/components/ui/RevealText";
+import { LocalizedText } from "@/components/ui/LocalizedText";
 
 export function Hero() {
   return (
@@ -11,17 +12,17 @@ export function Hero() {
       <HeroMotion />
       <div className="shell hero-grid">
         <div className="hero-copy">
-          <p className="eyebrow hero-entry hero-entry-1">{profile.eyebrow}</p>
+          <p className="eyebrow hero-entry hero-entry-1"><LocalizedText en={profile.eyebrow} /></p>
           <RevealText as="h1" id="hero-title" text={profile.name} mode="entrance" delay={110} />
           <RevealText as="p" className="hero-statement" text={profile.headline} mode="entrance" delay={210} stagger={36} />
-          <p className="hero-intro hero-entry hero-entry-4">{profile.introduction}</p>
+          <p className="hero-intro hero-entry hero-entry-4"><LocalizedText en={profile.introduction} /></p>
 
           <div className="hero-actions hero-entry hero-entry-5">
             <Button href="/#work">
-              View selected work <ArrowDownRight aria-hidden="true" size={17} />
+              <LocalizedText en="View selected work" /> <ArrowDownRight aria-hidden="true" size={17} />
             </Button>
             <Button href={profile.cv} variant="secondary" download>
-              Download CV <Download aria-hidden="true" size={17} />
+              <LocalizedText en="Download CV" /> <Download aria-hidden="true" size={17} />
             </Button>
           </div>
 
@@ -29,7 +30,7 @@ export function Hero() {
             <MapPin aria-hidden="true" size={16} />
             <span>{profile.location}</span>
             <span className="hero-location-divider" aria-hidden="true" />
-            <span>Working remotely across product and infrastructure</span>
+            <span><LocalizedText en="Working remotely across product and infrastructure" /></span>
           </div>
         </div>
 
@@ -45,7 +46,7 @@ export function Hero() {
             />
           </div>
           <div className="focus-card">
-            <span className="focus-index">Current focus / 2026</span>
+            <span className="focus-index"><LocalizedText en="Current focus / 2026" /></span>
             <strong>KandU Campus Platform</strong>
             <p>Next.js · Firebase · Linux deployment</p>
           </div>

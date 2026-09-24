@@ -3,17 +3,20 @@
 import Link from "next/link";
 import { useState } from "react";
 import type { Project } from "@/lib/types";
+import { LocalizedText } from "@/components/ui/LocalizedText";
+import { useLanguage } from "@/components/ui/useLanguage";
 
 const portfolioTechnologies = new Set(["Next.js", "React", "TypeScript", "Tailwind CSS"]);
 
 export function ProjectTechnologyExplorer({ project, projects }: { project: Project; projects: Project[] }) {
   const [activeTechnology, setActiveTechnology] = useState(project.technologies[0]);
+  const language = useLanguage();
   const relatedProjects = projects.filter((item) => item.technologies.includes(activeTechnology));
   const includesPortfolio = portfolioTechnologies.has(activeTechnology);
 
   return (
     <div className="technology-explorer">
-      <div className="technology-picker" aria-label="Explore technology usage">
+      <div className="technology-picker" aria-label={language === "id" ? "Jelajahi penggunaan teknologi" : "Explore technology usage"}>
         {project.technologies.map((technology) => (
           <button
             key={technology}
@@ -28,12 +31,12 @@ export function ProjectTechnologyExplorer({ project, projects }: { project: Proj
       </div>
 
       <div className="technology-usage" key={activeTechnology} aria-live="polite">
-        <span>Where I used {activeTechnology}</span>
+        <span><LocalizedText en="Where I used" /> {activeTechnology}</span>
         <div>
           {relatedProjects.map((item) => (
             <Link key={item.slug} href={`/projects/${item.slug}`} prefetch={false}>{item.title}</Link>
           ))}
-          {includesPortfolio ? <span>This portfolio</span> : null}
+          {includesPortfolio ? <span><LocalizedText en="This portfolio" /></span> : null}
         </div>
       </div>
     </div>

@@ -1,0 +1,145 @@
+.story.story {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 44px);
+  --journey-progress: 0%;
+}
+
+.track.track {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  padding-top: 14px;
+}
+
+.track::before,
+.track::after {
+  position: absolute;
+  top: 22px;
+  left: 9px;
+  height: 2px;
+  content: "";
+  pointer-events: none;
+}
+
+.track::before {
+  right: 9px;
+  background: var(--line-strong);
+}
+
+.track::after {
+  width: var(--journey-progress);
+  max-width: calc(100% - 18px);
+  background: var(--accent);
+  transition: width 80ms linear;
+}
+
+.track.track :global(button) {
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  align-content: start;
+  padding: 0 12px 8px 0;
+}
+
+.track.track :global(.experience-line) {
+  justify-content: flex-start;
+  min-height: 24px;
+}
+
+.track.track :global(.experience-line::after) {
+  display: none;
+}
+
+.track.track :global(.experience-line i) {
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+  border-width: 3px;
+  box-shadow: 0 0 0 4px var(--background-soft);
+}
+
+.track.track :global(button > em) {
+  grid-column: 1;
+}
+
+.details :global(article) {
+  min-height: 0;
+}
+
+.responsibilities {
+  margin-top: 19px;
+  border-top: 1px solid var(--line);
+}
+
+.responsibilities summary {
+  width: fit-content;
+  padding: 13px 0;
+  color: var(--accent);
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-weight: 650;
+}
+
+.responsibilities summary:hover,
+.responsibilities summary:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.responsibilities :global(.evidence-list) {
+  margin: 2px 0 8px;
+}
+
+@media (max-width: 700px) {
+  .track.track {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+    padding-top: 0;
+  }
+
+  .track::before,
+  .track::after {
+    top: 9px;
+    left: 7px;
+    width: 2px;
+    height: auto;
+  }
+
+  .track::before {
+    right: auto;
+    bottom: 28px;
+  }
+
+  .track::after {
+    max-height: calc(100% - 37px);
+    height: var(--journey-progress);
+    transition: height 80ms linear;
+  }
+
+  .track.track :global(button) {
+    grid-template-columns: 28px minmax(0, 1fr);
+    gap: 8px;
+    padding-bottom: 12px;
+  }
+
+  .track.track :global(button > em) {
+    grid-column: 2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track::after {
+    width: calc(100% - 18px);
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) and (max-width: 700px) {
+  .track::after {
+    width: 2px;
+    height: calc(100% - 37px);
+  }
+}

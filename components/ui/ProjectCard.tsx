@@ -5,6 +5,8 @@ import type { Project } from "@/lib/types";
 import { Badge } from "@/components/ui/Badge";
 import { GameIcon } from "@/components/game-ui/GameIcon";
 import ui from "@/components/game-ui/minecraft.module.css";
+import { LocalizedText } from "@/components/ui/LocalizedText";
+import { projectTeasers } from "@/data/project-teasers";
 
 export function ProjectCard({
   project,
@@ -19,6 +21,7 @@ export function ProjectCard({
 }) {
   const repository = project.links.find((link) => link.kind === "repository");
   const liveLink = project.links.find((link) => link.kind === "production" || link.kind === "demo");
+  const teaser = projectTeasers[project.slug];
 
   return (
     <article
@@ -48,34 +51,34 @@ export function ProjectCard({
           <h3>
             <Link href={`/projects/${project.slug}`} prefetch={false}>{project.title}</Link>
           </h3>
-          <p>{project.description}</p>
+          <p><LocalizedText en={teaser?.en ?? project.description} id={teaser?.id} /></p>
         </div>
 
         <div className="project-meta">
           <Badge tone={project.status === "production" ? "live" : project.status === "in-progress" ? "warm" : "default"}>
-            {project.statusLabel}
+            <LocalizedText en={project.statusLabel} />
           </Badge>
           <span className={ui.category}>
             <GameIcon name={project.categories.includes("IoT / Experiments") ? "redstone" : "chest"} size="sm" />
-            {project.categories[0]}
+            <LocalizedText en={project.categories[0]} />
           </span>
         </div>
 
-        <span className="project-card-period">{project.period}</span>
+        <span className="project-card-period"><LocalizedText en={project.period} /></span>
 
         <ul className="project-stack" aria-label={`${project.title} technologies`}>
           {project.technologies.slice(0, 5).map((technology) => (
-            <li key={technology}>{technology}</li>
+            <li key={technology}><LocalizedText en={technology} /></li>
           ))}
         </ul>
 
         <div className="project-card-actions">
           <div className="project-action-links">
             <Link className="text-link" href={`/projects/${project.slug}`} prefetch={false}>
-              Read case study <ArrowUpRight aria-hidden="true" size={16} />
+              <LocalizedText en="Read case study" /> <ArrowUpRight aria-hidden="true" size={16} />
             </Link>
             <button className="text-link quick-view-button" type="button" onClick={() => onQuickView(project)}>
-              Quick view <Eye aria-hidden="true" size={16} />
+              <LocalizedText en="Quick view" /> <Eye aria-hidden="true" size={16} />
             </button>
           </div>
           {liveLink ? (

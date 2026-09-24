@@ -4,9 +4,9 @@ export const profile = {
   name: "Aditya Fadni Athaullah",
   shortName: "Aditya Fadni",
   eyebrow: "Software Developer · Informatics Engineering Student",
-  headline: "I build practical software for the web—and keep it running.",
+  headline: "Web products that work in the real world.",
   introduction:
-    "I work across modern web interfaces, backend systems, deployment pipelines, and cloud infrastructure, grounded by an earlier foundation in computer networking.",
+    "I build web products, connect the data behind them, and help keep them online.",
   supportingText:
     "Currently contributing to production web development, Firebase-backed systems, Linux deployment, and a multi-campus platform while studying at Politeknik Negeri Jember.",
   location: "Jember, Indonesia",
@@ -16,7 +16,7 @@ export const profile = {
   profileImage: withBasePath("/images/profile-voxel.webp"),
   cv: withBasePath("/cv/aditya-fadni-athaullah-cv.pdf"),
   about: [
-    "My current work sits at the intersection of product development and operations: building Next.js interfaces, connecting application data, and maintaining the environments that deliver those systems.",
-    "Before focusing on software, I studied Computer and Network Engineering. That background still shapes how I debug—following a problem across the browser, application, process, server, and network instead of treating each layer in isolation.",
+    "I build product interfaces and the systems that keep them running, from application data to deployment.",
+    "My networking background helps me trace issues across browsers, servers, and infrastructure.",
   ],
 };

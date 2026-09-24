@@ -3,6 +3,7 @@
 import { Check, Copy } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { copyText } from "@/lib/clipboard";
+import { LocalizedText } from "@/components/ui/LocalizedText";
 
 type CopyButtonProps = {
   value?: string;
@@ -36,9 +37,9 @@ export function CopyButton({ value = "", currentUrl = false, label, className = 
   return (
     <button type="button" className={`copy-button ${className}`.trim()} onClick={handleCopy}>
       {status === "copied" ? <Check aria-hidden="true" size={16} /> : <Copy aria-hidden="true" size={16} />}
-      <span>{statusLabel}</span>
+      <span><LocalizedText en={statusLabel} /></span>
       <span className="sr-only" role="status" aria-live="polite">
-        {status === "copied" ? `${label} copied` : status === "failed" ? `Unable to copy ${label.toLowerCase()}` : ""}
+        <LocalizedText en={status === "copied" ? `${label} copied` : status === "failed" ? `Unable to copy ${label.toLowerCase()}` : ""} />
       </span>
     </button>
   );

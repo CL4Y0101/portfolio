@@ -9,6 +9,10 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { profile } from "@/data/profile";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { LanguageToggle } from "@/components/ui/LanguageToggle";
+import { LocalizedText } from "@/components/ui/LocalizedText";
+import { useLanguage } from "@/components/ui/useLanguage";
+import { translate } from "@/lib/translations";
 import { CommandPalette } from "@/components/navigation/CommandPalette";
 import { openMainMenuEvent } from "@/lib/preferences";
 
@@ -23,6 +27,8 @@ const navigation = [
 
 export function Navbar() {
   const pathname = usePathname();
+  const language = useLanguage();
+  const label = (en: string) => language === "id" ? translate(en) : en;
   const [isOpen, setIsOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
@@ -101,7 +107,7 @@ export function Navbar() {
               onClick={() => setIsOpen(false)}
             >
               <span className="nav-slot-marker" aria-hidden="true" />
-              {item.label}
+              <LocalizedText en={item.label} />
             </Link>
           ))}
         </div>
@@ -111,25 +117,26 @@ export function Navbar() {
             className="icon-button main-menu-trigger"
             type="button"
             onClick={() => window.dispatchEvent(new Event(openMainMenuEvent))}
-            aria-label="Open portfolio main menu"
-            title="Open main menu"
+            aria-label={label("Open portfolio main menu")}
+            title={label("Open main menu")}
           >
             <GameIcon name="compass" />
-          </button> : <Link className="icon-button main-menu-trigger" href="/" aria-label="Return to portfolio" title="Return to portfolio">
+          </button> : <Link className="icon-button main-menu-trigger" href="/" aria-label={label("Return to portfolio")} title={label("Return to portfolio")}>
             <GameIcon name="compass" />
           </Link>}
-          <button className="command-trigger" type="button" onClick={openPalette} aria-label="Open command palette">
+          <button className="command-trigger" type="button" onClick={openPalette} aria-label={label("Open command palette")}>
             <Search aria-hidden="true" size={17} />
-            <span>Command</span>
+            <span><LocalizedText en="Command" /></span>
             <kbd>Ctrl K</kbd>
           </button>
+          <LanguageToggle />
           <ThemeToggle />
           <button
             className="icon-button menu-button"
             type="button"
             aria-expanded={isOpen}
             aria-controls="site-navigation"
-            aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-label={label(isOpen ? "Close navigation menu" : "Open navigation menu")}
             onClick={() => setIsOpen((value) => !value)}
           >
             {isOpen ? <X aria-hidden="true" size={20} /> : <Menu aria-hidden="true" size={20} />}

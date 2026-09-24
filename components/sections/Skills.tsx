@@ -9,8 +9,8 @@ export function Skills() {
         <SectionHeading
           eyebrow="Technical capabilities"
           titleId="skills-title"
-          title="A stack organized by how it is used."
-          description="No proficiency percentages—primary tools are emphasized through current work, while supporting and exploratory tools stay in context."
+          title="Tools behind the work."
+          description="A practical stack, organized by how I use it."
         />
 
         <CapabilityExplorer groups={skillGroups} />

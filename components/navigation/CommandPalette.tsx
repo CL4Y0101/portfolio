@@ -25,6 +25,9 @@ import { projects } from "@/data/projects";
 import { copyText } from "@/lib/clipboard";
 import { toggleTheme } from "@/lib/theme";
 import ui from "@/components/game-ui/minecraft.module.css";
+import { LocalizedText } from "@/components/ui/LocalizedText";
+import { useLanguage } from "@/components/ui/useLanguage";
+import { translate } from "@/lib/translations";
 
 type Command = {
   id: string;
@@ -43,6 +46,7 @@ type CommandPaletteProps = {
 
 export function CommandPalette({ open, onOpen, onClose }: CommandPaletteProps) {
   const router = useRouter();
+  const language = useLanguage();
   const [query, setQuery] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [status, setStatus] = useState("");
@@ -73,7 +77,8 @@ export function CommandPalette({ open, onOpen, onClose }: CommandPaletteProps) {
     router.push(href);
   }, [router]);
 
-  const commands = useMemo<Command[]>(() => [
+  const commands = useMemo<Command[]>(() => {
+    const base: Command[] = [
     { id: "home", label: "Go to Home", group: "Navigate", keywords: "start intro", icon: Home, run: () => navigate("/#home") },
     { id: "work", label: "View Projects", group: "Navigate", keywords: "work portfolio", icon: FolderKanban, run: () => navigate("/#work") },
     { id: "experience", label: "View Experience", group: "Navigate", keywords: "career timeline", icon: BriefcaseBusiness, run: () => navigate("/#experience") },
@@ -123,7 +128,15 @@ export function CommandPalette({ open, onOpen, onClose }: CommandPaletteProps) {
         return "stay";
       },
     },
-  ], [navigate]);
+    ];
+    return base.map((command) => ({
+      ...command,
+      label: language === "id"
+        ? command.id.startsWith("project-") ? `Buka ${command.label.slice(5)}` : translate(command.label)
+        : command.label,
+      keywords: `${command.keywords} ${translate(command.label)}`,
+    }));
+  }, [navigate, language]);
 
   const normalizedQuery = query.trim().toLowerCase();
   const filteredCommands = commands.filter((command) =>
@@ -161,10 +174,10 @@ export function CommandPalette({ open, onOpen, onClose }: CommandPaletteProps) {
       <div className={`dialog-panel command-panel ${ui.dialog}`}>
         <div className="command-heading">
           <div>
-            <p className="eyebrow">Quick navigation</p>
-            <h2 id="command-palette-title">Command palette</h2>
+            <p className="eyebrow"><LocalizedText en="Quick navigation" /></p>
+            <h2 id="command-palette-title"><LocalizedText en="Command palette" /></h2>
           </div>
-          <button type="button" className="icon-button" onClick={closePalette} aria-label="Close command palette">
+          <button type="button" className="icon-button" onClick={closePalette} aria-label={language === "id" ? "Tutup palet perintah" : "Close command palette"}>
             <X aria-hidden="true" size={19} />
           </button>
         </div>
@@ -175,8 +188,8 @@ export function CommandPalette({ open, onOpen, onClose }: CommandPaletteProps) {
             data-autofocus
             type="search"
             value={query}
-            placeholder="Type a command or project…"
-            aria-label="Filter commands"
+            placeholder={language === "id" ? translate("Type a command or project…") : "Type a command or project…"}
+            aria-label={language === "id" ? "Filter perintah" : "Filter commands"}
             aria-controls="command-results"
             aria-activedescendant={filteredCommands[selectedIndex] ? `command-${filteredCommands[selectedIndex].id}` : undefined}
             onChange={(event) => {
@@ -188,7 +201,7 @@ export function CommandPalette({ open, onOpen, onClose }: CommandPaletteProps) {
           <kbd>Esc</kbd>
         </div>
 
-        <div id="command-results" className="command-results" role="listbox" aria-label="Available commands">
+        <div id="command-results" className="command-results" role="listbox" aria-label={language === "id" ? "Perintah tersedia" : "Available commands"}>
           {filteredCommands.length ? filteredCommands.map((command, index) => {
             const Icon = command.icon;
             return (
@@ -203,16 +216,16 @@ export function CommandPalette({ open, onOpen, onClose }: CommandPaletteProps) {
               >
                 <Icon aria-hidden={true} size={18} />
                 <span>{command.label}</span>
-                <small>{command.group}</small>
+                <small><LocalizedText en={command.group} /></small>
                 <ExternalLink aria-hidden="true" size={14} />
               </button>
             );
-          }) : <p className="command-empty">No matching commands.</p>}
+          }) : <p className="command-empty"><LocalizedText en="No matching commands." /></p>}
         </div>
         <div className="command-footer">
-          <span><kbd>↑</kbd><kbd>↓</kbd> Navigate</span>
-          <span><kbd>Enter</kbd> Open</span>
-          <span role="status" aria-live="polite">{status}</span>
+          <span><kbd>↑</kbd><kbd>↓</kbd> <LocalizedText en="Navigate" /></span>
+          <span><kbd>Enter</kbd> <LocalizedText en="Open" /></span>
+          <span role="status" aria-live="polite"><LocalizedText en={status} /></span>
         </div>
       </div>
     </Dialog>

@@ -1,6 +1,7 @@
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { profile } from "@/data/profile";
+import { LocalizedText } from "@/components/ui/LocalizedText";
 
 export function Footer() {
   return (
@@ -10,7 +11,7 @@ export function Footer() {
           <Link className="footer-name" href="/#home">
             {profile.name}
           </Link>
-          <p>Software development, systems, and deployment.</p>
+          <p><LocalizedText en="Software development, systems, and deployment." /></p>
         </div>
         <div className="footer-links" aria-label="Footer links">
           <a href={profile.github} target="_blank" rel="noreferrer">
@@ -21,7 +22,7 @@ export function Footer() {
           </a>
           <a href={`mailto:${profile.email}`}>Email</a>
         </div>
-        <p className="footer-note">© {new Date().getFullYear()} · Built with Next.js and exported statically.</p>
+        <p className="footer-note">© {new Date().getFullYear()} · <LocalizedText en="Built with Next.js and exported statically." /></p>
       </div>
     </footer>
   );

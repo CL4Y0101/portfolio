@@ -7,6 +7,7 @@ import { MainMenuScreen } from "@/components/game-menu/MainMenuScreen";
 import { MotionProvider } from "@/components/motion/MotionProvider";
 import { PageTransition } from "@/components/motion/PageTransition";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { LocalizedText } from "@/components/ui/LocalizedText";
 import { profile } from "@/data/profile";
 import { SITE_URL, withBasePath } from "@/lib/constants";
 import "./globals.css";
@@ -93,6 +94,9 @@ const themeScript = `
         : "balanced";
       document.documentElement.dataset.motion = new URLSearchParams(location.search).get("motion") === "off" ? "off" : motion;
       document.documentElement.dataset.graphics = graphics;
+      const language = localStorage.getItem("portfolio-language") === "id" ? "id" : "en";
+      document.documentElement.dataset.language = language;
+      document.documentElement.lang = language;
     } catch (_) {}
   })();
 `;
@@ -140,7 +144,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         <MotionProvider />
         <MainMenuScreen />
         <a className="skip-link" href="#main-content">
-          Skip to main content
+          <LocalizedText en="Skip to main content" />
         </a>
         <Navbar />
         {children}

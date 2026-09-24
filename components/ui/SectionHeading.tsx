@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Reveal } from "@/components/motion/Reveal";
 import { RevealText } from "@/components/ui/RevealText";
+import { LocalizedText } from "@/components/ui/LocalizedText";
 
 type SectionHeadingProps = {
   eyebrow: string;
@@ -22,9 +23,9 @@ export function SectionHeading({
   return (
     <Reveal variant="block-wipe" className={`section-heading ${align === "center" ? "section-heading-centered" : ""}`}>
       <div>
-        <p className="eyebrow">{eyebrow}</p>
+        <p className="eyebrow"><LocalizedText en={eyebrow} /></p>
         <RevealText as="h2" id={titleId} text={title} />
-        {description ? <p className="section-description">{description}</p> : null}
+        {description ? <p className="section-description"><LocalizedText en={description} /></p> : null}
       </div>
       {action ? <div className="section-action">{action}</div> : null}
     </Reveal>

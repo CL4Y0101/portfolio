@@ -12,8 +12,8 @@ export function OpenSource() {
         <SectionHeading
           eyebrow="GitHub / Open source"
           titleId="open-source-title"
-          title="Public code, curated locally."
-          description="The portfolio links to relevant public repositories without relying on live follower counts or rate-limited profile requests."
+          title="Selected public code."
+          description="Relevant repositories, linked directly to the work."
         />
         <div className="repo-card" data-scroll-reveal>
           <div className="repo-card-top">

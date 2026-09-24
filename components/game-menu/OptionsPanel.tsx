@@ -4,6 +4,7 @@ import { GlassPanel } from "@/components/game-ui/GlassPanel";
 import ui from "@/components/game-ui/minecraft.module.css";
 import type { GamePreferences, GraphicsPreference, MotionPreference } from "@/lib/preferences";
 import type { ThemePreference } from "@/lib/theme";
+import { LocalizedText } from "@/components/ui/LocalizedText";
 
 type OptionsPanelProps = {
   preferences: GamePreferences;
@@ -17,10 +18,10 @@ export function OptionsPanel({ preferences, onBack, onChange, onReset }: Options
     <GlassPanel className="game-panel options-panel" aria-labelledby="options-title">
       <div className={`game-panel-heading ${ui.heading}`}>
         <div>
-          <p>World settings</p>
-          <h2 id="options-title">Options</h2>
+          <p><LocalizedText en="World settings" /></p>
+          <h2 id="options-title"><LocalizedText en="Options" /></h2>
         </div>
-        <span>AUTO-SAVED</span>
+        <span><LocalizedText en="AUTO-SAVED" /></span>
       </div>
 
       <OptionGroup
@@ -47,8 +48,8 @@ export function OptionsPanel({ preferences, onBack, onChange, onReset }: Options
 
       <div className="option-row">
         <div>
-          <strong>Sound cues</strong>
-          <p>Optional procedural menu feedback. Off by default.</p>
+          <strong><LocalizedText en="Sound cues" /></strong>
+          <p><LocalizedText en="Optional procedural menu feedback. Off by default." /></p>
         </div>
         <button
           className={`option-sound-toggle ${ui.control}`}
@@ -58,13 +59,13 @@ export function OptionsPanel({ preferences, onBack, onChange, onReset }: Options
           onClick={() => onChange({ ...preferences, sound: !preferences.sound })}
         >
           {preferences.sound ? <Volume2 aria-hidden="true" size={17} /> : <VolumeX aria-hidden="true" size={17} />}
-          {preferences.sound ? "On" : "Off"}
+          <LocalizedText en={preferences.sound ? "On" : "Off"} />
         </button>
       </div>
 
       <div className="game-panel-actions">
-        <GameMenuButton icon="arrow" onClick={onBack}>Back</GameMenuButton>
-        <GameMenuButton icon="compass" variant="danger" onClick={onReset}>Reset preferences</GameMenuButton>
+        <GameMenuButton icon="arrow" onClick={onBack}><LocalizedText en="Back" /></GameMenuButton>
+        <GameMenuButton icon="compass" variant="danger" onClick={onReset}><LocalizedText en="Reset preferences" /></GameMenuButton>
       </div>
     </GlassPanel>
   );
@@ -85,8 +86,8 @@ function OptionGroup<T extends string>({
 }) {
   return (
     <fieldset className="option-group">
-      <legend>{label}</legend>
-      <p>{description}</p>
+      <legend><LocalizedText en={label} /></legend>
+      <p><LocalizedText en={description} /></p>
       <div className="option-segments">
         {options.map((option) => (
           <button
@@ -97,7 +98,7 @@ function OptionGroup<T extends string>({
             aria-pressed={value === option}
             onClick={() => onSelect(option)}
           >
-            {option}
+            <LocalizedText en={option} />
           </button>
         ))}
       </div>

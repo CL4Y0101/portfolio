@@ -1,6 +1,7 @@
 import { education } from "@/data/education";
 import { profile } from "@/data/profile";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { LocalizedText } from "@/components/ui/LocalizedText";
 
 export function About() {
   return (
@@ -9,25 +10,25 @@ export function About() {
         <SectionHeading
           eyebrow="About"
           titleId="about-title"
-          title="Product thinking with a systems foundation."
-          description="My work has moved from networks and computer systems toward full-stack product development, without losing the operational perspective that makes production debugging practical."
+          title="Product thinking, systems mindset."
+          description="Software development shaped by a foundation in networking."
         />
         <div className="about-copy" data-scroll-reveal>
           {profile.about.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
+            <p key={paragraph}><LocalizedText en={paragraph} /></p>
           ))}
         </div>
       </div>
 
       <div className="shell education-wrap" id="education" data-scroll-reveal="fade-up">
-        <p className="eyebrow">Education</p>
+        <p className="eyebrow"><LocalizedText en="Education" /></p>
         <div className="education-grid" data-scroll-reveal="stagger">
           {education.map((item) => (
             <article key={item.institution}>
-              <span>{item.period ?? "Technical education"}</span>
+              <span><LocalizedText en={item.period ?? "Technical education"} /></span>
               <h3>{item.institution}</h3>
-              <strong>{item.program}</strong>
-              {item.detail ? <p>{item.detail}</p> : null}
+              <strong><LocalizedText en={item.program} /></strong>
+              {item.detail ? <p><LocalizedText en={item.detail} /></p> : null}
             </article>
           ))}
         </div>

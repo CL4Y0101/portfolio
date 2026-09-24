@@ -72,6 +72,55 @@
   --gold: #d3a45d;
 }
 
+.localized-id { display: none; }
+.localized-en { display: contents; }
+html[data-language="id"] .localized-en { display: none; }
+html[data-language="id"] .localized-id { display: contents; }
+
+.language-toggle {
+  display: inline-flex;
+  flex: 0 0 auto;
+  padding: 2px;
+  border: 1px solid var(--line-strong);
+  border-radius: 3px;
+}
+
+.language-toggle button {
+  min-width: 26px;
+  min-height: 32px;
+  padding: 3px 4px;
+  color: var(--muted);
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.65rem;
+  font-weight: 720;
+}
+
+.language-toggle button[aria-pressed="true"] {
+  color: var(--background);
+  background: var(--accent-strong);
+}
+
+.language-toggle button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.main-menu-root .language-toggle {
+  border-color: var(--menu-edge);
+}
+
+.main-menu-root .language-toggle button {
+  color: var(--menu-muted);
+}
+
+.main-menu-root .language-toggle button[aria-pressed="true"] {
+  color: #10201c;
+  background: var(--menu-accent);
+}
+
 * {
   box-sizing: border-box;
 }
@@ -3129,6 +3178,27 @@ kbd {
   margin-top: 30px;
 }
 
+.capability-panels > section {
+  min-height: 0;
+}
+
+.capability-more-tools {
+  border-top: 1px solid var(--line);
+}
+
+.capability-more-tools summary {
+  width: fit-content;
+  padding: 12px 0;
+  color: var(--accent);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 650;
+}
+
+.capability-more-tools > div {
+  margin-top: 13px;
+}
+
 .capability-skill-groups > div > span,
 .capability-projects > span,
 .experience-technologies > span {
@@ -3935,6 +4005,14 @@ body.game-menu-open {
 
 .main-menu-brand {
   padding-bottom: clamp(22px, 4vh, 38px);
+}
+
+.main-menu-topline {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
 }
 
 .main-menu-brand p,

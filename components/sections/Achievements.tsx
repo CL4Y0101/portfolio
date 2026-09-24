@@ -1,6 +1,7 @@
 import { Award, GraduationCap, UsersRound } from "lucide-react";
 import { achievements, leadership } from "@/data/achievements";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { LocalizedText } from "@/components/ui/LocalizedText";
 
 const achievementIcons = [Award, GraduationCap, GraduationCap];
 
@@ -11,8 +12,8 @@ export function Achievements() {
         <SectionHeading
           eyebrow="Achievements"
           titleId="achievements-title"
-          title="Verified milestones, kept specific."
-          description="Results and formal competency evidence take priority over generic personality claims."
+          title="Verified milestones."
+          description="Results and formal credentials, kept specific."
         />
 
         <div className="achievements-grid" data-scroll-reveal="stagger">
@@ -21,10 +22,10 @@ export function Achievements() {
             return (
               <article className={achievement.featured ? "achievement-featured" : ""} key={achievement.title}>
                 <Icon aria-hidden="true" size={22} />
-                <span>{achievement.date ?? achievement.issuer}</span>
-                <h3>{achievement.title}</h3>
-                <p>{achievement.issuer}</p>
-                <strong>{achievement.detail}</strong>
+                <span><LocalizedText en={achievement.date ?? achievement.issuer} /></span>
+                <h3><LocalizedText en={achievement.title} /></h3>
+                <p><LocalizedText en={achievement.issuer} /></p>
+                <strong><LocalizedText en={achievement.detail} /></strong>
               </article>
             );
           })}
@@ -33,11 +34,11 @@ export function Achievements() {
         <article className="leadership-card" data-scroll-reveal>
           <UsersRound aria-hidden="true" size={24} />
           <div>
-            <p className="eyebrow">Leadership</p>
-            <h3>{leadership.title}</h3>
+            <p className="eyebrow"><LocalizedText en="Leadership" /></p>
+            <h3><LocalizedText en={leadership.title} /></h3>
             <span>{leadership.organization}</span>
           </div>
-          <p>{leadership.description}</p>
+          <p><LocalizedText en={leadership.description} /></p>
         </article>
       </div>
     </section>

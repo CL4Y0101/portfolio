@@ -1,0 +1,106 @@
+.wrap {
+  position: relative;
+  height: 155vh;
+  margin: -10px 0 48px;
+}
+
+.stage {
+  position: sticky;
+  top: clamp(88px, 11vh, 118px);
+  height: min(70vh, 660px);
+  overflow: hidden;
+  background:
+    linear-gradient(color-mix(in srgb, var(--accent) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--accent) 8%, transparent) 1px, transparent 1px),
+    var(--background-soft);
+  background-size: 36px 36px;
+  border: 1px solid var(--line);
+  isolation: isolate;
+}
+
+.heading {
+  position: absolute;
+  top: clamp(18px, 3vw, 36px);
+  left: clamp(18px, 3vw, 36px);
+  z-index: 10;
+  display: grid;
+  gap: 5px;
+  pointer-events: none;
+}
+
+.heading > span,
+.hint {
+  color: var(--accent);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.heading strong {
+  max-width: 19ch;
+  color: var(--text);
+  font-size: clamp(1.4rem, 2.5vw, 2.3rem);
+  line-height: 1.1;
+  letter-spacing: -0.045em;
+}
+
+.card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  width: clamp(168px, 23vw, 320px);
+  overflow: hidden;
+  color: #fff;
+  background: #14221d;
+  border: 3px solid var(--line-strong);
+  box-shadow: 9px 9px 0 color-mix(in srgb, var(--accent) 24%, var(--line)), 0 22px 45px rgba(0, 0, 0, 0.16);
+  transform: translate(-50%, -50%);
+  transform-origin: center;
+  will-change: transform;
+  transition: opacity var(--motion-base) var(--ease-standard), border-color var(--motion-base) var(--ease-standard);
+}
+
+.card img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  object-position: top center;
+}
+
+.card > span {
+  display: block;
+  min-height: 43px;
+  padding: 10px 12px;
+  font-size: 0.76rem;
+  font-weight: 650;
+  line-height: 1.25;
+}
+
+.card:hover,
+.card:focus-visible {
+  z-index: 12 !important;
+  opacity: 0.8;
+  border-color: var(--accent);
+}
+
+.hint {
+  position: absolute;
+  right: clamp(18px, 3vw, 36px);
+  bottom: clamp(18px, 3vw, 36px);
+  z-index: 10;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+@media (max-width: 700px), (prefers-reduced-motion: reduce) {
+  .wrap { display: none; }
+}
+
+:global(html[data-motion="reduced"]) .wrap,
+:global(html[data-motion="minimal"]) .wrap,
+:global(html[data-motion="off"]) .wrap {
+  display: none;
+}
