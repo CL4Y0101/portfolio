@@ -8,7 +8,7 @@ import { MotionProvider } from "@/components/motion/MotionProvider";
 import { PageTransition } from "@/components/motion/PageTransition";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { LocalizedText } from "@/components/ui/LocalizedText";
-import { LiquidGlassCursor } from "@/components/ui/LiquidGlassCursor";
+import { SpotlightCursor } from "@/components/ui/SpotlightCursor";
 import { profile } from "@/data/profile";
 import { SITE_URL, withBasePath } from "@/lib/constants";
 import "./globals.css";
@@ -152,7 +152,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         <Footer />
         <PageTransition />
         <ScrollReveal />
-        <LiquidGlassCursor />
+        <SpotlightCursor />
       </body>
     </html>
   );

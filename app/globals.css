@@ -1996,6 +1996,117 @@ body {
   display: none;
 }
 
+.nav-link-list {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nav-expand-button {
+  display: none;
+}
+
+@media (min-width: 1101px) and (pointer: fine) {
+  .nav-links {
+    position: relative;
+    height: 52px;
+    padding: 4px 6px;
+    background: color-mix(in srgb, var(--surface-strong) 88%, transparent);
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    box-shadow: 0 3px 0 color-mix(in srgb, var(--line-strong) 76%, transparent);
+    clip-path: inset(0 0 0 0 round 999px);
+    transition: clip-path var(--motion-page) var(--ease-enter);
+  }
+
+  .nav-link-list a {
+    flex: none;
+    padding-inline: 9px;
+    white-space: nowrap;
+    transition:
+      color var(--motion-fast) var(--ease-standard),
+      background-color var(--motion-fast) var(--ease-standard),
+      border-color var(--motion-fast) var(--ease-standard),
+      opacity var(--motion-base) var(--ease-standard),
+      transform var(--motion-base) var(--ease-enter);
+  }
+
+  .nav-link-list a:nth-child(2) { transition-delay: 25ms; }
+  .nav-link-list a:nth-child(3) { transition-delay: 50ms; }
+  .nav-link-list a:nth-child(4) { transition-delay: 75ms; }
+  .nav-link-list a:nth-child(5) { transition-delay: 100ms; }
+  .nav-link-list a:nth-child(6) { transition-delay: 125ms; }
+
+  .nav-expand-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: grid;
+    width: 46px;
+    height: 46px;
+    padding: 0;
+    place-items: center;
+    color: var(--text);
+    background: var(--surface-strong);
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(0.75) rotate(-90deg);
+    transition: opacity var(--motion-fast) var(--ease-standard), transform var(--motion-base) var(--ease-spring);
+  }
+
+  .nav-expand-button:hover,
+  .nav-expand-button:focus-visible {
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-color: var(--accent);
+  }
+
+  .nav-expand-button:focus-visible {
+    outline-offset: -4px;
+  }
+
+  .nav-links[data-collapsed="true"] {
+    clip-path: inset(0 calc(50% - 24px) 0 calc(50% - 24px) round 999px);
+  }
+
+  .nav-links[data-collapsed="true"] .nav-link-list {
+    pointer-events: none;
+  }
+
+  .nav-links[data-collapsed="true"] .nav-link-list a {
+    opacity: 0;
+    transform: translateX(-16px) scale(0.94);
+  }
+
+  .nav-links[data-collapsed="true"] .nav-expand-button {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, -50%) scale(1) rotate(0);
+  }
+}
+
+@media (min-width: 1240px) and (pointer: fine) {
+  .nav-shell {
+    position: relative;
+  }
+
+  .nav-links {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 820px) {
+  .nav-link-list {
+    display: grid;
+    gap: 3px;
+  }
+}
+
 .command-trigger,
 .icon-button,
 .icon-link,
@@ -4800,6 +4911,24 @@ body.game-menu-open {
     box-shadow: 10px 10px 0 #0d0b0e80, 0 30px 90px #080609a6;
   }
   :root[data-theme="dark"] .game-menu-button { background: #28252b; border-color: #776b7566; }
+  :root[data-theme="dark"] .main-menu-root .game-menu-button-primary[data-variant="primary"] {
+    --mc-face: #f1e8ee;
+    --mc-hover: #fff6fa;
+    --mc-ink: #17141a;
+    color: var(--mc-ink);
+    background: var(--mc-face);
+    border-color: #fff6fa;
+  }
+  :root[data-theme="dark"] .main-menu-root .game-menu-button-primary[data-variant="primary"]:is(:hover, :focus-visible, [data-selected="true"]) {
+    color: var(--mc-ink);
+    background: var(--mc-hover);
+    border-color: #fff;
+  }
+  :root[data-theme="dark"] .main-menu-root .game-menu-button-primary > span:nth-last-child(2) {
+    font-size: 0.9rem;
+    font-weight: 800;
+    letter-spacing: 0.045em;
+  }
   :root[data-theme="dark"] .main-menu-footer { color: #b6aab3; border-color: #d2c2cc30; }
   :root[data-theme="dark"] .main-menu-footer kbd { color: #eee6eb; }
   :root[data-theme="dark"] .game-panel { scrollbar-color: #a996a3 #ffffff0f; }
