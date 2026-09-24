@@ -4,7 +4,6 @@ import { MoveRight } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { featuredProjects } from "@/data/projects";
 import type { Project, ProjectCategory } from "@/lib/types";
-import { Button } from "@/components/ui/Button";
 import { ProjectCard } from "@/components/ui/ProjectCard";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ProjectQuickView } from "@/components/projects/ProjectQuickView";
@@ -31,6 +30,7 @@ export function FeaturedProjects() {
   const [filterPhase, setFilterPhase] = useState<"idle" | "out" | "in">("idle");
   const [quickViewProject, setQuickViewProject] = useState<Project | null>(null);
   const [quickViewOpen, setQuickViewOpen] = useState(false);
+  const [galleryExpanded, setGalleryExpanded] = useState(false);
   const filterTimers = useRef<Array<ReturnType<typeof setTimeout>>>([]);
   const reducedMotion = useReducedMotion();
   const language = useLanguage();
@@ -40,6 +40,17 @@ export function FeaturedProjects() {
       : featuredProjects.filter((project) => project.categories.includes(renderedCategory));
 
   useEffect(() => () => filterTimers.current.forEach(clearTimeout), []);
+
+  useEffect(() => {
+    const openLinkedGallery = () => {
+      if (window.location.hash !== "#project-gallery") return;
+      setGalleryExpanded(true);
+      window.requestAnimationFrame(() => document.getElementById("project-gallery")?.scrollIntoView({ behavior: "auto" }));
+    };
+    openLinkedGallery();
+    window.addEventListener("hashchange", openLinkedGallery);
+    return () => window.removeEventListener("hashchange", openLinkedGallery);
+  }, []);
 
   const openQuickView = useCallback((project: Project) => {
     setQuickViewProject(project);
@@ -78,47 +89,58 @@ export function FeaturedProjects() {
           title="Selected projects"
           description="Real products, practical constraints, and clearly labeled experiments."
           action={
-            <Button href="/#project-gallery" variant="secondary" className={styles.browseLink}>
+            <button
+              type="button"
+              className={`button button-secondary ${styles.browseLink}`}
+              aria-controls="project-gallery"
+              aria-expanded={galleryExpanded}
+              onClick={() => {
+                setGalleryExpanded(true);
+                window.requestAnimationFrame(() => document.getElementById("project-gallery")?.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth" }));
+              }}
+            >
               <LocalizedText en="View all projects" /> <MoveRight aria-hidden="true" size={17} />
-            </Button>
+            </button>
           }
         />
 
         <ProjectStackSpread projects={featuredProjects} />
 
-        <div className={styles.toolbar}>
-          <span className={styles.toolbarLabel}><LocalizedText en="Filter by discipline" /></span>
-          <div className="filter-list" role="group" aria-label={language === "id" ? "Filter proyek pilihan" : "Filter selected work"}>
-            {categories.map((category) => (
-              <button
-                key={category}
-                type="button"
-                className={activeCategory === category ? "filter-active" : ""}
-                aria-pressed={activeCategory === category}
-                onClick={() => selectCategory(category)}
-              >
-                <LocalizedText en={category} />
-              </button>
+        <div className={styles.gallery} id="project-gallery" data-expanded={galleryExpanded}>
+          <div className={styles.toolbar}>
+            <span className={styles.toolbarLabel}><LocalizedText en="Filter by discipline" /></span>
+            <div className="filter-list" role="group" aria-label={language === "id" ? "Filter proyek pilihan" : "Filter selected work"}>
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  type="button"
+                  className={activeCategory === category ? "filter-active" : ""}
+                  aria-pressed={activeCategory === category}
+                  onClick={() => selectCategory(category)}
+                >
+                  <LocalizedText en={category} />
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <p className="filter-status sr-only" aria-live="polite">
+            <LocalizedText
+              en={`Showing ${visibleProjects.length} ${visibleProjects.length === 1 ? "project" : "projects"} for ${renderedCategory}.`}
+              id={`Menampilkan ${visibleProjects.length} proyek untuk ${translate(renderedCategory)}.`}
+            />
+          </p>
+          <div className={`projects-grid ${styles.grid}`} data-scroll-reveal="stagger" data-filter-phase={filterPhase} aria-busy={filterPhase === "out"}>
+            {visibleProjects.map((project, index) => (
+              <ProjectCard
+                key={project.slug}
+                project={project}
+                index={index}
+                priority={index === 0 && activeCategory === "All"}
+                onQuickView={openQuickView}
+              />
             ))}
           </div>
-        </div>
-
-        <p className="filter-status sr-only" aria-live="polite">
-          <LocalizedText
-            en={`Showing ${visibleProjects.length} ${visibleProjects.length === 1 ? "project" : "projects"} for ${renderedCategory}.`}
-            id={`Menampilkan ${visibleProjects.length} proyek untuk ${translate(renderedCategory)}.`}
-          />
-        </p>
-        <div className={`projects-grid ${styles.grid}`} id="project-gallery" data-scroll-reveal="stagger" data-filter-phase={filterPhase} aria-busy={filterPhase === "out"}>
-          {visibleProjects.map((project, index) => (
-            <ProjectCard
-              key={project.slug}
-              project={project}
-              index={index}
-              priority={index === 0 && activeCategory === "All"}
-              onQuickView={openQuickView}
-            />
-          ))}
         </div>
       </div>
       <ProjectQuickView

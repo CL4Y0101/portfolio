@@ -1,8 +1,17 @@
 .story.story {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: clamp(24px, 4vw, 44px);
+  align-items: start;
+  height: var(--story-height);
   --journey-progress: 0%;
+}
+
+.stage {
+  position: sticky;
+  top: clamp(88px, 11vh, 118px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 44px);
 }
 
 .track.track {
@@ -91,6 +100,28 @@
 
 .responsibilities :global(.evidence-list) {
   margin: 2px 0 8px;
+}
+
+@media (max-width: 700px), (max-height: 760px), (prefers-reduced-motion: reduce) {
+  .story.story {
+    height: auto;
+  }
+
+  .stage {
+    position: static;
+  }
+}
+
+:global(html[data-motion="reduced"]) .story.story,
+:global(html[data-motion="minimal"]) .story.story,
+:global(html[data-motion="off"]) .story.story {
+  height: auto;
+}
+
+:global(html[data-motion="reduced"]) .stage,
+:global(html[data-motion="minimal"]) .stage,
+:global(html[data-motion="off"]) .stage {
+  position: static;
 }
 
 @media (max-width: 700px) {

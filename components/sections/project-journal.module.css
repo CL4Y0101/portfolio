@@ -39,6 +39,32 @@
   border-color: var(--accent);
 }
 
+.gallery[data-expanded="false"] {
+  display: none;
+}
+
+@media (max-width: 700px), (prefers-reduced-motion: reduce) {
+  .gallery[data-expanded="false"] {
+    display: block;
+  }
+
+  .journal .browseLink {
+    display: none;
+  }
+}
+
+:global(html[data-motion="reduced"]) .gallery[data-expanded="false"],
+:global(html[data-motion="minimal"]) .gallery[data-expanded="false"],
+:global(html[data-motion="off"]) .gallery[data-expanded="false"] {
+  display: block;
+}
+
+:global(html[data-motion="reduced"]) .journal .browseLink,
+:global(html[data-motion="minimal"]) .journal .browseLink,
+:global(html[data-motion="off"]) .journal .browseLink {
+  display: none;
+}
+
 .toolbar {
   display: flex;
   align-items: center;

@@ -1,6 +1,6 @@
 import fs from "node:fs";
 
-const baseUrl = process.argv[2] ?? "http://127.0.0.1:3031/";
+const baseUrl = process.argv[2] ?? "http://localhost:3031/";
 
 const tabs = await (await fetch("http://127.0.0.1:9229/json")).json();
 const tab = tabs.find((item) => item.type === "page");
@@ -42,6 +42,7 @@ const start = async () => {
 };
 
 await send("Page.enable");
+await send("Emulation.setEmulatedMedia", { features: [{ name: "prefers-reduced-motion", value: "no-preference" }] });
 await viewport(1440, 1000);
 await navigate(baseUrl);
 await waitFor("document.body.classList.contains('game-menu-open')");
@@ -67,6 +68,9 @@ await evalJs("window.scrollBy({top:600,behavior:'instant'})");
 await pause(500);
 console.log("spread progress", await evalJs("({progress:document.querySelector('[aria-label=\"Project previews\"]')?.style.getPropertyValue('--spread-progress'),first:document.querySelector('[aria-label=\"Project previews\"] a')?.style.transform})"));
 await screenshot("portfolio-spread-mid-desktop");
+console.log("gallery default", await evalJs("({display:getComputedStyle(document.querySelector('#project-gallery')).display,button:document.querySelector('button[aria-controls=project-gallery]')?.getAttribute('aria-expanded')})"));
+await evalJs("document.querySelector('button[aria-controls=project-gallery]')?.click()");
+await waitFor("getComputedStyle(document.querySelector('#project-gallery')).display !== 'none'");
 await evalJs("document.querySelector('#project-gallery')?.scrollIntoView({block:'start',behavior:'instant'})");
 await pause(650);
 console.log("grid id", await evalJs("({cards:document.querySelectorAll('.projects-grid .project-card').length,teaser:document.querySelector('.project-card-summary p')?.innerText,columns:getComputedStyle(document.querySelector('.projects-grid')).gridTemplateColumns.split(' ').length})"));
@@ -95,9 +99,23 @@ await evalJs("document.querySelector('#experience')?.scrollIntoView({block:'star
 await pause(650);
 console.log("experience id", await evalJs("({heading:document.querySelector('#experience-title')?.innerText,progress:document.querySelector('.experience-explorer')?.style.getPropertyValue('--journey-progress'),tabs:document.querySelectorAll('.experience-timeline button').length})"));
 await screenshot("portfolio-experience-id-desktop");
+const scrollExperience = async (progress) => {
+  await evalJs(`(() => { const story = document.querySelector('.experience-explorer'); const stage = story.firstElementChild; const top = parseFloat(getComputedStyle(stage).top) || 0; const range = story.offsetHeight - stage.offsetHeight; window.scrollTo({top: window.scrollY + story.getBoundingClientRect().top - top + range * ${progress}, behavior: 'instant'}); })()`);
+  await pause(350);
+  return evalJs("({progress:document.querySelector('.experience-explorer')?.style.getPropertyValue('--journey-progress'),selected:[...document.querySelectorAll('.experience-timeline button')].findIndex(button=>button.getAttribute('aria-selected')==='true'),sticky:getComputedStyle(document.querySelector('.experience-explorer').firstElementChild).position})");
+};
+console.log("experience step 2", await scrollExperience(0.5));
+await screenshot("portfolio-experience-step-2-desktop");
+console.log("experience step 3", await scrollExperience(0.9));
+await screenshot("portfolio-experience-step-3-desktop");
 await evalJs("document.querySelectorAll('.experience-timeline button')[1]?.click()");
 await pause(200);
 console.log("experience tab", await evalJs("({selected:document.querySelector('.experience-timeline button[aria-selected=true]')?.innerText.slice(0,75),detailsOpen:document.querySelector('.experience-detail-panels article:not([hidden]) details')?.open})"));
+await evalJs("document.querySelectorAll('.experience-timeline button')[1]?.focus()");
+await send("Input.dispatchKeyEvent", { type: "keyDown", key: "ArrowRight", code: "ArrowRight", windowsVirtualKeyCode: 39 });
+await send("Input.dispatchKeyEvent", { type: "keyUp", key: "ArrowRight", code: "ArrowRight", windowsVirtualKeyCode: 39 });
+await pause(200);
+console.log("experience keyboard", await evalJs("({selected:[...document.querySelectorAll('.experience-timeline button')].findIndex(button=>button.getAttribute('aria-selected')==='true'),focused:[...document.querySelectorAll('.experience-timeline button')].findIndex(button=>button===document.activeElement)})"));
 
 await viewport(390, 844);
 await navigate(baseUrl);
@@ -109,11 +127,11 @@ await pause(1800);
 await screenshot("portfolio-bilingual-hero-mobile");
 await evalJs("document.documentElement.style.scrollBehavior='auto';document.querySelector('#work')?.scrollIntoView({block:'start',behavior:'instant'})");
 await pause(600);
-console.log("mobile work", await evalJs("({spread:getComputedStyle(document.querySelector('[aria-label=\"Project previews\"]')).display,gridColumns:getComputedStyle(document.querySelector('.projects-grid')).gridTemplateColumns.split(' ').length,scrollWidth:document.documentElement.scrollWidth,viewport:innerWidth})"));
+console.log("mobile work", await evalJs("({spread:getComputedStyle(document.querySelector('[aria-label=\"Project previews\"]')).display,gallery:getComputedStyle(document.querySelector('#project-gallery')).display,gridColumns:getComputedStyle(document.querySelector('.projects-grid')).gridTemplateColumns.split(' ').length,scrollWidth:document.documentElement.scrollWidth,viewport:innerWidth})"));
 await screenshot("portfolio-bilingual-work-mobile");
 await evalJs("document.querySelector('#experience')?.scrollIntoView({block:'start',behavior:'instant'})");
 await pause(500);
-console.log("mobile experience", await evalJs("({scrollWidth:document.documentElement.scrollWidth,viewport:innerWidth,trackColumns:getComputedStyle(document.querySelector('.experience-timeline')).gridTemplateColumns})"));
+console.log("mobile experience", await evalJs("({scrollWidth:document.documentElement.scrollWidth,viewport:innerWidth,trackColumns:getComputedStyle(document.querySelector('.experience-timeline')).gridTemplateColumns,sticky:getComputedStyle(document.querySelector('.experience-explorer').firstElementChild).position})"));
 await screenshot("portfolio-bilingual-experience-mobile");
 await navigate(new URL("projects/kandu", baseUrl).href);
 await waitFor("!!document.querySelector('.case-subtitle')");
@@ -122,11 +140,19 @@ console.log("case direct id", await evalJs("({path:location.pathname,lang:docume
 await screenshot("portfolio-bilingual-case-mobile");
 await evalJs("history.back()");
 await waitFor(`location.pathname===${JSON.stringify(new URL(baseUrl).pathname)}`);
+await waitFor("document.documentElement.lang==='id' && !!document.querySelector('#experience-title')");
+await pause(1200);
 console.log("browser back", await evalJs("({path:location.pathname,lang:document.documentElement.lang})"));
-await evalJs("document.querySelector('.nav-controls .language-toggle button:first-child')?.click()");
-await pause(200);
+await evalJs("(document.querySelector('.main-menu-root .language-toggle button:first-child') ?? document.querySelector('.nav-controls .language-toggle button:first-child'))?.click()");
+await waitFor("document.documentElement.lang==='en'");
 console.log("language back to EN", await evalJs("({lang:document.documentElement.lang,heading:document.querySelector('#experience-title')?.innerText?.slice(0,40)})"));
+await viewport(1440, 1000);
 await send("Emulation.setEmulatedMedia", { features: [{ name: "prefers-reduced-motion", value: "reduce" }] });
 await pause(300);
-console.log("reduced motion", await evalJs("({enabled:matchMedia('(prefers-reduced-motion: reduce)').matches,spread:getComputedStyle(document.querySelector('[aria-label=\"Project previews\"]')).display})"));
+console.log("reduced motion", await evalJs("({enabled:matchMedia('(prefers-reduced-motion: reduce)').matches,spread:getComputedStyle(document.querySelector('[aria-label=\"Project previews\"]')).display,gallery:getComputedStyle(document.querySelector('#project-gallery')).display,sticky:getComputedStyle(document.querySelector('.experience-explorer').firstElementChild).position})"));
+await send("Emulation.setEmulatedMedia", { features: [{ name: "prefers-reduced-motion", value: "no-preference" }] });
+await pause(200);
+await navigate(`${baseUrl}#project-gallery`);
+await waitFor("getComputedStyle(document.querySelector('#project-gallery')).display !== 'none'");
+console.log("gallery deep link", await evalJs("({hash:location.hash,display:getComputedStyle(document.querySelector('#project-gallery')).display,expanded:document.querySelector('button[aria-controls=project-gallery]')?.getAttribute('aria-expanded')})"));
 socket.close();
