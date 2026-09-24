@@ -40,7 +40,7 @@ Public assets live in:
 
 - `public/images/profile.jpg`
 - `public/images/projects/`
-- `public/cv/aditya-fadni-athaullah-cv.pdf`
+- `public/cv/Aditya_Fadni_Athaullah_CV_EN.pdf` and `public/cv/Aditya_Fadni_Athaullah_CV_ID.pdf`
 
 When adding a project image, use a real product screenshot and provide meaningful alt text in the project data. Do not add private repository links, credentials, server addresses, or environment values.
 

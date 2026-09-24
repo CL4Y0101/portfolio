@@ -14,7 +14,10 @@ export const profile = {
   github: "https://github.com/CL4Y0101",
   linkedin: "https://www.linkedin.com/in/aditya-fadni-312373308/",
   profileImage: withBasePath("/images/profile-voxel.webp"),
-  cv: withBasePath("/cv/aditya-fadni-athaullah-cv.pdf"),
+  cv: {
+    en: withBasePath("/cv/Aditya_Fadni_Athaullah_CV_EN.pdf"),
+    id: withBasePath("/cv/Aditya_Fadni_Athaullah_CV_ID.pdf"),
+  },
   about: [
     "I build product interfaces and the systems that keep them running, from application data to deployment.",
     "My networking background helps me trace issues across browsers, servers, and infrastructure.",

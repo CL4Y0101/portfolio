@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { HeroMotion } from "@/components/motion/HeroMotion";
 import { RevealText } from "@/components/ui/RevealText";
 import { LocalizedText } from "@/components/ui/LocalizedText";
+import { CvDownloadLink } from "@/components/ui/CvDownloadLink";
 
 export function Hero() {
   return (
@@ -21,9 +22,9 @@ export function Hero() {
             <Button href="/#work">
               <LocalizedText en="View selected work" /> <ArrowDownRight aria-hidden="true" size={17} />
             </Button>
-            <Button href={profile.cv} variant="secondary" download>
+            <CvDownloadLink className="button button-secondary">
               <LocalizedText en="Download CV" /> <Download aria-hidden="true" size={17} />
-            </Button>
+            </CvDownloadLink>
           </div>
 
           <div className="hero-location hero-entry hero-entry-6">

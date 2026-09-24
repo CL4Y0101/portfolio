@@ -77,6 +77,10 @@
 html[data-language="id"] .localized-en { display: none; }
 html[data-language="id"] .localized-id { display: contents; }
 
+.cv-download-link[data-cv-language="id"] { display: none; }
+html[data-language="id"] .cv-download-link[data-cv-language="en"] { display: none; }
+html[data-language="id"] .cv-download-link[data-cv-language="id"] { display: var(--cv-download-display, inline-flex); }
+
 .language-toggle {
   display: inline-flex;
   flex: 0 0 auto;
@@ -1216,6 +1220,7 @@ h3 {
 }
 
 .contact-links {
+  --cv-download-display: grid;
   display: grid;
   border-top: 1px solid rgba(255, 255, 255, 0.18);
 }

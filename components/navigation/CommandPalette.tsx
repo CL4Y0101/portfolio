@@ -104,8 +104,9 @@ export function CommandPalette({ open, onOpen, onClose }: CommandPaletteProps) {
       icon: Download,
       run: () => {
         const link = document.createElement("a");
-        link.href = profile.cv;
-        link.download = "aditya-fadni-athaullah-cv.pdf";
+        const cvHref = language === "id" ? profile.cv.id : profile.cv.en;
+        link.href = cvHref;
+        link.download = cvHref.split("/").pop() ?? "aditya-fadni-athaullah-cv.pdf";
         link.click();
       },
     },

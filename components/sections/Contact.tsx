@@ -3,6 +3,7 @@ import { profile } from "@/data/profile";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { RevealText } from "@/components/ui/RevealText";
 import { LocalizedText } from "@/components/ui/LocalizedText";
+import { CvDownloadLink } from "@/components/ui/CvDownloadLink";
 
 const contactLinks = [
   { label: "Email", value: profile.email, href: `mailto:${profile.email}`, icon: Mail },
@@ -13,7 +14,6 @@ const contactLinks = [
     href: profile.linkedin,
     icon: ContactRound,
   },
-  { label: "CV", value: "Download PDF", href: profile.cv, icon: Download, download: true },
 ];
 
 export function Contact() {
@@ -36,7 +36,6 @@ export function Contact() {
                 href={item.href}
                 target={item.href.startsWith("http") ? "_blank" : undefined}
                 rel={item.href.startsWith("http") ? "noreferrer" : undefined}
-                download={item.download || undefined}
               >
                 <Icon aria-hidden="true" size={21} />
                 <span>
@@ -47,6 +46,14 @@ export function Contact() {
               </a>
             );
           })}
+          <CvDownloadLink>
+            <Download aria-hidden="true" size={21} />
+            <span>
+              <small>CV</small>
+              <strong><LocalizedText en="Download PDF" /></strong>
+            </span>
+            <ArrowUpRight aria-hidden="true" size={18} />
+          </CvDownloadLink>
           <div className="contact-copy">
             <CopyButton value={profile.email} label="Copy email" />
           </div>
