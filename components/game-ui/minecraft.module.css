@@ -22,6 +22,16 @@
   transform: none;
 }
 
+:global(html[data-theme="dark"]) .button.button {
+  --mc-face: #39353b;
+  --mc-hover: #514b53;
+  --mc-edge: #171519;
+  --mc-depth: #242127;
+  --mc-highlight: #8c828b;
+  --mc-lower: #302b32;
+  --mc-ink: #f1eaee;
+}
+
 .button.button[data-variant="primary"] {
   --mc-face: #3c8527;
   --mc-hover: #2a641c;
@@ -31,6 +41,15 @@
   --mc-ink: #fff;
 }
 
+:global(html[data-theme="dark"]) .button.button[data-variant="primary"] {
+  --mc-face: #c6b9c1;
+  --mc-hover: #e2d7dd;
+  --mc-depth: #736971;
+  --mc-highlight: #f6edf1;
+  --mc-lower: #a89ba4;
+  --mc-ink: #211d22;
+}
+
 .button.button[data-variant="danger"] {
   --mc-face: #4a3c3c;
   --mc-hover: #655050;
@@ -38,6 +57,15 @@
   --mc-highlight: #7a6363;
   --mc-lower: #5b4646;
   --mc-ink: #fff0e9;
+}
+
+:global(html[data-theme="dark"]) .button.button[data-variant="danger"] {
+  --mc-face: #4b393d;
+  --mc-hover: #65494d;
+  --mc-depth: #2a1d21;
+  --mc-highlight: #957b7f;
+  --mc-lower: #443137;
+  --mc-ink: #f7e9e9;
 }
 
 .button.button:is(:hover, :focus-visible, [data-selected="true"]):not(:disabled) {
@@ -99,6 +127,17 @@
 
 .control.control:active { transform: translateY(1px); }
 
+:global(html[data-theme="dark"]) .button.button:is(:hover, :focus-visible, [data-selected="true"]):not(:disabled) {
+  border-color: #f3ebef;
+  box-shadow: inset 0 -6px var(--mc-depth), inset 3px 3px var(--mc-highlight), inset -3px -9px var(--mc-lower), 0 0 0 2px #211d22;
+}
+
+:global(html[data-theme="dark"]) .panel.panel { border-color: #302b31; }
+:global(html[data-theme="dark"]) .heading.heading { border-color: #29252a; box-shadow: 0 2px #d4c9d033; }
+:global(html[data-theme="dark"]) .slot.slot { background: #373239; border-color: #272328; box-shadow: inset 2px 2px #dfd2da44, inset -2px -3px #19161a80; }
+:global(html[data-theme="dark"]) .control.control { border-color: #29252a; box-shadow: inset 2px 2px #e6d9e14d, inset -2px -3px #14111666; }
+:global(html[data-theme="dark"]) .control.control:is(:hover, :focus-visible, [aria-pressed="true"]) { box-shadow: inset 2px 2px #f4eaf0a8, inset -2px -3px #74697466; }
+
 .hud.hud {
   border-bottom: 3px solid var(--line-strong);
   box-shadow: inset 0 -5px color-mix(in srgb, var(--line) 55%, transparent), 0 5px 0 #00000008;
@@ -151,4 +190,6 @@
   .control.control:focus-visible { outline-color: Highlight; }
   .button.button[data-selected="true"],
   .control.control[aria-pressed="true"] { border-color: Highlight; }
+  :global(html[data-theme="dark"]) .button.button:is(:hover, :focus-visible, [data-selected="true"]):not(:disabled),
+  :global(html[data-theme="dark"]) .control.control[aria-pressed="true"] { border-color: Highlight; }
 }

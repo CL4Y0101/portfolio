@@ -13,6 +13,12 @@
   background: linear-gradient(135deg, #b9dfc426, transparent 42%), linear-gradient(#14251ed9, #101c17eb);
 }
 
+:global(html[data-theme="dark"]) .glass.glass,
+:global(html[data-theme="dark"]) .glass.glass[data-glass="refracted"] {
+  background: linear-gradient(135deg, #e1d3dd20, transparent 42%), linear-gradient(#242127e8, #1b191ef0);
+  box-shadow: inset 2px 2px #f1e5ed55, inset -2px -5px #0008, 8px 8px 0 #15121655, 0 28px 70px #0c0a0d80;
+}
+
 :global(html[data-graphics="low"]) .glass.glass,
 :global(html[data-motion="minimal"]) .glass.glass,
 :global(html[data-motion="off"]) .glass.glass {
@@ -21,8 +27,15 @@
   backdrop-filter: none;
 }
 
+:global(html[data-theme="dark"][data-graphics="low"]) .glass.glass,
+:global(html[data-theme="dark"][data-motion="minimal"]) .glass.glass,
+:global(html[data-theme="dark"][data-motion="off"]) .glass.glass {
+  background: #211f23;
+}
+
 @supports not (backdrop-filter: blur(1px)) {
   .glass.glass { background: #17241d; }
+  :global(html[data-theme="dark"]) .glass.glass { background: #211f23; }
 }
 
 @media (max-width: 820px), (prefers-reduced-motion: reduce) {
@@ -31,8 +44,10 @@
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
+  :global(html[data-theme="dark"]) .glass.glass { background: #211f23f5; }
 }
 
 @media (forced-colors: active) {
   .glass.glass { background: Canvas; color: CanvasText; backdrop-filter: none; }
+  :global(html[data-theme="dark"]) .glass.glass { background: Canvas; color: CanvasText; backdrop-filter: none; }
 }

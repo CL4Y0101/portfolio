@@ -49,27 +49,27 @@
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --background: #101413;
-  --background-raised: #161c1a;
-  --background-soft: #141a18;
-  --surface: rgba(22, 28, 26, 0.86);
-  --surface-strong: #19211e;
-  --text: #f1f5f3;
-  --text-soft: #cbd5d1;
-  --muted: #98a6a1;
-  --line: #29332f;
-  --line-strong: #3b4944;
-  --accent: #8fc1b5;
-  --accent-strong: #c4e1da;
-  --accent-soft: #1b312b;
-  --warm: #e4ae73;
-  --warm-soft: #382a1c;
+  --background: #151416;
+  --background-raised: #211f23;
+  --background-soft: #1b1a1d;
+  --surface: rgba(33, 31, 35, 0.88);
+  --surface-strong: #29262b;
+  --text: #f3f0f1;
+  --text-soft: #d5ced2;
+  --muted: #aaa2a8;
+  --line: #38343a;
+  --line-strong: #57515a;
+  --accent: #c0b4bb;
+  --accent-strong: #e5d9df;
+  --accent-soft: #342e34;
+  --warm: #ddb28e;
+  --warm-soft: #382e2b;
   --shadow-sm: 0 12px 34px rgba(0, 0, 0, 0.2);
   --shadow-lg: 0 28px 80px rgba(0, 0, 0, 0.32);
-  --depth-1: 0 5px 0 #0b0f0e, 0 12px 28px rgba(0, 0, 0, 0.25);
-  --depth-2: 0 9px 0 #090c0b, 0 28px 58px rgba(0, 0, 0, 0.42);
-  --sky: #78a8b4;
-  --gold: #d3a45d;
+  --depth-1: 0 5px 0 #0e0c0f, 0 12px 28px rgba(0, 0, 0, 0.28);
+  --depth-2: 0 9px 0 #0a090b, 0 28px 58px rgba(0, 0, 0, 0.45);
+  --sky: #aaa4af;
+  --gold: #d3b58e;
 }
 
 .localized-id { display: none; }
@@ -153,8 +153,8 @@ body::before {
 }
 
 :root[data-theme="dark"] body::before {
-  background-image: linear-gradient(rgba(143, 193, 181, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(143, 193, 181, 0.035) 1px, transparent 1px);
+  background-image: linear-gradient(rgba(202, 190, 199, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(202, 190, 199, 0.035) 1px, transparent 1px);
 }
 
 ::selection {
@@ -414,7 +414,7 @@ h3 {
 }
 
 :root[data-theme="dark"] .button-primary {
-  color: #10201c;
+  color: #211d22;
   background: var(--accent-strong);
 }
 
@@ -3938,7 +3938,7 @@ html.scroll-reveal-ready [data-scroll-reveal="stagger"]:not(.is-revealed) > * {
 }
 
 :root[data-theme="dark"] .button-primary:focus-visible {
-  color: #10201c;
+  color: #211d22;
 }
 
 .button-secondary:focus-visible {
@@ -4729,6 +4729,118 @@ body.game-menu-open {
 
 @keyframes menu-wipe-in {
   to { transform: scaleY(1); }
+}
+
+/* Black-dove palette: keep the light world unchanged and neutralize dark surfaces. */
+@media (forced-colors: none) {
+  :root[data-theme="dark"] ::selection,
+  :root[data-theme="dark"] .skip-link,
+  :root[data-theme="dark"] .button-primary:hover,
+  :root[data-theme="dark"] .button-primary:focus-visible {
+    color: #211d22;
+  }
+
+  :root[data-theme="dark"] .achievement-featured {
+    color: #f3edf0;
+    background: #282329 !important;
+    border-color: #62545f !important;
+  }
+
+  :root[data-theme="dark"] .achievement-featured h3,
+  :root[data-theme="dark"] .achievement-featured > svg,
+  :root[data-theme="dark"] .achievement-featured > span,
+  :root[data-theme="dark"] .achievement-featured p,
+  :root[data-theme="dark"] .achievement-featured strong {
+    color: #d9cbd3 !important;
+  }
+
+  :root[data-theme="dark"] .achievement-featured h3 { color: #f3edf0 !important; }
+  :root[data-theme="dark"] .contact-section,
+  :root[data-theme="dark"] .case-highlights { color: #f3edf0; background: #252126; }
+  :root[data-theme="dark"] .contact-section {
+    background-image: linear-gradient(90deg, #ffffff06 1px, transparent 1px),
+      linear-gradient(#ffffff06 1px, transparent 1px);
+  }
+  :root[data-theme="dark"] .contact-section .eyebrow,
+  :root[data-theme="dark"] .case-highlights .eyebrow,
+  :root[data-theme="dark"] .contact-links small,
+  :root[data-theme="dark"] #contact::before { color: #c9b9c3; }
+  :root[data-theme="dark"] .contact-grid > div:first-child > p:last-child,
+  :root[data-theme="dark"] .case-highlights .evidence-list li { color: #d0c5cb; }
+  :root[data-theme="dark"] .case-highlights .evidence-list li::before { background: #bdaab7; }
+  :root[data-theme="dark"] .contact-section::after {
+    background: linear-gradient(90deg, transparent 0 30%, #cfbdc91a 30% 70%, transparent 70%);
+  }
+  :root[data-theme="dark"] .contact-copy .copy-button,
+  :root[data-theme="dark"] .case-cover p { color: #eee7eb; }
+  :root[data-theme="dark"] .case-cover { background: #332d34; }
+  :root[data-theme="dark"] .project-card::after { background: #231e24d9; }
+  :root[data-theme="dark"] .route-transition > span:not(.route-transition-label),
+  :root[data-theme="dark"] .route-transition-label { background: #211d22; }
+  :root[data-theme="dark"] .route-transition-label { color: #f3edf0; border-color: #655b65; }
+  :root[data-theme="dark"] .app-dialog::backdrop { background: #100d11b8; }
+
+  :root[data-theme="dark"] .main-menu-root {
+    --menu-ink: #f3eff1;
+    --menu-muted: #bdb3ba;
+    --menu-panel: #19171ceb;
+    --menu-panel-solid: #211e24;
+    --menu-edge: #d2c2cc47;
+    --menu-accent: #d0bfca;
+    background: #37333a;
+  }
+  :root[data-theme="dark"] .main-menu-root .language-toggle button[aria-pressed="true"] { color: #211d22; }
+  :root[data-theme="dark"] .main-menu-content {
+    background: linear-gradient(135deg, #dac7d30f, transparent 38%), var(--menu-panel);
+    box-shadow: 10px 10px 0 #0d0b0e80, 0 30px 90px #080609a6;
+  }
+  :root[data-theme="dark"] .game-menu-button { background: #28252b; border-color: #776b7566; }
+  :root[data-theme="dark"] .main-menu-footer { color: #b6aab3; border-color: #d2c2cc30; }
+  :root[data-theme="dark"] .main-menu-footer kbd { color: #eee6eb; }
+  :root[data-theme="dark"] .game-panel { scrollbar-color: #a996a3 #ffffff0f; }
+  :root[data-theme="dark"] .exit-menu-panel { border-color: #a997a3; }
+  :root[data-theme="dark"] .exit-menu-icon,
+  :root[data-theme="dark"] .menu-profile-image { background: #cfbdca1c; border-color: #d6c8d147; }
+  :root[data-theme="dark"] .game-panel-heading { border-color: #d2c2cc30; }
+  :root[data-theme="dark"] .game-panel-heading > span,
+  :root[data-theme="dark"] .menu-achievement-grid span,
+  :root[data-theme="dark"] .menu-achievement-grid small,
+  :root[data-theme="dark"] .menu-profile-copy dt { color: #c6b4c0; }
+  :root[data-theme="dark"] .option-group,
+  :root[data-theme="dark"] .option-row,
+  :root[data-theme="dark"] .menu-achievement-grid article { border-color: #d2c2cc2b; }
+  :root[data-theme="dark"] .option-segments button,
+  :root[data-theme="dark"] .option-sound-toggle,
+  :root[data-theme="dark"] .menu-social-links a { background: #2b272e; border-color: #d2c2cc47; }
+  :root[data-theme="dark"] .option-segments button:is(:hover, :focus-visible, [aria-pressed="true"]),
+  :root[data-theme="dark"] .option-sound-toggle:is(:hover, :focus-visible, [aria-pressed="true"]),
+  :root[data-theme="dark"] .menu-social-links a:is(:hover, :focus-visible) {
+    color: #211d22;
+    background: #d8cbd3;
+    border-color: #f1e8ed;
+  }
+  :root[data-theme="dark"] .menu-achievement-grid article::before { background: #ab94a4; }
+  :root[data-theme="dark"] .menu-achievement-grid article.menu-achievement-featured::before { background: #d3b58e; }
+  :root[data-theme="dark"] .menu-achievement-icon { color: #211d22; background: #cbb9c5; }
+  :root[data-theme="dark"] .menu-achievement-grid strong,
+  :root[data-theme="dark"] .menu-profile-copy dd { color: #ede5ea; }
+  :root[data-theme="dark"] .menu-entry-wipe i { background: #211d22; }
+
+  :root[data-theme="dark"] .menu-world { background: linear-gradient(#59545f 0 52%, #29272e 52% 100%); }
+  :root[data-theme="dark"] .menu-sky { background: linear-gradient(180deg, #514d58 0, #77717b 52%, #343039 52%); }
+  :root[data-theme="dark"] .menu-sun { background: #dcd3d5; box-shadow: 0 0 70px #e5d6dd66; }
+  :root[data-theme="dark"] .menu-cloud { background: #ddd4d652; box-shadow: 38px -21px 0 #ddd4d652, 85px -7px 0 #ddd4d652, 128px 7px 0 #ddd4d652; }
+  :root[data-theme="dark"] .menu-mountain { background: linear-gradient(138deg, #8e858eeb, #49444ded); }
+  :root[data-theme="dark"] .menu-mountain-near { background: linear-gradient(138deg, #746b75, #39353d 68%); }
+  :root[data-theme="dark"] .menu-terrain { background-color: #28252b; }
+  :root[data-theme="dark"] .menu-terrain-back { background-color: #403b43; }
+  :root[data-theme="dark"] .menu-fog { background: linear-gradient(90deg, transparent, #d5c8d342, transparent); }
+  :root[data-theme="dark"] .menu-particles i { background: #e7dae4b3; }
+  :root[data-theme="dark"] .menu-world-vignette {
+    background: linear-gradient(90deg, #100d1280, transparent 60%),
+      linear-gradient(0deg, #0e0b1080, transparent 44%),
+      radial-gradient(circle at 55% 45%, transparent 36%, #100d1247);
+  }
 }
 
 :root[data-graphics="low"] .menu-particles,
