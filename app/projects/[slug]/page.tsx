@@ -13,6 +13,8 @@ import { LocalizedText } from "@/components/ui/LocalizedText";
 import { projectCopyId } from "@/data/project-copy-id";
 import { projects, getProject } from "@/data/projects";
 import { SITE_URL } from "@/lib/constants";
+import { projectWorld } from "@/lib/project-world";
+import { WorldAtmosphere } from "@/components/motion/WorldAtmosphere";
 
 type ProjectPageProps = {
   params: Promise<{ slug: string }>;
@@ -65,9 +67,10 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const copy = projectCopyId[project.slug];
 
   return (
-    <main id="main-content" className="case-study" data-case-entry>
+    <main id="main-content" className="case-study" data-case-entry data-project-world={projectWorld(project)}>
       <ReadingProgress />
       <header className="case-hero">
+        <WorldAtmosphere />
         <div className="shell case-hero-grid">
           <div className="case-hero-copy">
             <Link className="back-link" href="/#work">
@@ -114,6 +117,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       {project.screenshots[0] ? (
         <section className="shell case-cover" aria-label={`${project.title} screenshot`} data-scroll-reveal="portal">
           <Image
+            data-project-cover={project.slug}
             src={project.screenshots[0].src}
             alt={project.screenshots[0].alt}
             width={1440}
@@ -236,6 +240,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           <p className="case-cta-description"><LocalizedText en="Next up" />: {nextProject.title}. <LocalizedText en="Or return to all selected projects." /></p>
           <div className="case-cta-actions">
             <Link className="button button-primary" href={`/projects/${nextProject.slug}`} prefetch={false}>
+              {nextProject.screenshots[0] ? <Image className="next-project-cover" data-project-cover={nextProject.slug} src={nextProject.screenshots[0].src} alt="" width={96} height={60} /> : null}
               <LocalizedText en="Next case study" /> <ExternalLink aria-hidden="true" size={16} />
             </Link>
             <Link className="button button-secondary" href="/#work">

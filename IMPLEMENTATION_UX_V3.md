@@ -55,8 +55,10 @@ intersection feedback without recurring screen-reader announcements.
 - Dialog focus traps, Escape/outside close, focus restoration, filter aria-live,
   language-specific CVs and native browser history remain in place.
 - Navigation uses Next.js links without intercepting or delaying route changes;
-  route imagery reuses the destination's real cover. This is visual continuity,
-  not a browser-specific shared-element transition.
+  route imagery reuses the destination's real cover. A DOM shared-cover transition
+  moves a visible preview into the case-study cover using the Web Animations API,
+  without intercepting Next.js navigation. Direct entry, history traversal and
+  unsupported/reduced devices retain the portal/static fallback.
 
 ## Verification
 
@@ -87,10 +89,23 @@ Screenshots are generated in the OS temp directory for visual review.
   all the same information.
 - Existing project/experience copy and factual dates are reused. Missing dates
   and unsupported skill/project associations are not invented.
-- No new artwork, particles, WebGL or perpetual canvas loops were introduced.
-  Additional category-specific ambient art is deferred to avoid visual noise.
-- Chrome desktop/mobile emulation is covered; physical touch devices, Safari,
-  Firefox, and a full assistive-technology audit still merit manual testing.
+- Category worlds now use scoped terrain/grid/signal/workshop geometry and subtle
+  neutral accents in `lib/project-world.ts` and `app/world-polish.css`. Six CSS
+  particles run once, pause offscreen/when the document is hidden, and disappear
+  on mobile, coarse pointers, Low graphics and reduced-motion settings.
+- `WorldAtmosphere.tsx` owns the visibility lifecycle; `useSharedProjectCover.ts`
+  owns the temporary cover clone, timeout and cancellation lifecycle. Resize,
+  policy changes and rapid route changes clean up without changing history.
+- Cross-browser checks are in `scripts/check-world-polish.mjs`. Playwright and
+  axe-core are installed only in an external temporary QA directory, not in the
+  portfolio dependencies. The suite covers Chromium, Firefox, WebKit, touch-input
+  emulation, accessibility-tree names, and axe WCAG A/AA checks on menu, quests,
+  quick view, case study, light homepage and Indonesian reduced-motion mobile.
+- The accessibility checks identified and prompted fixes for light-theme muted
+  text contrast and the mobile avatar link's accessible name.
+- WebKit testing is not equivalent to Safari on a real Apple device. Physical
+  touch devices and an actual NVDA/VoiceOver reading audit remain manual checks;
+  automated accessibility results cannot certify complete WCAG compliance.
 - Local OneDrive cache locks and transient Google Fonts fetch failures occurred
   during validation. Cache folders were preserved in OS temp backups; the build
   succeeded on retry without changes to production configuration or fonts.

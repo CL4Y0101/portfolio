@@ -14,6 +14,7 @@ import styles from "./project-journal.module.css";
 import { LocalizedText } from "@/components/ui/LocalizedText";
 import { useLanguage } from "@/components/ui/useLanguage";
 import { translate } from "@/lib/translations";
+import { categoryWorld } from "@/lib/project-world";
 
 const categories: Array<"All" | ProjectCategory> = [
   "All",
@@ -116,7 +117,7 @@ export function FeaturedProjects() {
 
         <ProjectStackSpread projects={featuredProjects} onBrowse={browseProjects} />
 
-        <div className={styles.gallery} id="project-gallery" tabIndex={-1} data-expanded={galleryExpanded}>
+        <div className={styles.gallery} id="project-gallery" data-project-world={categoryWorld(renderedCategory)} tabIndex={-1} data-expanded={galleryExpanded}>
           <div className={styles.toolbar}>
             <span className={styles.toolbarLabel}><LocalizedText en="Filter by discipline" /></span>
             <div className="filter-list" role="group" aria-label={language === "id" ? "Filter proyek pilihan" : "Filter selected work"}>

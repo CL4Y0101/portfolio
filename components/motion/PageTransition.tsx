@@ -6,11 +6,13 @@ import { motionDurations } from "@/components/motion/motion";
 import Image from "next/image";
 import { projects } from "@/data/projects";
 import { LocalizedText } from "@/components/ui/LocalizedText";
+import { useSharedProjectCover } from "./useSharedProjectCover";
 
 type TransitionPhase = "idle" | "cover" | "reveal";
 
 export function PageTransition() {
   const pathname = usePathname();
+  const startSharedCover = useSharedProjectCover(pathname);
   const previousPathname = useRef(pathname);
   const coverStartedAt = useRef(0);
   const [phase, setPhase] = useState<TransitionPhase>("idle");
@@ -31,6 +33,7 @@ export function PageTransition() {
       if (destination.origin !== window.location.origin || destination.pathname === window.location.pathname) return;
 
       coverStartedAt.current = performance.now();
+      startSharedCover(link);
       setDestinationPath(destination.pathname);
       setPhase("cover");
       window.clearTimeout(fallbackTimer);
@@ -42,7 +45,7 @@ export function PageTransition() {
       document.removeEventListener("click", handleNavigationIntent, true);
       window.clearTimeout(fallbackTimer);
     };
-  }, []);
+  }, [startSharedCover]);
 
   useEffect(() => {
     if (previousPathname.current === pathname) return;

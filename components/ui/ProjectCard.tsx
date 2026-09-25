@@ -7,6 +7,7 @@ import { GameIcon } from "@/components/game-ui/GameIcon";
 import ui from "@/components/game-ui/minecraft.module.css";
 import { LocalizedText } from "@/components/ui/LocalizedText";
 import { projectTeasers } from "@/data/project-teasers";
+import { projectWorld } from "@/lib/project-world";
 
 export function ProjectCard({
   project,
@@ -27,10 +28,12 @@ export function ProjectCard({
     <article
       className={`project-card ${ui.card} ${project.categories.includes("Professional") ? "project-card-prominent" : ""}`}
       data-build-index={`BUILD ${String(index + 1).padStart(2, "0")}`}
+      data-project-world={projectWorld(project)}
     >
       {project.screenshots[0] ? (
         <Link className="project-media" href={`/projects/${project.slug}`} prefetch={false} aria-label={`Read ${project.title} case study`}>
           <Image
+            data-project-cover={project.slug}
             src={project.screenshots[0].src}
             alt={project.screenshots[0].alt}
             width={1440}

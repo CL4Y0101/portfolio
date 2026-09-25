@@ -13,6 +13,7 @@ import { profile } from "@/data/profile";
 import { SITE_URL, withBasePath } from "@/lib/constants";
 import "./globals.css";
 import "./narrative.css";
+import "./world-polish.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

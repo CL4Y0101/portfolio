@@ -7,6 +7,8 @@ import { useScrollProgress } from "@/components/motion/useScrollProgress";
 import { ProjectStoryPanel } from "./ProjectStoryPanel";
 import type { Project } from "@/lib/types";
 import styles from "./project-stack-spread.module.css";
+import { projectWorld } from "@/lib/project-world";
+import { WorldAtmosphere } from "@/components/motion/WorldAtmosphere";
 
 export function ProjectStackSpread({ projects, onBrowse }: { projects: Project[]; onBrowse: () => void }) {
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -45,8 +47,9 @@ export function ProjectStackSpread({ projects, onBrowse }: { projects: Project[]
   }
 
   return (
-    <div ref={wrapRef} className={styles.wrap} data-project-story data-phase="discover">
+    <div ref={wrapRef} className={styles.wrap} data-project-story data-phase="discover" data-project-world={selected[active] ? projectWorld(selected[active]) : "neutral"}>
       <div className={styles.stage}>
+        <WorldAtmosphere />
         <div className={styles.heading}>
           <span>01 / <LocalizedText en="Discover builds" id="Jelajahi karya" /></span>
           <h3><LocalizedText en="Explore the builds" /></h3>
@@ -55,7 +58,7 @@ export function ProjectStackSpread({ projects, onBrowse }: { projects: Project[]
           {selected.map((project, index) => {
             const screenshot = project.screenshots[0];
             return screenshot ? <div key={project.slug} ref={(element) => { cardsRef.current[index] = element; }} className={styles.card}>
-              <Image src={screenshot.src} alt="" width={720} height={450} sizes="(max-width: 1200px) 30vw, 380px" />
+              <Image data-project-cover={project.slug} src={screenshot.src} alt="" width={720} height={450} sizes="(max-width: 1200px) 30vw, 380px" />
               <span>{project.title}</span>
             </div> : null;
           })}

@@ -1,0 +1,33 @@
+/* Category accents are scoped decoration; text keeps the established contrast tokens. */
+[data-project-world] { --world-tint: #9b879c; --world-grid: 48px; }
+[data-project-world="terrain"] { --world-tint: #b6a083; --world-grid: 64px; }
+[data-project-world="architecture"] { --world-tint: #8f96ad; --world-grid: 32px; }
+[data-project-world="sky"] { --world-tint: #89a2bd; --world-grid: 56px; }
+[data-project-world="signal"] { --world-tint: #c48c84; --world-grid: 24px; }
+[data-project-world="workshop"] { --world-tint: #b99d71; --world-grid: 40px; }
+[data-project-story] > div:first-child, .case-hero { position: relative; isolation: isolate; }
+[data-project-world] .project-media, [data-quest][data-project-world] { border-color: color-mix(in srgb, var(--world-tint) 50%, var(--line)); }
+#project-gallery[data-project-world] { border-top: 2px solid color-mix(in srgb, var(--world-tint) 55%, var(--line)); transition: border-color var(--motion-story); }
+.world-atmosphere { position: absolute; inset: 0; overflow: clip; z-index: -1; pointer-events: none; background: radial-gradient(ellipse at 80% 60%, color-mix(in srgb, var(--world-tint) 13%, transparent), transparent 70%); }
+.world-atmosphere-terrain { position: absolute; inset: 55% 0 0; opacity: 0.16; background: repeating-linear-gradient(90deg, var(--world-tint) 0 2px, transparent 2px var(--world-grid)); clip-path: polygon(0 65%, 15% 65%, 15% 40%, 30% 40%, 30% 70%, 45% 70%, 45% 25%, 65% 25%, 65% 50%, 80% 50%, 80% 10%, 100% 10%, 100% 100%, 0 100%); }
+[data-project-world="signal"] .world-atmosphere-terrain { background: repeating-linear-gradient(0deg, var(--world-tint) 0 1px, transparent 1px var(--world-grid)); clip-path: polygon(0 20%, 35% 20%, 35% 50%, 70% 50%, 70% 80%, 100% 80%, 100% 100%, 0 100%); }
+[data-project-world="workshop"] .world-atmosphere-terrain { clip-path: none; background: radial-gradient(var(--world-tint) 2px, transparent 3px); background-size: var(--world-grid) var(--world-grid); }
+.world-atmosphere-particles { position: absolute; inset: 0; display: none; }
+.world-atmosphere-particles i { position: absolute; left: 8%; top: 80%; width: 4px; height: 4px; background: var(--world-tint); opacity: 0; }
+.world-atmosphere-particles i:nth-child(2) { left: 26%; top: 62%; animation-delay: 150ms; }
+.world-atmosphere-particles i:nth-child(3) { left: 44%; top: 85%; animation-delay: 300ms; }
+.world-atmosphere-particles i:nth-child(4) { left: 61%; top: 71%; animation-delay: 450ms; }
+.world-atmosphere-particles i:nth-child(5) { left: 78%; top: 58%; animation-delay: 600ms; }
+.world-atmosphere-particles i:nth-child(6) { left: 91%; top: 82%; animation-delay: 750ms; }
+@keyframes world-mote { 0% { opacity: 0; transform: translateY(8px); } 25%, 60% { opacity: 0.45; } 100% { opacity: 0; transform: translateY(-48px); } }
+@media (min-width: 1001px) and (min-height: 801px) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  html[data-motion="full"]:not([data-graphics="low"]) .world-atmosphere-particles { display: block; }
+  html[data-motion="full"]:not([data-graphics="low"]) .world-atmosphere-particles i { animation-name: world-mote; animation-duration: 2800ms; animation-timing-function: ease-out; animation-fill-mode: both; animation-play-state: paused; }
+  html[data-motion="full"]:not([data-graphics="low"]) .world-atmosphere[data-visible="true"][data-paused="false"] .world-atmosphere-particles i { animation-play-state: running; }
+}
+html[data-graphics="low"] .world-atmosphere { display: none; }
+.shared-project-cover { position: fixed; z-index: 1001; object-fit: cover; object-position: top; transform-origin: top left; pointer-events: none; border-radius: 2px; box-shadow: 0 16px 48px #0003; }
+html[data-shared-cover] .route-transition { display: none; }
+[data-cover-in-flight="true"] { visibility: hidden !important; }
+.case-cover[data-shared-cover-target] { transform: none !important; clip-path: none !important; transition: none !important; opacity: 1 !important; }
+.next-project-cover { width: 80px; height: 50px; object-fit: cover; object-position: top; }

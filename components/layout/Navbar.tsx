@@ -148,7 +148,7 @@ export function Navbar() {
   return (
     <header className={`site-header ${ui.hud}`} data-scrolled={isScrolled ? "true" : "false"} data-world-entry>
       <nav className="shell nav-shell" ref={navShellRef} data-collapsed={isCollapsed ? "true" : "false"} aria-label="Primary navigation">
-        <Link className="site-brand" href="/#home" inert={isCollapsed} aria-hidden={isCollapsed || undefined} onClick={() => setIsOpen(false)}>
+        <Link className="site-brand" href="/#home" aria-label={`${profile.shortName} — ${label("Home")}`} inert={isCollapsed} aria-hidden={isCollapsed || undefined} onClick={() => setIsOpen(false)}>
           <span className="brand-avatar"><Image src={profile.profileImage} alt="" width={40} height={40} priority /></span>
           <span className="brand-copy">
             <strong>{profile.shortName}</strong>
