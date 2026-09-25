@@ -8,7 +8,7 @@ export function About() {
     <section className="section section-tinted" id="about" aria-labelledby="about-title">
       <div className="shell about-grid">
         <SectionHeading
-          eyebrow="About"
+          eyebrow="Player profile / About"
           titleId="about-title"
           title="Product thinking, systems mindset."
           description="Software development shaped by a foundation in networking."

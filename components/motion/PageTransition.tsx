@@ -3,6 +3,9 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { motionDurations } from "@/components/motion/motion";
+import Image from "next/image";
+import { projects } from "@/data/projects";
+import { LocalizedText } from "@/components/ui/LocalizedText";
 
 type TransitionPhase = "idle" | "cover" | "reveal";
 
@@ -11,6 +14,8 @@ export function PageTransition() {
   const previousPathname = useRef(pathname);
   const coverStartedAt = useRef(0);
   const [phase, setPhase] = useState<TransitionPhase>("idle");
+  const [destinationPath, setDestinationPath] = useState(pathname);
+  const destinationProject = projects.find((project) => destinationPath.replace(/\/$/, "").endsWith(`/projects/${project.slug}`));
 
   useEffect(() => {
     let fallbackTimer = 0;
@@ -26,6 +31,7 @@ export function PageTransition() {
       if (destination.origin !== window.location.origin || destination.pathname === window.location.pathname) return;
 
       coverStartedAt.current = performance.now();
+      setDestinationPath(destination.pathname);
       setPhase("cover");
       window.clearTimeout(fallbackTimer);
       fallbackTimer = window.setTimeout(() => setPhase("idle"), 1200);
@@ -45,7 +51,10 @@ export function PageTransition() {
     let focusTimer = 0;
     const elapsedCoverTime = coverStartedAt.current ? performance.now() - coverStartedAt.current : motionDurations.fast;
     const revealDelay = Math.max(0, motionDurations.fast - elapsedCoverTime);
-    const revealTimer = window.setTimeout(() => setPhase("reveal"), revealDelay);
+    const revealTimer = window.setTimeout(() => {
+      setDestinationPath(pathname);
+      setPhase("reveal");
+    }, revealDelay);
     const idleTimer = window.setTimeout(() => setPhase("idle"), revealDelay + motionDurations.page);
 
     focusTimer = window.setTimeout(() => {
@@ -69,7 +78,13 @@ export function PageTransition() {
       <span />
       <span />
       <span />
-      <span className="route-transition-label">Loading region</span>
+      <span className="route-transition-label">
+        <LocalizedText en={destinationProject ? "Entering project" : "Returning to world"} id={destinationProject ? "Memasuki proyek" : "Kembali ke dunia"} />
+        {destinationProject ? <strong>{destinationProject.title}</strong> : null}
+      </span>
+      {destinationProject?.screenshots[0] ? <div className="route-transition-cover">
+        <Image src={destinationProject.screenshots[0].src} alt="" width={480} height={300} sizes="240px" />
+      </div> : null}
     </div>
   );
 }

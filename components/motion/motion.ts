@@ -4,6 +4,7 @@ export const motionDurations = {
   base: 220,
   reveal: 520,
   page: 680,
+  world: 1050,
 } as const;
 
 export const motionStagger = {

@@ -14,7 +14,7 @@ export function MotionProvider() {
     const updatePolicy = () => {
       const disabled = new URLSearchParams(window.location.search).get("motion") === "off";
       const preferences = readGamePreferences();
-      root.dataset.motion = disabled ? "off" : preferences.motion;
+      root.dataset.motion = disabled ? "off" : reducedMotion.matches && preferences.motion === "full" ? "reduced" : preferences.motion;
       root.dataset.graphics = preferences.graphics;
       root.dataset.motionIntensity = compactMotion.matches ? "compact" : "full";
       window.dispatchEvent(new Event("portfolio-motion-change"));

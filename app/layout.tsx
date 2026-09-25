@@ -12,6 +12,7 @@ import { SpotlightCursor } from "@/components/ui/SpotlightCursor";
 import { profile } from "@/data/profile";
 import { SITE_URL, withBasePath } from "@/lib/constants";
 import "./globals.css";
+import "./narrative.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -87,13 +88,13 @@ const themeScript = `
         savedPreferences = JSON.parse(localStorage.getItem("portfolio-game-preferences") || "{}") || {};
       } catch (_) {}
       const systemReduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const motion = ["full", "reduced", "minimal"].includes(savedPreferences.motion)
+      const motion = ["full", "reduced", "minimal", "off"].includes(savedPreferences.motion)
         ? savedPreferences.motion
         : systemReduced ? "reduced" : "full";
       const graphics = ["high", "balanced", "low"].includes(savedPreferences.graphics)
         ? savedPreferences.graphics
         : "balanced";
-      document.documentElement.dataset.motion = new URLSearchParams(location.search).get("motion") === "off" ? "off" : motion;
+      document.documentElement.dataset.motion = new URLSearchParams(location.search).get("motion") === "off" ? "off" : systemReduced && motion === "full" ? "reduced" : motion;
       document.documentElement.dataset.graphics = graphics;
       const language = localStorage.getItem("portfolio-language") === "id" ? "id" : "en";
       document.documentElement.dataset.language = language;

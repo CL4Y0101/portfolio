@@ -59,6 +59,19 @@ export function FeaturedProjects() {
 
   const clearQuickView = useCallback(() => setQuickViewProject(null), []);
 
+  function browseProjects() {
+    // Keep browsing context in the current history entry when a case study is opened.
+    const url = new URL(window.location.href);
+    url.hash = "project-gallery";
+    window.history.replaceState(window.history.state, "", url);
+    setGalleryExpanded(true);
+    window.requestAnimationFrame(() => {
+      const gallery = document.getElementById("project-gallery");
+      gallery?.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth" });
+      gallery?.focus({ preventScroll: true });
+    });
+  }
+
   function selectCategory(category: (typeof categories)[number]) {
     if (category === activeCategory) return;
     filterTimers.current.forEach(clearTimeout);
@@ -94,19 +107,16 @@ export function FeaturedProjects() {
               className={`button button-secondary ${styles.browseLink}`}
               aria-controls="project-gallery"
               aria-expanded={galleryExpanded}
-              onClick={() => {
-                setGalleryExpanded(true);
-                window.requestAnimationFrame(() => document.getElementById("project-gallery")?.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth" }));
-              }}
+              onClick={browseProjects}
             >
               <LocalizedText en="View all projects" /> <MoveRight aria-hidden="true" size={17} />
             </button>
           }
         />
 
-        <ProjectStackSpread projects={featuredProjects} />
+        <ProjectStackSpread projects={featuredProjects} onBrowse={browseProjects} />
 
-        <div className={styles.gallery} id="project-gallery" data-expanded={galleryExpanded}>
+        <div className={styles.gallery} id="project-gallery" tabIndex={-1} data-expanded={galleryExpanded}>
           <div className={styles.toolbar}>
             <span className={styles.toolbarLabel}><LocalizedText en="Filter by discipline" /></span>
             <div className="filter-list" role="group" aria-label={language === "id" ? "Filter proyek pilihan" : "Filter selected work"}>

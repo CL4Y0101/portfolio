@@ -1,5 +1,9 @@
 /** Exact-copy translations keep English SSR and existing data contracts intact. */
 const translations: Record<string, string> = {
+  "Player journey / Experience": "Perjalanan / Pengalaman",
+  "Inventory / Technical capabilities": "Inventori / Keahlian teknis",
+  "Player profile / About": "Profil pemain / Tentang saya",
+  "off": "mati",
   "Software Developer · Informatics Engineering Student": "Pengembang Perangkat Lunak · Mahasiswa Teknik Informatika",
   "Web products that work in the real world.": "Produk web yang berfungsi di dunia nyata.",
   "I build web products, connect the data behind them, and help keep them online.": "Saya membangun produk web, menghubungkan datanya, dan menjaga layanan tetap online.",

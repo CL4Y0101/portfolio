@@ -9,13 +9,13 @@ import { Skills } from "@/components/sections/Skills";
 
 export default function HomePage() {
   return (
-    <main id="main-content">
+    <main id="main-content" className="portfolio-story">
       <Hero />
       <FeaturedProjects />
       <Experience />
       <Skills />
-      <About />
       <Achievements />
+      <About />
       <OpenSource />
       <Contact />
     </main>

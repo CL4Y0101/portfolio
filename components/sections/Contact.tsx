@@ -4,6 +4,7 @@ import { CopyButton } from "@/components/ui/CopyButton";
 import { RevealText } from "@/components/ui/RevealText";
 import { LocalizedText } from "@/components/ui/LocalizedText";
 import { CvDownloadLink } from "@/components/ui/CvDownloadLink";
+import { WorldActions } from "@/components/game-menu/WorldActions";
 
 const contactLinks = [
   { label: "Email", value: profile.email, href: `mailto:${profile.email}`, icon: Mail },
@@ -18,10 +19,11 @@ const contactLinks = [
 
 export function Contact() {
   return (
-    <section className="contact-section" id="contact" aria-labelledby="contact-title">
+    <section className="contact-section end-portal" id="contact" aria-labelledby="contact-title">
+      <div className="end-portal-frame" aria-hidden="true"><i /><i /><i /></div>
       <div className="shell contact-grid">
         <div data-scroll-reveal>
-          <p className="eyebrow"><LocalizedText en="Contact" /></p>
+          <p className="eyebrow"><LocalizedText en="End portal / Contact" id="Portal akhir / Kontak" /></p>
           <RevealText as="h2" id="contact-title" text="Let’s work together." />
           <p>
             <LocalizedText en="For product work or engineering collaboration, email is the best place to start." />
@@ -59,6 +61,7 @@ export function Contact() {
           </div>
         </div>
       </div>
+      <div className="shell"><WorldActions /></div>
     </section>
   );
 }

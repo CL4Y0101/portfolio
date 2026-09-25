@@ -1,9 +1,19 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useScrollProgress } from "./useScrollProgress";
+import { worldMotionEnabled } from "./scroll-progress";
 
 export function HeroMotion() {
   const backdropRef = useRef<HTMLDivElement>(null);
+  useScrollProgress(backdropRef, { closest: ".hero-section", mode: "leave", onProgress: ({ progress, enabled }) => {
+    const hero = backdropRef.current?.closest<HTMLElement>(".hero-section");
+    hero?.style.setProperty("--spawn-travel", `${enabled ? progress * 40 : 0}px`);
+    if (!enabled) {
+      hero?.style.setProperty("--hero-parallax-x", "0px");
+      hero?.style.setProperty("--hero-parallax-y", "0px");
+    }
+  } });
 
   useEffect(() => {
     const backdrop = backdropRef.current;
@@ -15,17 +25,21 @@ export function HeroMotion() {
     let frame = 0;
 
     const reset = () => {
+      window.cancelAnimationFrame(frame);
+      frame = 0;
       hero.style.setProperty("--hero-parallax-x", "0px");
       hero.style.setProperty("--hero-parallax-y", "0px");
     };
 
     const handlePointer = (event: PointerEvent) => {
-      if (reducedMotion.matches || !desktopPointer.matches || document.documentElement.dataset.motion !== "full") return;
+      if (!worldMotionEnabled()) return;
       window.cancelAnimationFrame(frame);
       frame = window.requestAnimationFrame(() => {
+        frame = 0;
         const bounds = hero.getBoundingClientRect();
-        const x = ((event.clientX - bounds.left) / bounds.width - 0.5) * 2;
-        const y = ((event.clientY - bounds.top) / bounds.height - 0.5) * 2;
+        if (!worldMotionEnabled()) return reset();
+        const x = Math.max(-1, Math.min(1, ((event.clientX - bounds.left) / bounds.width - 0.5) * 2));
+        const y = Math.max(-1, Math.min(1, ((event.clientY - bounds.top) / bounds.height - 0.5) * 2));
         hero.style.setProperty("--hero-parallax-x", `${(x * 8).toFixed(2)}px`);
         hero.style.setProperty("--hero-parallax-y", `${(y * 6).toFixed(2)}px`);
       });
@@ -35,6 +49,7 @@ export function HeroMotion() {
     hero.addEventListener("pointerleave", reset);
     reducedMotion.addEventListener("change", reset);
     desktopPointer.addEventListener("change", reset);
+    window.addEventListener("portfolio-motion-change", reset);
 
     return () => {
       window.cancelAnimationFrame(frame);
@@ -42,6 +57,7 @@ export function HeroMotion() {
       hero.removeEventListener("pointerleave", reset);
       reducedMotion.removeEventListener("change", reset);
       desktopPointer.removeEventListener("change", reset);
+      window.removeEventListener("portfolio-motion-change", reset);
     };
   }, []);
 

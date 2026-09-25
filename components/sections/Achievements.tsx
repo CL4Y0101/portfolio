@@ -2,6 +2,7 @@ import { Award, GraduationCap, UsersRound } from "lucide-react";
 import { achievements, leadership } from "@/data/achievements";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { LocalizedText } from "@/components/ui/LocalizedText";
+import { Milestone } from "@/components/motion/Milestone";
 
 const achievementIcons = [Award, GraduationCap, GraduationCap];
 
@@ -20,13 +21,13 @@ export function Achievements() {
           {achievements.map((achievement, index) => {
             const Icon = achievementIcons[index];
             return (
-              <article className={achievement.featured ? "achievement-featured" : ""} key={achievement.title}>
+              <Milestone featured={achievement.featured} key={achievement.title}>
                 <Icon aria-hidden="true" size={22} />
                 <span><LocalizedText en={achievement.date ?? achievement.issuer} /></span>
                 <h3><LocalizedText en={achievement.title} /></h3>
                 <p><LocalizedText en={achievement.issuer} /></p>
                 <strong><LocalizedText en={achievement.detail} /></strong>
-              </article>
+              </Milestone>
             );
           })}
         </div>

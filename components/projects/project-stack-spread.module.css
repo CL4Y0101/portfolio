@@ -1,106 +1,35 @@
-.wrap {
-  position: relative;
-  height: 155vh;
-  margin: -10px 0 48px;
-}
-
-.stage {
-  position: sticky;
-  top: clamp(88px, 11vh, 118px);
-  height: min(70vh, 660px);
-  overflow: hidden;
-  background:
-    linear-gradient(color-mix(in srgb, var(--accent) 8%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--accent) 8%, transparent) 1px, transparent 1px),
-    var(--background-soft);
-  background-size: 36px 36px;
-  border: 1px solid var(--line);
-  isolation: isolate;
-}
-
-.heading {
-  position: absolute;
-  top: clamp(18px, 3vw, 36px);
-  left: clamp(18px, 3vw, 36px);
-  z-index: 10;
-  display: grid;
-  gap: 5px;
-  pointer-events: none;
-}
-
-.heading > span,
-.hint {
-  color: var(--accent);
-  font-family: var(--font-geist-mono), monospace;
-  font-size: 0.67rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.heading strong {
-  max-width: 19ch;
-  color: var(--text);
-  font-size: clamp(1.4rem, 2.5vw, 2.3rem);
-  line-height: 1.1;
-  letter-spacing: -0.045em;
-}
-
-.card {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  display: block;
-  width: clamp(168px, 23vw, 320px);
-  overflow: hidden;
-  color: #fff;
-  background: #14221d;
-  border: 3px solid var(--line-strong);
-  box-shadow: 9px 9px 0 color-mix(in srgb, var(--accent) 24%, var(--line)), 0 22px 45px rgba(0, 0, 0, 0.16);
-  transform: translate(-50%, -50%);
-  transform-origin: center;
-  will-change: transform;
-  transition: opacity var(--motion-base) var(--ease-standard), border-color var(--motion-base) var(--ease-standard);
-}
-
-.card img {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  object-position: top center;
-}
-
-.card > span {
-  display: block;
-  min-height: 43px;
-  padding: 10px 12px;
-  font-size: 0.76rem;
-  font-weight: 650;
-  line-height: 1.25;
-}
-
-.card:hover,
-.card:focus-visible {
-  z-index: 12 !important;
-  opacity: 0.8;
-  border-color: var(--accent);
-}
-
-.hint {
-  position: absolute;
-  right: clamp(18px, 3vw, 36px);
-  bottom: clamp(18px, 3vw, 36px);
-  z-index: 10;
-  color: var(--muted);
-  pointer-events: none;
-}
-
-@media (max-width: 700px), (prefers-reduced-motion: reduce) {
-  .wrap { display: none; }
-}
-
-:global(html[data-motion="reduced"]) .wrap,
-:global(html[data-motion="minimal"]) .wrap,
-:global(html[data-motion="off"]) .wrap {
-  display: none;
+.wrap { --spread-progress: 0; margin: -10px 0 32px; position: relative; }
+.stage { position: relative; padding: clamp(18px, 3vw, 32px); border: 1px solid var(--line); background: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px), var(--background-soft); background-size: 48px 48px; }
+.heading { margin-bottom: 28px; }
+.heading > span, .status { color: var(--accent); font: 600 0.65rem var(--font-geist-mono), monospace; letter-spacing: 0.06em; }
+.heading h3 { margin: 8px 0; font-size: clamp(1.6rem, 2.5vw, 2.3rem); letter-spacing: -0.045em; }
+.spread { display: none; }
+.quests { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.quest { padding: 22px; background: var(--background-raised); border: 1px solid var(--line); }
+.quest h3 { font-size: clamp(1.15rem, 2vw, 1.7rem); margin: 8px 0; line-height: 1.15; letter-spacing: -0.035em; }
+.quest p { margin: 0 0 10px; }
+.role { font-size: 0.78rem; color: var(--muted); }
+.quest dl { display: grid; gap: 14px; margin: 20px 0; }
+.quest dt { font-size: 0.67rem; color: var(--accent); font-weight: 700; margin-bottom: 4px; }
+.quest dd { margin: 0; font-size: 0.84rem; line-height: 1.6; color: var(--muted); }
+.quest :global(.project-stack) { margin-bottom: 20px; }
+.preview { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; object-position: top; margin-bottom: 20px; }
+.controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; margin-top: 28px; }
+.steps { display: none; gap: 8px; }
+.steps button { width: 40px; min-height: 40px; border: 1px solid var(--line-strong); color: var(--text); background: var(--background); cursor: pointer; transition: background var(--motion-focus), border-color var(--motion-focus); }
+.steps button:is(:hover, :focus-visible, [aria-pressed="true"]) { background: var(--accent-soft); border-color: var(--accent); }
+@media (max-width: 700px) { .quests { grid-template-columns: 1fr; } .quest { padding: 18px; } }
+@media (min-width: 1001px) and (min-height: 801px) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  :global(html[data-motion="full"]:not([data-graphics="low"])) .wrap { height: 280vh; }
+  :global(html[data-motion="full"]:not([data-graphics="low"])) .stage { position: sticky; top: clamp(88px, 11vh, 118px); height: min(76vh, 760px); overflow: clip; }
+  :global(html[data-motion="full"]:not([data-graphics="low"])) .spread { display: block; }
+  :global(html[data-motion="full"]:not([data-graphics="low"])) .card { position: absolute; top: 52%; left: 50%; width: min(29vw, 380px); border: 3px solid var(--line-strong); background: var(--background-raised); box-shadow: 9px 9px 0 var(--line), 0 22px 45px #0002; transform: translate(-50%, -50%); transition: transform var(--motion-story) var(--ease-enter), opacity var(--motion-story); }
+  .card img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; object-position: top; }
+  .card > span { display: block; padding: 12px; font-size: 0.8rem; }
+  :global(html[data-motion="full"]:not([data-graphics="low"])) .quests { position: absolute; inset: 105px 28px 86px 49%; display: grid; grid-template-columns: 1fr; }
+  :global(html[data-motion="full"]:not([data-graphics="low"])) .quest { grid-area: 1 / 1; padding: 0 0 0 24px; background: var(--background-soft); border: 0; visibility: hidden; opacity: 0; translate: 0 12px; transition: opacity var(--motion-story), translate var(--motion-story); }
+  :global(html[data-motion="full"]:not([data-graphics="low"])) .wrap[data-phase="quest"] .quest[data-active="true"] { visibility: visible; opacity: 1; translate: 0 0; }
+  :global(html[data-motion="full"]:not([data-graphics="low"])) .preview { display: none; }
+  :global(html[data-motion="full"]:not([data-graphics="low"])) .controls { position: absolute; inset: auto 32px 24px; }
+  :global(html[data-motion="full"]:not([data-graphics="low"])) .steps { display: flex; }
 }

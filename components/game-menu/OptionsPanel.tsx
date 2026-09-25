@@ -34,7 +34,7 @@ export function OptionsPanel({ preferences, onBack, onChange, onReset }: Options
       <OptionGroup
         label="Motion"
         description="Reduced and Minimal remove parallax and world transitions."
-        options={["full", "reduced", "minimal"] as MotionPreference[]}
+        options={["full", "reduced", "minimal", "off"] as MotionPreference[]}
         value={preferences.motion}
         onSelect={(motion) => onChange({ ...preferences, motion })}
       />

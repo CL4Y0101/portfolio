@@ -11,6 +11,7 @@ import { OptionsPanel } from "@/components/game-menu/OptionsPanel";
 import { WorldBackground } from "@/components/game-menu/WorldBackground";
 import { GlassPanel } from "@/components/game-ui/GlassPanel";
 import { motionDurations } from "@/components/motion/motion";
+import { worldMotionEnabled } from "@/components/motion/scroll-progress";
 import { RevealText } from "@/components/ui/RevealText";
 import { LanguageToggle } from "@/components/ui/LanguageToggle";
 import { LocalizedText } from "@/components/ui/LocalizedText";
@@ -34,7 +35,7 @@ export function MainMenuScreen() {
   const returnFocusRef = useRef<HTMLElement | null>(null);
   const pendingFocusRef = useRef<"hero" | "previous" | null>(null);
   const transitionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(pathname === "/");
   const [hasEntered, setHasEntered] = useState(false);
   const [panel, setPanel] = useState<MenuPanel>("main");
   const [menuState, setMenuState] = useState<MenuState>("active");
@@ -129,20 +130,23 @@ export function MainMenuScreen() {
   }, [preferences.sound]);
 
   const enterPortfolio = useCallback((restorePreviousFocus = false) => {
+    if (transitionTimerRef.current) return;
     playTick();
-    setHasEntered(true);
     setMenuState("entering");
-    const reduced = preferences.motion !== "full" || window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const duration = reduced ? motionDurations.instant : motionDurations.page;
+    containerRef.current?.focus({ preventScroll: true });
+    const duration = document.documentElement.dataset.motion === "off" ? 0
+      : !hasEntered && worldMotionEnabled() ? motionDurations.world : motionDurations.fast;
 
     if (transitionTimerRef.current) clearTimeout(transitionTimerRef.current);
     transitionTimerRef.current = setTimeout(() => {
-      pendingFocusRef.current = restorePreviousFocus ? "previous" : "hero";
+      transitionTimerRef.current = null;
+      pendingFocusRef.current = restorePreviousFocus || hasEntered ? "previous" : "hero";
+      setHasEntered(true);
       setVisible(false);
       setMenuState("active");
       setPanel("main");
     }, duration);
-  }, [playTick, preferences.motion]);
+  }, [playTick, hasEntered]);
 
   const openPanel = useCallback((nextPanel: MenuPanel) => {
     playTick();
@@ -156,10 +160,11 @@ export function MainMenuScreen() {
   }, [playTick]);
 
   const handleEscape = useCallback(() => {
+    if (menuState === "entering") return;
     if (panel !== "main") backToMain();
     else if (hasEntered) enterPortfolio(true);
     else openPanel("exit");
-  }, [backToMain, enterPortfolio, hasEntered, openPanel, panel]);
+  }, [backToMain, enterPortfolio, hasEntered, openPanel, panel, menuState]);
 
   useMenuFocusManager(containerRef, active, panel, handleEscape);
 
@@ -181,6 +186,8 @@ export function MainMenuScreen() {
       className="main-menu-root"
       data-state={menuState}
       data-panel={panel}
+      data-entry={hasEntered ? "return" : "first"}
+      tabIndex={-1}
       role="dialog"
       aria-modal="true"
       aria-labelledby={panel === "main"
@@ -196,11 +203,14 @@ export function MainMenuScreen() {
     >
       <WorldBackground paused={paused} />
 
-      <div className="menu-entry-wipe" aria-hidden="true">
-        <i /><i /><i /><i /><i /><i />
+      <div className="world-loading" role="status" aria-live="polite">
+        {menuState === "entering" && !hasEntered ? <>
+          <span><LocalizedText en="Generating world…" id="Menyiapkan dunia…" /></span>
+          <i aria-hidden="true" />
+        </> : null}
       </div>
 
-      <div className={`main-menu-shell ${panel === "main" ? "main-menu-shell-home" : "main-menu-shell-panel"}`}>
+      <div inert={menuState === "entering"} className={`main-menu-shell ${panel === "main" ? "main-menu-shell-home" : "main-menu-shell-panel"}`}>
         {panel === "main" ? (
           <GlassPanel className="main-menu-content">
             <header className="main-menu-brand">

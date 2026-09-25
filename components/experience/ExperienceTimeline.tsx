@@ -2,7 +2,8 @@
 
 import { ArrowUpRight, BriefcaseBusiness } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
+import { useRef, useState, type KeyboardEvent } from "react";
+import { useScrollProgress } from "@/components/motion/useScrollProgress";
 import type { Experience } from "@/lib/types";
 import { LocalizedText } from "@/components/ui/LocalizedText";
 import styles from "./experience-story.module.css";
@@ -14,69 +15,23 @@ export function ExperienceTimeline({ items }: { items: Experience[] }) {
   const storyRef = useRef<HTMLDivElement>(null);
   const language = useLanguage();
 
-  useEffect(() => {
+  const scroll = useScrollProgress(storyRef, { stageSelector: `.${styles.stage}`, onProgress: ({ progress, enabled }) => {
     const story = storyRef.current;
     if (!story) return;
-    const stage = story.querySelector<HTMLElement>(`.${styles.stage}`);
-    if (!stage) return;
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const compact = window.matchMedia("(max-width: 700px), (max-height: 760px)");
-    let frame = 0;
-    let watching = false;
-
-    const update = () => {
-      frame = 0;
-      if (reduced.matches || compact.matches || document.documentElement.dataset.motion !== "full") {
-        story.style.setProperty("--journey-progress", "100%");
-        return;
-      }
-      const bounds = story.getBoundingClientRect();
-      const stickyTop = Number.parseFloat(window.getComputedStyle(stage).top) || 0;
-      const distance = Math.max(1, story.offsetHeight - stage.offsetHeight);
-      const progress = Math.min(1, Math.max(0, (stickyTop - bounds.top) / distance));
-      story.style.setProperty("--journey-progress", `${Math.round(progress * 100)}%`);
-      const step = Math.min(items.length - 1, Math.floor(progress * items.length));
-      if (items[step]) setActiveId(items[step].id);
-    };
-    const queueUpdate = () => { if (!frame) frame = window.requestAnimationFrame(update); };
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && !watching) {
-        window.addEventListener("scroll", queueUpdate, { passive: true });
-        watching = true;
-      } else if (!entry.isIntersecting && watching) {
-        window.removeEventListener("scroll", queueUpdate);
-        watching = false;
-      }
-      queueUpdate();
-    }, { rootMargin: "160px 0px" });
-    observer.observe(story);
-    reduced.addEventListener("change", queueUpdate);
-    compact.addEventListener("change", queueUpdate);
-    window.addEventListener("portfolio-motion-change", queueUpdate);
-    window.addEventListener("resize", queueUpdate);
-    queueUpdate();
-
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("scroll", queueUpdate);
-      window.removeEventListener("resize", queueUpdate);
-      window.removeEventListener("portfolio-motion-change", queueUpdate);
-      reduced.removeEventListener("change", queueUpdate);
-      compact.removeEventListener("change", queueUpdate);
-      window.cancelAnimationFrame(frame);
-    };
-  }, [items]);
+    story.style.setProperty("--journey-progress", `${enabled ? Math.round(progress * 100) : 100}%`);
+    if (!enabled || story.querySelector("details[open]") || (story.contains(document.activeElement) && document.activeElement?.closest('[role="tabpanel"]'))) return;
+    const step = Math.min(items.length - 1, Math.floor(progress * items.length));
+    if (items[step]) setActiveId(items[step].id);
+  } });
 
   function selectItem(index: number) {
     setActiveId(items[index].id);
-    const story = storyRef.current;
-    const stage = story?.querySelector<HTMLElement>(`.${styles.stage}`);
-    if (!story || !stage || window.matchMedia("(prefers-reduced-motion: reduce), (max-width: 700px), (max-height: 760px)").matches || document.documentElement.dataset.motion !== "full") return;
-
-    const stickyTop = Number.parseFloat(window.getComputedStyle(stage).top) || 0;
-    const distance = Math.max(1, story.offsetHeight - stage.offsetHeight);
-    const storyTop = window.scrollY + story.getBoundingClientRect().top;
-    window.scrollTo({ top: storyTop - stickyTop + distance * ((index + 0.1) / items.length), behavior: "instant" });
+    const frame = scroll.current;
+    if (frame.enabled) {
+      window.scrollTo({ top: frame.start + frame.travel * ((index + 0.1) / items.length), behavior: "instant" });
+    } else {
+      document.getElementById(`experience-panel-${items[index].id}`)?.scrollIntoView({ behavior: "instant", block: "nearest" });
+    }
   }
 
   function handleTabKey(event: KeyboardEvent<HTMLButtonElement>, index: number) {
@@ -93,7 +48,7 @@ export function ExperienceTimeline({ items }: { items: Experience[] }) {
   }
 
   return (
-    <div ref={storyRef} className={`experience-explorer ${styles.story}`} style={{ "--story-height": `${items.length * 85 + 70}vh` } as CSSProperties}>
+    <div ref={storyRef} className={`experience-explorer ${styles.story}`} data-journey-story>
       <div className={styles.stage}>
         <div className={`experience-timeline ${styles.track}`} role="tablist" aria-label={language === "id" ? "Linimasa pengalaman" : "Experience timeline"}>
           {items.map((item, index) => (
@@ -127,7 +82,7 @@ export function ExperienceTimeline({ items }: { items: Experience[] }) {
               id={`experience-panel-${item.id}`}
               role="tabpanel"
               aria-labelledby={`experience-tab-${item.id}`}
-              hidden={activeId !== item.id}
+              data-active={activeId === item.id}
               tabIndex={0}
             >
               <div className="experience-detail-heading">

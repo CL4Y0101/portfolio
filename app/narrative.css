@@ -1,0 +1,92 @@
+/* Story choreography only; existing palette, typography and component styles remain authoritative. */
+:root {
+  --motion-enter: 520ms;
+  --motion-exit: 180ms;
+  --motion-focus: 140ms;
+  --motion-world: 1050ms;
+  --motion-story: 360ms;
+}
+
+body:has(.main-menu-root) .hero-entry { animation-play-state: paused; }
+.world-loading {
+  position: absolute;
+  z-index: 13;
+  inset: 45% 20px auto;
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+  color: #fff;
+  font: 600 0.85rem var(--font-geist-mono), monospace;
+  text-shadow: 0 2px 4px #000;
+  pointer-events: none;
+}
+.world-loading i { width: min(240px, 70vw); height: 5px; background: #fff; transform-origin: left; animation: world-load var(--motion-world) linear both; }
+.main-menu-root[data-state="entering"] { animation: world-crossfade var(--motion-world) linear both; }
+.main-menu-root[data-state="entering"][data-entry="first"] .menu-world { animation: world-approach var(--motion-world) var(--ease-enter) both; }
+.main-menu-root[data-state="entering"][data-entry="return"] { animation-duration: var(--motion-focus); }
+@keyframes world-load { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes world-approach { to { transform: scale(1.08) translateY(-8px); } }
+@keyframes world-crossfade { 0%, 80% { opacity: 1; } 100% { opacity: 0; } }
+.spawn-hud { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-bottom: 28px; font: 500 0.65rem var(--font-geist-mono), monospace; color: var(--muted); }
+.spawn-hud > span:first-child { color: var(--accent); }
+.hero-section { --spawn-travel: 0px; flex-direction: column; justify-content: center; }
+.hero-copy { translate: calc(var(--hero-parallax-x) * 0.15) calc(var(--hero-parallax-y) * 0.1 - var(--spawn-travel) * 0.25); }
+.hero-profile { transform: none; translate: var(--hero-parallax-x) calc(var(--hero-parallax-y) + var(--spawn-travel) * -0.6); }
+.hero-entry-portrait { animation-fill-mode: backwards; }
+.world-layer-ground { translate: 0 var(--spawn-travel); }
+.world-layer-ridge { translate: 0 calc(var(--spawn-travel) * 0.5); }
+.spawn-hud, .world-coordinate { translate: calc(var(--hero-parallax-x) * 0.25) calc(var(--hero-parallax-y) * 0.2 - var(--spawn-travel) * 0.35); }
+
+.portfolio-story > .section { position: relative; padding-block: clamp(56px, 7vw, 96px); }
+.portfolio-story > .section::before { top: 8px; padding-left: 14px; border-left: 2px solid var(--line-strong); white-space: nowrap; }
+.portfolio-story #achievements::before { content: "CHUNK 05 / MILESTONES"; }
+.portfolio-story #about::before { content: "CHUNK 06 / PROFILE"; }
+.portfolio-story #contact::before { content: "CHUNK 07 / END PORTAL"; }
+.inventory-explorer .capability-tabs button { border: 1px solid var(--line); box-shadow: inset 0 -3px var(--line); margin-bottom: 6px; transition: background var(--motion-focus), border-color var(--motion-focus); }
+.inventory-explorer .capability-tabs button:is(:hover, :focus-visible, [aria-selected="true"]) { border-color: var(--accent); background: var(--accent-soft); }
+.inventory-explorer .skill-list { align-items: start; }
+.inventory-explorer .inventory-item { padding: 0; max-width: 100%; }
+.inventory-item summary { cursor: pointer; padding: 9px 12px; color: var(--text); }
+.inventory-item summary:is(:hover, :focus-visible) { color: var(--accent); background: var(--accent-soft); }
+.inventory-evidence { display: grid; gap: 8px; padding: 12px; max-width: 240px; border-top: 1px solid var(--line); font-size: 0.75rem; line-height: 1.5; }
+.inventory-evidence a { text-decoration: underline; text-underline-offset: 3px; }
+.story-milestone { transition: border-color var(--motion-story), box-shadow var(--motion-story); }
+.story-milestone[data-discovered="true"] { border-color: var(--accent); box-shadow: inset 0 -3px var(--accent); }
+.milestone-label { display: block; margin-top: 18px; color: var(--accent); font: 500 0.6rem var(--font-geist-mono), monospace; opacity: 0; transition: opacity var(--motion-enter); }
+.story-milestone[data-discovered="true"] .milestone-label { opacity: 1; }
+.end-portal { position: relative; isolation: isolate; overflow: clip; }
+.end-portal-frame { position: absolute; inset: 10% 4% 10% 45%; z-index: -1; pointer-events: none; opacity: 0.15; border: 12px solid var(--line-strong); box-shadow: inset 0 0 0 2px var(--accent), 8px 8px 0 var(--line); clip-path: polygon(0 24px, 24px 24px, 24px 0, 100% 0, 100% calc(100% - 24px), calc(100% - 24px) calc(100% - 24px), calc(100% - 24px) 100%, 0 100%); }
+.end-portal-frame i { position: absolute; inset: 15%; border: 1px solid var(--accent); }
+.end-portal-frame i:nth-child(2) { inset: 25%; }
+.end-portal-frame i:nth-child(3) { inset: 35%; }
+.end-portal:has(.contact-grid .is-revealed) .end-portal-frame { animation: end-portal-arrive var(--motion-enter) var(--ease-enter) both; }
+@keyframes end-portal-arrive { from { opacity: 0; scale: 0.98; } to { opacity: 0.15; scale: 1; } }
+:root:not([data-motion="full"]) .end-portal-frame { animation: none !important; }
+.world-actions { display: flex; flex-wrap: wrap; gap: 12px; padding-top: 32px; margin-top: 32px; border-top: 1px solid var(--line); }
+.world-actions .button { font-size: 0.8rem; }
+.route-transition-label { text-align: center; width: max-content; max-width: calc(100vw - 40px); }
+.route-transition-label strong { display: block; margin-top: 8px; font-size: 0.85rem; letter-spacing: 0; text-transform: none; }
+.route-transition-cover { position: absolute; top: calc(50% + 65px); left: 50%; width: 240px; transform: translateX(-50%); opacity: 0; }
+.route-transition-cover img { width: 100%; height: 130px; object-fit: cover; object-position: top; border: 2px solid var(--line-strong); }
+.route-transition[data-state="cover"] .route-transition-cover { animation: route-label var(--motion-enter) var(--ease-enter) both; }
+.route-transition[data-state="reveal"] .route-transition-cover { animation: story-cover-exit var(--motion-exit) both; }
+@keyframes story-cover-exit { from { opacity: 1; } to { opacity: 0; } }
+@media (max-width: 700px) { .end-portal-frame { inset: 5% 5%; } .world-actions { display: grid; } }
+
+:root:not([data-motion="full"]) { --motion-world: 140ms; --motion-story: 120ms; }
+:root:is([data-motion="minimal"], [data-motion="off"]) { --motion-enter: 0ms; --motion-exit: 0ms; --motion-focus: 0ms; --motion-world: 0ms; --motion-story: 0ms; }
+:root:not([data-motion="full"]) .main-menu-root[data-state="entering"] .menu-world,
+:root[data-graphics="low"] .main-menu-root[data-state="entering"] .menu-world { animation: none; }
+:root:not([data-motion="full"]) .main-menu-root[data-state="entering"] .main-menu-shell { animation: none; }
+:root:not([data-motion="full"]) .world-loading i { animation: none; }
+:root[data-graphics="low"] .world-loading i,
+:root[data-graphics="low"] .main-menu-root[data-state="entering"] .main-menu-shell { animation: none; }
+:root[data-graphics="low"] .main-menu-root[data-state="entering"] { animation-duration: 140ms; }
+@media (max-width: 1000px), (max-height: 800px), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .main-menu-root[data-state="entering"] { animation-duration: 140ms; }
+  .main-menu-root[data-state="entering"] .menu-world { animation: none; }
+  .main-menu-root[data-state="entering"] .main-menu-shell { animation: none; }
+  .world-loading i { animation: none; }
+  .end-portal-frame { animation: none !important; }
+  .spawn-hud { font-size: 0.6rem; gap: 7px 14px; }
+}

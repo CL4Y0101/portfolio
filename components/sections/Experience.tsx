@@ -7,7 +7,7 @@ export function Experience() {
     <section className="section section-tinted" id="experience" aria-labelledby="experience-title">
       <div className="shell">
         <SectionHeading
-          eyebrow="Experience"
+          eyebrow="Player journey / Experience"
           titleId="experience-title"
           title="Experience in product and systems."
           description="Building interfaces, connecting data, and keeping products online."

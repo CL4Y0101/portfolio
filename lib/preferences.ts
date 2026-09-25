@@ -1,6 +1,6 @@
 import { applyTheme, getThemePreference, type ThemePreference } from "@/lib/theme";
 
-export type MotionPreference = "full" | "reduced" | "minimal";
+export type MotionPreference = "full" | "reduced" | "minimal" | "off";
 export type GraphicsPreference = "high" | "balanced" | "low";
 
 export type GamePreferences = {
@@ -22,7 +22,7 @@ export const defaultGamePreferences: GamePreferences = {
 };
 
 function isMotionPreference(value: unknown): value is MotionPreference {
-  return value === "full" || value === "reduced" || value === "minimal";
+  return value === "full" || value === "reduced" || value === "minimal" || value === "off";
 }
 
 function isGraphicsPreference(value: unknown): value is GraphicsPreference {
@@ -53,7 +53,8 @@ export function readGamePreferences(): GamePreferences {
 export function applyGamePreferences(preferences: GamePreferences) {
   const root = document.documentElement;
   applyTheme(preferences.theme);
-  root.dataset.motion = preferences.motion;
+  root.dataset.motion = new URLSearchParams(window.location.search).get("motion") === "off" ? "off"
+    : preferences.motion === "full" && window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "reduced" : preferences.motion;
   root.dataset.graphics = preferences.graphics;
 
   try {

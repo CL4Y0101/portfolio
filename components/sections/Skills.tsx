@@ -7,7 +7,7 @@ export function Skills() {
     <section className="section" id="skills" aria-labelledby="skills-title">
       <div className="shell">
         <SectionHeading
-          eyebrow="Technical capabilities"
+          eyebrow="Inventory / Technical capabilities"
           titleId="skills-title"
           title="Tools behind the work."
           description="A practical stack, organized by how I use it."

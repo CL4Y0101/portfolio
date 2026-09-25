@@ -11,6 +11,12 @@ export function Hero() {
   return (
     <section className="hero-section" id="home" aria-labelledby="hero-title" data-world-entry>
       <HeroMotion />
+      <div className="shell spawn-hud hero-entry">
+        <span>WORLD / PORTFOLIO</span>
+        <span><LocalizedText en="Player" id="Pemain" />: {profile.shortName}</span>
+        <span><LocalizedText en="Class: Software Developer" id="Kelas: Pengembang Perangkat Lunak" /></span>
+        <span><LocalizedText en="Spawn: Jember · Building products" id="Spawn: Jember · Membangun produk" /></span>
+      </div>
       <div className="shell hero-grid">
         <div className="hero-copy">
           <p className="eyebrow hero-entry hero-entry-1"><LocalizedText en={profile.eyebrow} /></p>
