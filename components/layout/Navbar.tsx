@@ -35,6 +35,7 @@ export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const collapsedRef = useRef(false);
+  const navShellRef = useRef<HTMLElement>(null);
   const navLinksRef = useRef<HTMLDivElement>(null);
   const expandButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -87,8 +88,8 @@ export function Navbar() {
         if (currentScrollY <= 150) {
           if (collapsedRef.current) expand();
         } else if (canCollapse) {
-          const keyboardFocusInLinks = navLinksRef.current?.contains(document.activeElement) && document.activeElement?.matches(":focus-visible");
-          if (!collapsedRef.current && currentScrollY > lastScrollY && !keyboardFocusInLinks) {
+          const keyboardFocusInNav = navShellRef.current?.contains(document.activeElement) && document.activeElement?.matches(":focus-visible");
+          if (!collapsedRef.current && currentScrollY > lastScrollY && !keyboardFocusInNav) {
             collapsedRef.current = true;
             collapsePeak = currentScrollY;
             setIsCollapsed(true);
@@ -146,8 +147,8 @@ export function Navbar() {
 
   return (
     <header className={`site-header ${ui.hud}`} data-scrolled={isScrolled ? "true" : "false"} data-world-entry>
-      <nav className="shell nav-shell" aria-label="Primary navigation">
-        <Link className="site-brand" href="/#home" onClick={() => setIsOpen(false)}>
+      <nav className="shell nav-shell" ref={navShellRef} data-collapsed={isCollapsed ? "true" : "false"} aria-label="Primary navigation">
+        <Link className="site-brand" href="/#home" inert={isCollapsed} aria-hidden={isCollapsed || undefined} onClick={() => setIsOpen(false)}>
           <span className="brand-avatar"><Image src={profile.profileImage} alt="" width={40} height={40} priority /></span>
           <span className="brand-copy">
             <strong>{profile.shortName}</strong>
@@ -155,7 +156,7 @@ export function Navbar() {
           </span>
         </Link>
 
-        <div className={`nav-links ${isOpen ? "nav-links-open" : ""}`} id="site-navigation" data-collapsed={isCollapsed ? "true" : "false"}>
+        <div className={`nav-links ${isOpen ? "nav-links-open" : ""}`} id="site-navigation">
           <div className="nav-link-list" id="site-navigation-items" ref={navLinksRef} inert={isCollapsed} aria-hidden={isCollapsed || undefined}>
             {navigation.map((item) => (
               <Link
@@ -170,26 +171,9 @@ export function Navbar() {
               </Link>
             ))}
           </div>
-          <button
-            ref={expandButtonRef}
-            className="nav-expand-button"
-            type="button"
-            aria-label={label("Open navigation menu")}
-            aria-controls="site-navigation-items"
-            aria-expanded={!isCollapsed}
-            aria-hidden={!isCollapsed || undefined}
-            tabIndex={isCollapsed ? 0 : -1}
-            onClick={() => {
-              collapsedRef.current = false;
-              setIsCollapsed(false);
-              window.requestAnimationFrame(() => navLinksRef.current?.querySelector("a")?.focus());
-            }}
-          >
-            <Menu aria-hidden="true" size={20} />
-          </button>
         </div>
 
-        <div className="nav-controls">
+        <div className="nav-controls" inert={isCollapsed} aria-hidden={isCollapsed || undefined}>
           {pathname === "/" ? <button
             className="icon-button main-menu-trigger"
             type="button"
@@ -219,6 +203,23 @@ export function Navbar() {
             {isOpen ? <X aria-hidden="true" size={20} /> : <Menu aria-hidden="true" size={20} />}
           </button>
         </div>
+        <button
+          ref={expandButtonRef}
+          className="nav-expand-button"
+          type="button"
+          aria-label={label("Open navigation menu")}
+          aria-controls="site-navigation-items"
+          aria-expanded={!isCollapsed}
+          aria-hidden={!isCollapsed || undefined}
+          tabIndex={isCollapsed ? 0 : -1}
+          onClick={() => {
+            collapsedRef.current = false;
+            setIsCollapsed(false);
+            window.requestAnimationFrame(() => navLinksRef.current?.querySelector("a")?.focus());
+          }}
+        >
+          <Menu aria-hidden="true" size={20} />
+        </button>
       </nav>
       <CommandPalette open={paletteOpen} onOpen={openPalette} onClose={() => setPaletteOpen(false)} />
     </header>

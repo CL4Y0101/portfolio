@@ -2007,35 +2007,51 @@ body {
 }
 
 @media (min-width: 1101px) and (pointer: fine) {
-  .nav-links {
+  .site-header.site-header.site-header,
+  .site-header.site-header.site-header[data-scrolled="true"] {
+    padding-block: 7px;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+
+  .nav-shell {
     position: relative;
-    height: 52px;
-    padding: 4px 6px;
-    background: color-mix(in srgb, var(--surface-strong) 88%, transparent);
+    min-height: 64px;
+    padding-inline: 14px;
+    background: color-mix(in srgb, var(--surface-strong) 94%, transparent);
     border: 1px solid var(--line-strong);
     border-radius: 999px;
-    box-shadow: 0 3px 0 color-mix(in srgb, var(--line-strong) 76%, transparent);
+    box-shadow: 0 4px 0 color-mix(in srgb, var(--line-strong) 72%, transparent);
+    backdrop-filter: blur(14px);
     clip-path: inset(0 0 0 0 round 999px);
-    transition: clip-path var(--motion-page) var(--ease-enter);
+    transition:
+      clip-path var(--motion-page) var(--ease-enter),
+      transform var(--motion-base) var(--ease-spring),
+      background-color var(--motion-base) var(--ease-standard);
+  }
+
+  .nav-shell > .site-brand,
+  .nav-shell > .nav-links,
+  .nav-shell > .nav-controls {
+    transform-origin: center;
+    transition:
+      opacity var(--motion-base) var(--ease-standard),
+      transform var(--motion-base) var(--ease-enter);
+  }
+
+  .nav-links {
+    background: none;
+    border: 0;
+    box-shadow: none;
   }
 
   .nav-link-list a {
     flex: none;
     padding-inline: 9px;
     white-space: nowrap;
-    transition:
-      color var(--motion-fast) var(--ease-standard),
-      background-color var(--motion-fast) var(--ease-standard),
-      border-color var(--motion-fast) var(--ease-standard),
-      opacity var(--motion-base) var(--ease-standard),
-      transform var(--motion-base) var(--ease-enter);
   }
-
-  .nav-link-list a:nth-child(2) { transition-delay: 25ms; }
-  .nav-link-list a:nth-child(3) { transition-delay: 50ms; }
-  .nav-link-list a:nth-child(4) { transition-delay: 75ms; }
-  .nav-link-list a:nth-child(5) { transition-delay: 100ms; }
-  .nav-link-list a:nth-child(6) { transition-delay: 125ms; }
 
   .nav-expand-button {
     position: absolute;
@@ -2068,20 +2084,20 @@ body {
     outline-offset: -4px;
   }
 
-  .nav-links[data-collapsed="true"] {
-    clip-path: inset(0 calc(50% - 24px) 0 calc(50% - 24px) round 999px);
+  .nav-shell[data-collapsed="true"] {
+    clip-path: inset(0 calc(50% - 28px) 0 calc(50% - 28px) round 999px);
+    transform: translateY(-3px);
   }
 
-  .nav-links[data-collapsed="true"] .nav-link-list {
-    pointer-events: none;
-  }
-
-  .nav-links[data-collapsed="true"] .nav-link-list a {
+  .nav-shell[data-collapsed="true"] > .site-brand,
+  .nav-shell[data-collapsed="true"] > .nav-links,
+  .nav-shell[data-collapsed="true"] > .nav-controls {
     opacity: 0;
-    transform: translateX(-16px) scale(0.94);
+    pointer-events: none;
+    transform: translateY(-6px) scale(0.97);
   }
 
-  .nav-links[data-collapsed="true"] .nav-expand-button {
+  .nav-shell[data-collapsed="true"] .nav-expand-button {
     opacity: 1;
     pointer-events: auto;
     transform: translate(-50%, -50%) scale(1) rotate(0);
@@ -2089,10 +2105,6 @@ body {
 }
 
 @media (min-width: 1240px) and (pointer: fine) {
-  .nav-shell {
-    position: relative;
-  }
-
   .nav-links {
     position: absolute;
     left: 50%;
