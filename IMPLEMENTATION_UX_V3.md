@@ -82,6 +82,32 @@ Reduced/Minimal/Off/Low and OS override, mobile 390×844, both languages/CVs,
 theme switching, light text colors, and browser runtime/network console errors.
 Screenshots are generated in the OS temp directory for visual review.
 
+### Follow-up validation (2026-09-27)
+
+- Lint, TypeScript checking and the production static build passed.
+- Chromium and Firefox passed the full world-polish suite locally, including
+  actual shared-cover animations, next-project navigation, rapid history cleanup,
+  touch emulation, both themes and reduced-motion mobile. All six tested axe
+  WCAG A/AA screen states reported zero violations in these two engines.
+- WebKit checks passed in focused runs for all six axe screen states, direct
+  project entry, the mobile/low-motion/touch policies, and rapid browser Back
+  cleanup. A next-project cover animation completed in one run; slow routes in
+  other runs used the intentional timeout fallback and left no clone behind.
+  The full WebKit suite did not complete in a single run on this 4 GB Windows
+  test machine because actionability and asset-load waits timed out.
+- The QA runner now waits for menu hydration explicitly, waits for a usable
+  source image before testing its transition, and waits for DOM readiness on
+  navigation instead of unrelated late-loading assets. It reports actual cover
+  animation separately from the intentional 1.8s timeout fallback.
+- Set `PORTFOLIO_QA_BROWSER` to `chromium`, `firefox` or `webkit` to run a single
+  engine on memory-constrained machines. Without this variable, all three run
+  sequentially. Failed tests print the shared-cover lifecycle for diagnosis.
+- Deployment of application commit `56196f0` succeeded. A focused Chromium
+  smoke test on the GitHub Pages URL passed menu hydration/Start, project
+  filtering, quick-view Escape, project navigation with Back, direct project URL,
+  and zero runtime page errors. This live smoke does not replace the broader
+  local cross-browser and axe runs.
+
 ## Tradeoffs and remaining checks
 
 - Desktop sticky scenes intentionally fall back on short windows and zoomed
