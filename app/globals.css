@@ -2058,18 +2058,19 @@ body {
     top: 50%;
     left: 50%;
     display: grid;
-    width: 46px;
-    height: 46px;
+    width: 50px;
+    height: 50px;
     padding: 0;
     place-items: center;
     color: var(--text);
     background: var(--surface-strong);
     border: 1px solid var(--line-strong);
-    border-radius: 50%;
+    border-radius: 8px;
+    box-shadow: 0 3px 0 color-mix(in srgb, var(--line-strong) 70%, transparent);
     cursor: pointer;
     opacity: 0;
     pointer-events: none;
-    transform: translate(-50%, -50%) scale(0.75) rotate(-90deg);
+    transform: translate(-50%, -50%) scale(0.9);
     transition: opacity var(--motion-fast) var(--ease-standard), transform var(--motion-base) var(--ease-spring);
   }
 
@@ -2081,12 +2082,15 @@ body {
   }
 
   .nav-expand-button:focus-visible {
-    outline-offset: -4px;
+    outline-offset: 2px;
   }
 
   .nav-shell[data-collapsed="true"] {
-    clip-path: inset(0 calc(50% - 28px) 0 calc(50% - 28px) round 999px);
-    transform: translateY(-3px);
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+    clip-path: inset(0 calc(50% - 32px) 0 calc(50% - 32px) round 10px);
   }
 
   .nav-shell[data-collapsed="true"] > .site-brand,
@@ -2100,7 +2104,7 @@ body {
   .nav-shell[data-collapsed="true"] .nav-expand-button {
     opacity: 1;
     pointer-events: auto;
-    transform: translate(-50%, -50%) scale(1) rotate(0);
+    transform: translate(-50%, -50%) scale(1);
   }
 }
 
