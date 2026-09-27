@@ -3,9 +3,10 @@
 .heading { margin-bottom: 28px; }
 .heading > span, .status { color: var(--accent); font: 600 0.65rem var(--font-geist-mono), monospace; letter-spacing: 0.06em; }
 .heading h3 { margin: 8px 0; font-size: clamp(1.6rem, 2.5vw, 2.3rem); letter-spacing: -0.045em; }
-.spread { display: none; }
+.spread { display: none; user-select: none; }
+.spread[data-dragging="true"] { cursor: grabbing; }
 .wheel { position: absolute; top: 50%; left: 50%; transform-style: preserve-3d; }
-.card { position: absolute; top: 0; left: 0; width: min(29vw, 340px); aspect-ratio: 1.45; translate: -50% -50%; transform: rotateZ(var(--ring-angle)) translateY(calc(-1 * var(--wheel-ring-radius))); transform-style: preserve-3d; backface-visibility: hidden; color: var(--text); text-decoration: none; }
+.card { position: absolute; top: 0; left: 0; width: min(29vw, 340px); aspect-ratio: 1.45; translate: -50% -50%; transform: rotateZ(var(--ring-angle)) translateY(calc(-1 * var(--wheel-ring-radius))); transform-style: preserve-3d; backface-visibility: hidden; color: var(--text); text-decoration: none; cursor: pointer; }
 .cardFace { display: block; width: 100%; height: 100%; overflow: hidden; background: var(--background-raised); border: 3px solid color-mix(in srgb, var(--world-tint) 52%, var(--line-strong)); box-shadow: 9px 9px 0 var(--line), 0 22px 45px #0002; transform: scale(0.56); transition: border-color var(--motion-focus), box-shadow var(--motion-focus); }
 .cardFace img { display: block; width: 100%; height: calc(100% - 38px); object-fit: cover; object-position: top; }
 .cardTitle { display: block; overflow: hidden; padding: 9px 12px; font-size: 0.77rem; white-space: nowrap; text-overflow: ellipsis; }

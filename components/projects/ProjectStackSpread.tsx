@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type PointerEvent } from "react";
 import { LocalizedText } from "@/components/ui/LocalizedText";
 import { useScrollProgress } from "@/components/motion/useScrollProgress";
 import { ProjectStoryPanel } from "./ProjectStoryPanel";
@@ -15,6 +15,7 @@ const clamp = (value: number, min: number, max: number) => Math.min(max, Math.ma
 const radians = (degrees: number) => degrees * Math.PI / 180;
 
 type WheelMetrics = { ringRadius: number; drumRadius: number; bow: number; shift: number };
+type WheelDrag = { pointerId: number; startY: number; startProgress: number; moved: boolean };
 
 export function ProjectStackSpread({ projects, onBrowse }: { projects: Project[]; onBrowse: () => void }) {
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -23,6 +24,8 @@ export function ProjectStackSpread({ projects, onBrowse }: { projects: Project[]
   const ringLabelRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<Array<HTMLAnchorElement | null>>([]);
   const metricsRef = useRef<WheelMetrics | null>(null);
+  const dragRef = useRef<WheelDrag | null>(null);
+  const suppressClickRef = useRef(false);
   const activeRef = useRef(0);
   const [active, setActive] = useState(0);
   const selected = projects.slice(0, 4);
@@ -98,6 +101,35 @@ export function ProjectStackSpread({ projects, onBrowse }: { projects: Project[]
     if (frame.enabled) window.scrollTo({ top: frame.start + frame.travel * (0.24 + (index + 0.5) / count * 0.7), behavior: "instant" });
   }
 
+  function finishDrag(event: PointerEvent<HTMLDivElement>, settle: boolean) {
+    const drag = dragRef.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+    dragRef.current = null;
+    if (!drag.moved) return;
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+    event.currentTarget.removeAttribute("data-dragging");
+    suppressClickRef.current = true;
+    window.setTimeout(() => { suppressClickRef.current = false; }, 0);
+    if (!settle) return;
+    const frame = scroll.current;
+    if (frame.progress < 0.24) {
+      const destination = frame.progress < 0.12 ? 0 : 0.24 + 0.35 / count;
+      window.scrollTo({ top: frame.start + frame.travel * destination, behavior: "instant" });
+    } else {
+      selectQuest(clamp(Math.floor((frame.progress - 0.24) / 0.7 * count), 0, count - 1));
+    }
+  }
+
+  function handleWheelKey(event: KeyboardEvent<HTMLDivElement>) {
+    if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
+    event.preventDefault();
+    const focused = (event.target as HTMLElement).closest<HTMLElement>("[data-wheel-card]");
+    const current = focused ? Number(focused.dataset.wheelCard) : activeRef.current;
+    const next = clamp(current + (event.key === "ArrowDown" ? 1 : -1), 0, count - 1);
+    selectQuest(next);
+    window.requestAnimationFrame(() => cardsRef.current[next]?.focus({ preventScroll: true }));
+  }
+
   return (
     <div ref={wrapRef} className={styles.wrap} data-project-story data-phase="discover" data-project-world={selected[active] ? projectWorld(selected[active]) : "neutral"}>
       <div className={styles.stage}>
@@ -106,11 +138,40 @@ export function ProjectStackSpread({ projects, onBrowse }: { projects: Project[]
           <span>01 / <LocalizedText en="Discover builds" id="Jelajahi karya" /></span>
           <h3><LocalizedText en="Explore the builds" /></h3>
         </div>
-        <div ref={spreadRef} className={styles.spread}>
+        <div ref={spreadRef} className={styles.spread}
+          onPointerDown={(event) => {
+            if (event.pointerType === "touch" || event.button !== 0 || !scroll.current.enabled) return;
+            dragRef.current = { pointerId: event.pointerId, startY: event.clientY, startProgress: scroll.current.progress, moved: false };
+          }}
+          onPointerMove={(event) => {
+            const drag = dragRef.current;
+            if (!drag || drag.pointerId !== event.pointerId || event.buttons !== 1) return;
+            const distance = drag.startY - event.clientY;
+            if (!drag.moved && Math.abs(distance) < 6) return;
+            if (!drag.moved) {
+              drag.moved = true;
+              event.currentTarget.setPointerCapture(event.pointerId);
+              event.currentTarget.dataset.dragging = "true";
+            }
+            const frame = scroll.current;
+            const progress = clamp(drag.startProgress + distance / 420 * 0.2, 0, 1);
+            window.scrollTo({ top: frame.start + frame.travel * progress, behavior: "instant" });
+            event.preventDefault();
+          }}
+          onPointerUp={(event) => finishDrag(event, true)}
+          onPointerCancel={(event) => finishDrag(event, false)}
+          onClickCapture={(event) => {
+            if (!suppressClickRef.current) return;
+            event.preventDefault();
+            event.stopPropagation();
+            suppressClickRef.current = false;
+          }}
+          onKeyDown={handleWheelKey}>
           <div ref={wheelRef} className={styles.wheel}>
             {selected.map((project, index) => {
               const screenshot = project.screenshots[0];
               return screenshot ? <Link key={project.slug} href={`/projects/${project.slug}`} prefetch={false}
+                draggable={false}
                 data-wheel-card={index} data-project-world={projectWorld(project)}
                 aria-current={active === index ? "true" : undefined}
                 ref={(element) => { cardsRef.current[index] = element; }}

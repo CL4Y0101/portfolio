@@ -53,9 +53,9 @@ intersection feedback without recurring screen-reader announcements.
   content is not hidden during scroll. Inventory details work with hover, focus,
   or native tap/click disclosure and link only to existing project evidence.
 - The project wheel reuses the bounded scroll scene and its event-driven frame
-  scheduler. Each cover links to its case study; numbered controls still select
-  quests. Mobile, Low graphics and reduced-motion modes keep the static quest
-  layout, without the 3D wheel.
+  scheduler. Pointer drag and arrow keys also move between projects; each cover
+  links to its case study, and numbered controls still select quests. Mobile,
+  Low graphics and reduced-motion modes keep the static quest layout.
 - Dialog focus traps, Escape/outside close, focus restoration, filter aria-live,
   language-specific CVs and native browser history remain in place.
 - Navigation uses Next.js links without intercepting or delaying route changes;
