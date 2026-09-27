@@ -20,7 +20,7 @@ No runtime or development dependencies were added.
 The new flow is Menu → world entry → Spawn → Discover Builds → four project
 quests → Journey → Inventory → Achievements → Profile → public code → End Portal.
 
-Scroll-driven: bounded hero depth, project stack/spread and quest selection,
+Scroll-driven: bounded hero depth, ring-to-drum project wheel and quest selection,
 journey nodes, and case-study reading progress. Event-driven: menu entry, route
 feedback, inventory inspection, filters and dialogs. Milestones use one-shot
 intersection feedback without recurring screen-reader announcements.
@@ -52,6 +52,10 @@ intersection feedback without recurring screen-reader announcements.
 - Keyboard controls can select quests and journey nodes directly. Focused story
   content is not hidden during scroll. Inventory details work with hover, focus,
   or native tap/click disclosure and link only to existing project evidence.
+- The project wheel reuses the bounded scroll scene and its event-driven frame
+  scheduler. Each cover links to its case study; numbered controls still select
+  quests. Mobile, Low graphics and reduced-motion modes keep the static quest
+  layout, without the 3D wheel.
 - Dialog focus traps, Escape/outside close, focus restoration, filter aria-live,
   language-specific CVs and native browser history remain in place.
 - Navigation uses Next.js links without intercepting or delaying route changes;

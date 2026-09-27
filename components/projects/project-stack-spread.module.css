@@ -4,6 +4,17 @@
 .heading > span, .status { color: var(--accent); font: 600 0.65rem var(--font-geist-mono), monospace; letter-spacing: 0.06em; }
 .heading h3 { margin: 8px 0; font-size: clamp(1.6rem, 2.5vw, 2.3rem); letter-spacing: -0.045em; }
 .spread { display: none; }
+.wheel { position: absolute; top: 50%; left: 50%; transform-style: preserve-3d; }
+.card { position: absolute; top: 0; left: 0; width: min(29vw, 340px); aspect-ratio: 1.45; translate: -50% -50%; transform: rotateZ(var(--ring-angle)) translateY(calc(-1 * var(--wheel-ring-radius))); transform-style: preserve-3d; backface-visibility: hidden; color: var(--text); text-decoration: none; }
+.cardFace { display: block; width: 100%; height: 100%; overflow: hidden; background: var(--background-raised); border: 3px solid color-mix(in srgb, var(--world-tint) 52%, var(--line-strong)); box-shadow: 9px 9px 0 var(--line), 0 22px 45px #0002; transform: scale(0.56); transition: border-color var(--motion-focus), box-shadow var(--motion-focus); }
+.cardFace img { display: block; width: 100%; height: calc(100% - 38px); object-fit: cover; object-position: top; }
+.cardTitle { display: block; overflow: hidden; padding: 9px 12px; font-size: 0.77rem; white-space: nowrap; text-overflow: ellipsis; }
+.card:is(:hover, :focus-visible) { z-index: 105 !important; }
+.card:is(:hover, :focus-visible) .cardFace { border-color: var(--accent); box-shadow: 11px 11px 0 var(--line-strong), 0 28px 52px #0004; }
+.card:focus-visible .cardFace { outline: 3px solid var(--accent); outline-offset: 4px; }
+.ringLabel { position: absolute; inset: 0; display: grid; align-content: center; justify-items: center; gap: 4px; pointer-events: none; text-align: center; }
+.ringLabel span { color: var(--accent); font: 600 0.66rem var(--font-geist-mono), monospace; letter-spacing: 0.1em; text-transform: uppercase; }
+.ringLabel strong { font-size: clamp(1.9rem, 3vw, 3rem); line-height: 1; letter-spacing: -0.05em; }
 .quests { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
 .quest { padding: 22px; background: var(--background-raised); border: 1px solid var(--line); }
 .quest h3 { font-size: clamp(1.15rem, 2vw, 1.7rem); margin: 8px 0; line-height: 1.15; letter-spacing: -0.035em; }
@@ -22,10 +33,7 @@
 @media (min-width: 1001px) and (min-height: 801px) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   :global(html[data-motion="full"]:not([data-graphics="low"])) .wrap { height: 280vh; }
   :global(html[data-motion="full"]:not([data-graphics="low"])) .stage { position: sticky; top: clamp(88px, 11vh, 118px); height: min(76vh, 760px); overflow: clip; }
-  :global(html[data-motion="full"]:not([data-graphics="low"])) .spread { display: block; }
-  :global(html[data-motion="full"]:not([data-graphics="low"])) .card { position: absolute; top: 52%; left: 50%; width: min(29vw, 380px); border: 3px solid var(--line-strong); background: var(--background-raised); box-shadow: 9px 9px 0 var(--line), 0 22px 45px #0002; transform: translate(-50%, -50%); transition: transform var(--motion-story) var(--ease-enter), opacity var(--motion-story); }
-  .card img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; object-position: top; }
-  .card > span { display: block; padding: 12px; font-size: 0.8rem; }
+  :global(html[data-motion="full"]:not([data-graphics="low"])) .spread { --wheel-ring-radius: min(19vh, 190px); display: block; position: absolute; inset: 130px 28px 76px; perspective: 900px; overflow: clip; }
   :global(html[data-motion="full"]:not([data-graphics="low"])) .quests { position: absolute; inset: 105px 28px 86px 49%; display: grid; grid-template-columns: 1fr; }
   :global(html[data-motion="full"]:not([data-graphics="low"])) .quest { grid-area: 1 / 1; padding: 0 0 0 24px; background: var(--background-soft); border: 0; visibility: hidden; opacity: 0; translate: 0 12px; transition: opacity var(--motion-story), translate var(--motion-story); }
   :global(html[data-motion="full"]:not([data-graphics="low"])) .wrap[data-phase="quest"] .quest[data-active="true"] { visibility: visible; opacity: 1; translate: 0 0; }
