@@ -54,7 +54,8 @@ intersection feedback without recurring screen-reader announcements.
   or native tap/click disclosure and link only to existing project evidence.
 - The project wheel reuses the bounded scroll scene and its event-driven frame
   scheduler. Pointer drag and arrow keys also move between projects; each cover
-  links to its case study, and numbered controls still select quests. Mobile,
+  links to its case study, and numbered controls still select quests. A compact
+  wheel fits shorter desktop viewports from 620px high at normal zoom; mobile,
   Low graphics and reduced-motion modes keep the static quest layout.
 - Dialog focus traps, Escape/outside close, focus restoration, filter aria-live,
   language-specific CVs and native browser history remain in place.

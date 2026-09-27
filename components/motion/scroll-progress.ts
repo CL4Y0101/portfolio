@@ -11,6 +11,7 @@ type Scene = {
   element: HTMLElement;
   stage?: HTMLElement;
   mode: "sticky" | "leave";
+  motionEnabled?: () => boolean;
   active: boolean;
   update: (frame: ScrollFrame) => void;
 };
@@ -30,14 +31,13 @@ const clamp = (value: number) => Math.min(1, Math.max(0, value));
 
 function flush() {
   frame = 0;
-  const enabled = worldMotionEnabled();
   const scrollY = window.scrollY;
   const pending = [...scenes].filter((scene) => force || scene.active).map((scene) => {
     const rect = scene.element.getBoundingClientRect();
     const top = scene.stage ? parseFloat(getComputedStyle(scene.stage).top) || 0 : 0;
     const travel = Math.max(1, scene.mode === "leave" ? rect.height : rect.height - (scene.stage?.offsetHeight ?? window.innerHeight));
     const start = scrollY + rect.top - top;
-    return { scene, value: { progress: clamp((scrollY - start) / travel), enabled, width: rect.width, start, travel } };
+    return { scene, value: { progress: clamp((scrollY - start) / travel), enabled: scene.motionEnabled?.() ?? worldMotionEnabled(), width: rect.width, start, travel } };
   });
   force = false;
   pending.forEach(({ scene, value }) => scene.update(value));

@@ -13,6 +13,9 @@ import { WorldAtmosphere } from "@/components/motion/WorldAtmosphere";
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 const radians = (degrees: number) => degrees * Math.PI / 180;
+const projectWheelMotionEnabled = () => document.documentElement.dataset.motion === "full" &&
+  document.documentElement.dataset.graphics !== "low" &&
+  window.matchMedia("(min-width: 1001px) and (min-height: 620px) and (pointer: fine) and (prefers-reduced-motion: no-preference)").matches;
 
 type WheelMetrics = { ringRadius: number; drumRadius: number; bow: number; shift: number };
 type WheelDrag = { pointerId: number; startY: number; startProgress: number; moved: boolean };
@@ -58,7 +61,7 @@ export function ProjectStackSpread({ projects, onBrowse }: { projects: Project[]
     if (ringLabelRef.current) ringLabelRef.current.style.opacity = String(1 - morph);
   }, [count]);
 
-  const scroll = useScrollProgress(wrapRef, { stageSelector: `.${styles.stage}`, onProgress: ({ progress, enabled }) => {
+  const scroll = useScrollProgress(wrapRef, { stageSelector: `.${styles.stage}`, motionEnabled: projectWheelMotionEnabled, onProgress: ({ progress, enabled }) => {
     const wrap = wrapRef.current;
     if (!wrap || !count) return;
     const questProgress = Math.max(0, (progress - 0.24) / 0.7);
@@ -112,11 +115,12 @@ export function ProjectStackSpread({ projects, onBrowse }: { projects: Project[]
     window.setTimeout(() => { suppressClickRef.current = false; }, 0);
     if (!settle) return;
     const frame = scroll.current;
-    if (frame.progress < 0.24) {
-      const destination = frame.progress < 0.12 ? 0 : 0.24 + 0.35 / count;
+    const dragProgress = clamp(drag.startProgress + (drag.startY - event.clientY) / 420 * 0.2, 0, 1);
+    if (dragProgress < 0.24) {
+      const destination = dragProgress < 0.12 ? 0 : 0.24 + 0.35 / count;
       window.scrollTo({ top: frame.start + frame.travel * destination, behavior: "instant" });
     } else {
-      selectQuest(clamp(Math.floor((frame.progress - 0.24) / 0.7 * count), 0, count - 1));
+      selectQuest(clamp(Math.floor((dragProgress - 0.24) / 0.7 * count), 0, count - 1));
     }
   }
 
