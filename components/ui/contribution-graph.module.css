@@ -1,0 +1,306 @@
+.panel {
+  grid-column: 1 / -1;
+  min-width: 0;
+  padding: clamp(20px, 3vw, 32px);
+  background: var(--background-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.heading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.heading h3 {
+  margin: 4px 0 0;
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+  line-height: 1.25;
+}
+
+.heading a,
+.source a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.heading a {
+  flex: 0 0 auto;
+  font-size: 0.85rem;
+}
+
+.heading a:focus-visible,
+.source a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.source,
+.unavailable {
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.graph {
+  --day-size: 14px;
+  --day-gap: 3px;
+  --level-0: #e8ece9;
+  --level-1: #b9d0c7;
+  --level-2: #81aa9b;
+  --level-3: #4f7f70;
+  --level-4: #245548;
+  min-width: 0;
+}
+
+:global(html[data-theme="dark"]) .graph {
+  --level-0: #37343a;
+  --level-1: #5b535d;
+  --level-2: #817581;
+  --level-3: #a596a3;
+  --level-4: #c9b9c6;
+}
+
+.scroller {
+  overflow-x: auto;
+  padding: 0 2px 9px;
+  scrollbar-color: var(--line-strong) transparent;
+}
+
+.scroller:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.fullYear {
+  width: max-content;
+  min-width: 100%;
+}
+
+.monthLabels {
+  display: grid;
+  gap: var(--day-gap);
+  width: max-content;
+  margin-left: 35px;
+  margin-bottom: 9px;
+  color: var(--muted);
+  font: 0.69rem var(--font-geist-mono), monospace;
+}
+
+.monthLabels span {
+  white-space: nowrap;
+}
+
+.calendarRows {
+  display: flex;
+  gap: 7px;
+}
+
+.weekdayLabels,
+.week {
+  display: grid;
+  grid-template-rows: repeat(7, var(--day-size));
+  gap: var(--day-gap);
+}
+
+.weekdayLabels {
+  width: 28px;
+  flex: 0 0 28px;
+  color: var(--muted);
+  font: 0.65rem var(--font-geist-mono), monospace;
+}
+
+.weekdayLabels span {
+  line-height: var(--day-size);
+}
+
+.weeks {
+  display: flex;
+  gap: var(--day-gap);
+}
+
+.day,
+.legend i {
+  display: block;
+  padding: 0;
+  background: var(--level-0);
+  border: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+  border-radius: 2px;
+}
+
+.day {
+  width: var(--day-size);
+  height: var(--day-size);
+  cursor: pointer;
+  transition: transform var(--motion-fast) var(--ease-standard), box-shadow var(--motion-fast) var(--ease-standard);
+}
+
+.day[data-level="1"],
+.legend i[data-level="1"] { background: var(--level-1); }
+.day[data-level="2"],
+.legend i[data-level="2"] { background: var(--level-2); }
+.day[data-level="3"],
+.legend i[data-level="3"] { background: var(--level-3); }
+.day[data-level="4"],
+.legend i[data-level="4"] { background: var(--level-4); }
+
+.day:hover,
+.day:focus-visible {
+  position: relative;
+  z-index: 1;
+  transform: scale(1.3);
+  box-shadow: 0 0 0 2px var(--background-raised), 0 0 0 4px var(--accent);
+}
+
+.day:focus-visible {
+  outline: 0;
+}
+
+.day[aria-pressed="true"] {
+  box-shadow: 0 0 0 2px var(--background-raised), 0 0 0 3px var(--text);
+}
+
+.dayNumber {
+  display: none;
+}
+
+.monthView {
+  display: none;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  margin-top: 13px;
+}
+
+.detail {
+  min-height: 1.5em;
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 0.82rem;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--muted);
+  font: 0.68rem var(--font-geist-mono), monospace;
+  white-space: nowrap;
+}
+
+.legend span:first-child { margin-right: 3px; }
+.legend span:last-child { margin-left: 3px; }
+
+.legend i {
+  width: 12px;
+  height: 12px;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 100;
+  pointer-events: none;
+  padding: 7px 10px;
+  color: var(--text);
+  background: var(--background-raised);
+  border: 1px solid var(--line-strong);
+  box-shadow: var(--shadow-sm);
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+@media (max-width: 700px) {
+  .panel { padding: clamp(10px, 3vw, 20px); }
+  .heading { align-items: start; }
+  .heading a { font-size: 0.75rem; }
+  .yearView { display: none; }
+  .monthView { display: block; overflow-x: auto; }
+
+  .monthControl {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    color: var(--muted);
+    font-size: 0.82rem;
+  }
+
+  .monthControl select {
+    min-height: 44px;
+    padding: 7px 12px;
+    color: var(--text);
+    background: var(--background-raised);
+    border: 1px solid var(--line-strong);
+    border-radius: 3px;
+  }
+
+  .monthControl select:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .monthGrid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(44px, 1fr));
+    gap: 2px;
+    min-width: 320px;
+  }
+
+  .mobileWeekday {
+    color: var(--muted);
+    font: 0.68rem var(--font-geist-mono), monospace;
+    text-align: center;
+  }
+
+  .monthGrid .day,
+  .mobileBlank {
+    width: 100%;
+    min-height: 44px;
+    height: 44px;
+  }
+
+  .monthGrid .day:hover,
+  .monthGrid .day:focus-visible { transform: none; }
+
+  .dayNumber {
+    display: block;
+    color: #17201e;
+    font: 0.72rem var(--font-geist-mono), monospace;
+  }
+
+  .monthGrid .day[data-level="3"] .dayNumber,
+  .monthGrid .day[data-level="4"] .dayNumber { color: #fff; }
+
+  :global(html[data-theme="dark"]) .monthGrid .day[data-level="0"] .dayNumber,
+  :global(html[data-theme="dark"]) .monthGrid .day[data-level="1"] .dayNumber,
+  :global(html[data-theme="dark"]) .monthGrid .day[data-level="2"] .dayNumber { color: #fff; }
+
+  :global(html[data-theme="dark"]) .monthGrid .day[data-level="3"] .dayNumber,
+  :global(html[data-theme="dark"]) .monthGrid .day[data-level="4"] .dayNumber { color: #17201e; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .day { transition: none; }
+  .day:hover,
+  .day:focus-visible { transform: none; }
+}
+
+:global(html[data-motion="off"]) .day,
+:global(html[data-motion="minimal"]) .day,
+:global(html[data-motion="reduced"]) .day { transition: none; }
+
+:global(html[data-motion="off"]) .day:hover,
+:global(html[data-motion="off"]) .day:focus-visible,
+:global(html[data-motion="minimal"]) .day:hover,
+:global(html[data-motion="minimal"]) .day:focus-visible,
+:global(html[data-motion="reduced"]) .day:hover,
+:global(html[data-motion="reduced"]) .day:focus-visible { transform: none; }
