@@ -1,0 +1,15 @@
+#!/bin/sh
+# Keep data/contributions.json fresh on every commit so the contribution
+# skyline always shows the latest GitHub activity. A failed sync never
+# blocks the commit — the previously synced data is used instead.
+#
+# Enable once per clone:  npm run setup:hooks
+
+set -u
+
+if ! node scripts/sync-contributions.mjs; then
+  echo "warning: contribution sync failed, committing with the existing data" >&2
+fi
+
+git add data/contributions.json
+exit 0
