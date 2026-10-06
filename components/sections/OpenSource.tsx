@@ -1,16 +1,27 @@
+import type { CSSProperties } from "react";
 import { ArrowUpRight, GitBranch, GitFork } from "lucide-react";
 import { projects } from "@/data/projects";
 import { profile } from "@/data/profile";
-import { ContributionGraph } from "@/components/ui/ContributionGraph";
+import { ContributionSkylineLocalized } from "@/components/ui/ContributionSkylineLocalized";
 import { LocalizedText } from "@/components/ui/LocalizedText";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { getGitHubContributions } from "@/lib/github-contributions";
+import { getContributionDays, getContributionsAsOf } from "@/lib/github-contributions";
 import styles from "@/components/ui/contribution-graph.module.css";
 
 const publicProjects = projects.filter((project) => project.links.some((link) => link.kind === "repository"));
 
-export async function OpenSource() {
-  const calendar = await getGitHubContributions();
+// Maps the skyline's theme variables onto the portfolio design tokens so the
+// canvas picks up light/dark mode (it watches `data-theme` on <html>).
+const skylineTheme = {
+  "--color-background": "var(--background-raised)",
+  "--color-foreground": "var(--text)",
+  "--color-border": "var(--line)",
+  "--color-muted-foreground": "var(--muted)",
+} as CSSProperties;
+
+export function OpenSource() {
+  const days = getContributionDays();
+  const asOf = getContributionsAsOf();
 
   return (
     <section className="section section-tinted" aria-labelledby="open-source-title">
@@ -47,27 +58,25 @@ export async function OpenSource() {
           </ul>
         </div>
         <div className={styles.panel} data-scroll-reveal>
-          <div className={styles.heading}>
-            <div>
-              <p className="eyebrow"><LocalizedText en="GITHUB / ACTIVITY" id="GITHUB / AKTIVITAS" /></p>
-              <h3><LocalizedText en="Contribution activity" id="Aktivitas kontribusi" /></h3>
-            </div>
+          <div style={skylineTheme}>
+            <ContributionSkylineLocalized days={days} asOf={asOf ?? undefined} />
+          </div>
+          <p className={styles.source}>
+            {asOf ? (
+              <LocalizedText
+                en={`Activity shown on GitHub through ${asOf}. `}
+                id={`Aktivitas yang ditampilkan GitHub hingga ${asOf}. `}
+              />
+            ) : (
+              <LocalizedText
+                en="Contribution data is temporarily unavailable. "
+                id="Data kontribusi sementara tidak tersedia. "
+              />
+            )}
             <a href={profile.github} target="_blank" rel="noreferrer">
               <LocalizedText en="View profile" id="Lihat profil" />
             </a>
-          </div>
-          {calendar ? (
-            <>
-              <ContributionGraph calendar={calendar} />
-              <p className={styles.source}>
-                <LocalizedText en={`Activity shown on GitHub through ${calendar.asOf}.`} id={`Aktivitas yang ditampilkan GitHub hingga ${calendar.asOf}.`} />
-              </p>
-            </>
-          ) : (
-            <p className={styles.unavailable} role="status">
-              <LocalizedText en="Contribution data is temporarily unavailable. Visit GitHub for the latest activity." id="Data kontribusi sementara tidak tersedia. Kunjungi GitHub untuk aktivitas terbaru." />
-            </p>
-          )}
+          </p>
         </div>
       </div>
     </section>
