@@ -7,7 +7,9 @@
     "build": "next build && node scripts/add-project-route-aliases.mjs",
     "start": "next start",
     "lint": "eslint . --max-warnings=0",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "contributions:sync": "node scripts/sync-contributions.mjs",
+    "setup:hooks": "git config core.hooksPath .githooks"
   },
   "dependencies": {
     "lucide-react": "1.37.0",

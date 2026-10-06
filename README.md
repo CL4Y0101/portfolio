@@ -44,6 +44,25 @@ Public assets live in:
 
 When adding a project image, use a real product screenshot and provide meaningful alt text in the project data. Do not add private repository links, credentials, server addresses, or environment values.
 
+## Contribution skyline
+
+The Open Source section renders a 2D/3D contribution skyline
+(`components/ui/ContributionSkyline.tsx`, a `"use client"` canvas component)
+from `data/contributions.json`.
+
+The JSON is refreshed from the public GitHub contribution calendar by
+`scripts/sync-contributions.mjs` (no token needed). A pre-commit hook keeps it
+fresh on every commit — the data rides along with the commit, so each push
+deploys an up-to-date skyline:
+
+```bash
+npm run setup:hooks          # once per clone: use .githooks/
+npm run contributions:sync   # manual refresh
+```
+
+If the sync fails (offline, GitHub hiccup), the hook warns and the commit
+proceeds with the previously synced data.
+
 ## GitHub Pages
 
 The workflow in `.github/workflows/deploy-pages.yml` installs dependencies, validates the project, builds the static export, and deploys `out/`.
