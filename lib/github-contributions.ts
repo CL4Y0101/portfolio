@@ -1,52 +1,48 @@
-import { profile } from "@/data/profile";
+import raw from "@/data/contributions.json";
 
 export type ContributionDay = {
   date: string;
   count: number;
-  level: 0 | 1 | 2 | 3 | 4;
 };
 
-export type ContributionCalendar = {
-  year: number;
+type ContributionsFile = {
   asOf: string;
   days: ContributionDay[];
 };
 
-const githubUser = new URL(profile.github).pathname.split("/").filter(Boolean)[0];
+const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
-export async function getGitHubContributions(): Promise<ContributionCalendar | null> {
-  const asOf = new Date().toISOString().slice(0, 10);
-  const year = Number(asOf.slice(0, 4));
-  const url = `https://github.com/users/${githubUser}/contributions?from=${year}-01-01&to=${year}-12-31`;
-
-  try {
-    const response = await fetch(url, {
-      cache: "force-cache",
-      headers: { "User-Agent": "Aditya-Fadni-Portfolio" },
-      signal: AbortSignal.timeout(10000),
-    });
-    if (!response.ok) throw new Error(`GitHub returned ${response.status}`);
-
-    const html = await response.text();
-    const days: ContributionDay[] = [];
-    const cells = html.matchAll(/<td\b[^>]*\bdata-date="(\d{4}-\d{2}-\d{2})"[^>]*\bdata-level="([0-4])"[^>]*>\s*<\/td>\s*<tool-tip\b[^>]*>([^<]*)<\/tool-tip>/g);
-
-    for (const [, date, level, tooltip] of cells) {
-      if (!date.startsWith(`${year}-`)) continue;
-      const countText = tooltip.match(/([\d,]+) contributions? on/);
-      const count = countText ? Number(countText[1].replaceAll(",", "")) : /^No contributions on/.test(tooltip) ? 0 : NaN;
-      if (!Number.isSafeInteger(count) || count < 0) throw new Error(`Invalid contribution count for ${date}`);
-      days.push({ date, count, level: Number(level) as ContributionDay["level"] });
-    }
-
-    const expectedDays = (Date.UTC(year + 1, 0, 1) - Date.UTC(year, 0, 1)) / 86400000;
-    if (days.length !== expectedDays || new Set(days.map((day) => day.date)).size !== expectedDays) {
-      throw new Error(`Incomplete GitHub contribution calendar for ${year}`);
-    }
-
-    return { year, asOf, days: days.filter((day) => day.date <= asOf) };
-  } catch (error) {
-    console.warn("GitHub contribution calendar is unavailable during this build.", error);
-    return null;
+function isValid(value: unknown): value is ContributionsFile {
+  if (typeof value !== "object" || value === null) return false;
+  const file = value as Record<string, unknown>;
+  if (typeof file.asOf !== "string" || !DATE_RE.test(file.asOf)) return false;
+  if (!Array.isArray(file.days) || file.days.length === 0) return false;
+  const seen = new Set<string>();
+  let prev = "";
+  for (const day of file.days) {
+    if (typeof day !== "object" || day === null) return false;
+    const { date, count } = day as Record<string, unknown>;
+    if (typeof date !== "string" || !DATE_RE.test(date)) return false;
+    if (!Number.isSafeInteger(count) || (count as number) < 0) return false;
+    if (seen.has(date) || date < prev) return false;
+    seen.add(date);
+    prev = date;
   }
+  return true;
+}
+
+const file: ContributionsFile | null = isValid(raw) ? raw : null;
+
+if (!file) {
+  console.warn("data/contributions.json is missing or invalid — run `npm run contributions:sync`.");
+}
+
+/** Days synced by scripts/sync-contributions.mjs (trailing year, ascending). */
+export function getContributionDays(): ContributionDay[] {
+  return file?.days ?? [];
+}
+
+/** Last day covered by the synced data, or null when unavailable. */
+export function getContributionsAsOf(): string | null {
+  return file?.asOf ?? null;
 }
