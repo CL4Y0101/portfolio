@@ -1,4 +1,4 @@
-export const SITE_URL = "https://cl4y0101.github.io/portfolio";
+export const SITE_URL = "https://adityafadni.is-a.dev";
 export const GITHUB_URL = "https://github.com/CL4Y0101";
 
 export function withBasePath(path: string) {

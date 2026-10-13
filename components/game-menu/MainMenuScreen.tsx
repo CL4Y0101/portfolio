@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { AboutPanel } from "@/components/game-menu/AboutPanel";
 import { AchievementsPanel } from "@/components/game-menu/AchievementsPanel";
 import { ExitPrompt } from "@/components/game-menu/ExitPrompt";
@@ -29,6 +29,25 @@ type MenuPanel = "main" | "options" | "achievements" | "about" | "exit";
 type MenuState = "active" | "entering";
 type MenuAction = "start" | "options" | "achievements" | "about" | "exit";
 
+const MENU_SEEN_KEY = "portfolio-menu-seen";
+
+function getMenuSeenSnapshot(): string {
+  try {
+    return window.localStorage.getItem(MENU_SEEN_KEY) ?? "0";
+  } catch {
+    return "0";
+  }
+}
+
+function getMenuSeenServerSnapshot(): string {
+  return "0";
+}
+
+function subscribeMenuSeen(onChange: () => void): () => void {
+  window.addEventListener("storage", onChange);
+  return () => window.removeEventListener("storage", onChange);
+}
+
 export function MainMenuScreen() {
   const pathname = usePathname();
   const containerRef = useRef<HTMLElement>(null);
@@ -43,7 +62,10 @@ export function MainMenuScreen() {
   const [preferences, setPreferences] = useState<GamePreferences>(defaultGamePreferences);
   const [paused, setPaused] = useState(false);
   const onHomepage = pathname === "/";
-  const active = onHomepage && visible;
+  /* Menu intro hanya sekali per visitor; dibaca pasca-hydration agar SSR tetap konsisten. */
+  const menuSeen = useSyncExternalStore(subscribeMenuSeen, getMenuSeenSnapshot, getMenuSeenServerSnapshot);
+  const skipIntro = menuSeen === "1" && !hasEntered;
+  const active = onHomepage && visible && !skipIntro;
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
@@ -132,6 +154,7 @@ export function MainMenuScreen() {
   const enterPortfolio = useCallback((restorePreviousFocus = false) => {
     if (transitionTimerRef.current) return;
     playTick();
+    try { window.localStorage.setItem(MENU_SEEN_KEY, "1"); } catch { /* abaikan */ }
     setMenuState("entering");
     containerRef.current?.focus({ preventScroll: true });
     const duration = document.documentElement.dataset.motion === "off" ? 0

@@ -14,8 +14,8 @@ export function Hero() {
       <div className="shell spawn-hud hero-entry">
         <span>WORLD / PORTFOLIO</span>
         <span><LocalizedText en="Player" id="Pemain" />: {profile.shortName}</span>
-        <span><LocalizedText en="Class: Software Developer" id="Kelas: Pengembang Perangkat Lunak" /></span>
-        <span><LocalizedText en="Spawn: Jember · Building products" id="Spawn: Jember · Membangun produk" /></span>
+        <span><LocalizedText en="Role: Software Developer" id="Peran: Pengembang Perangkat Lunak" /></span>
+        <span><LocalizedText en="Base: Jember · Building products" id="Basis: Jember · Membangun produk" /></span>
       </div>
       <div className="shell hero-grid">
         <div className="hero-copy">

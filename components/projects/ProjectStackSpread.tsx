@@ -182,7 +182,7 @@ export function ProjectStackSpread({ projects, onBrowse }: { projects: Project[]
                 className={styles.card}
                 style={{ "--ring-angle": `${index * 360 / count}deg` } as CSSProperties}>
                 <span className={styles.cardFace}>
-                  <Image data-project-cover={project.slug} src={screenshot.src} alt="" width={720} height={450} sizes="(max-width: 1200px) 30vw, 340px" draggable={false} />
+                  <Image data-project-cover={project.slug} src={screenshot.src} alt={screenshot.alt} width={720} height={450} sizes="(max-width: 1200px) 30vw, 340px" draggable={false} />
                   <span className={styles.cardTitle}>{project.title}</span>
                   <span className="sr-only"><LocalizedText en="View case study" /></span>
                 </span>
