@@ -76,7 +76,8 @@ export function MainMenuScreen() {
   const onHomepage = pathname === "/";
   /* Menu intro hanya sekali per visitor; dibaca pasca-hydration agar SSR tetap konsisten. */
   const menuSeen = useSyncExternalStore(subscribeMenuSeen, getMenuSeenSnapshot, getMenuSeenServerSnapshot);
-  const skipIntro = menuSeen === "1" && !hasEntered;
+  /* Jangan skip saat transisi entering: menu harus tetap mounted selama sinematik. */
+  const skipIntro = menuSeen === "1" && !hasEntered && menuState !== "entering";
   const active = onHomepage && visible && !skipIntro;
 
   useEffect(() => {
