@@ -31,7 +31,7 @@ type MenuAction = "start" | "options" | "achievements" | "about" | "exit";
 /** Dispatched on window when the first world-entry intro finishes (or is skipped). */
 export const introCompleteEvent = "portfolio-intro-complete";
 
-/** Staged status lines for the first-visit world-generation cinematic. */
+/** Staged status lines for the world-generation cinematic. */
 const ENTER_STAGES = [
   { en: "Generating world…", id: "Menyiapkan dunia…" },
   { en: "Loading chunks…", id: "Memuat chunk…" },
@@ -184,14 +184,13 @@ export function MainMenuScreen() {
     const firstEntry = !hasEntered;
     try { window.localStorage.setItem(MENU_SEEN_KEY, "1"); } catch { /* abaikan */ }
     setMenuState("entering");
-    // Sinematik intro main tiap first visit di semua device, kecuali motion dimatikan total.
+    // Sinematik intro main penuh setiap tap Start di semua device, kecuali motion dimatikan total.
     // (prefers-reduced-motion tetap menonaktifkan zoom/efek gerak via CSS.)
     const motion = document.documentElement.dataset.motion;
-    const duration = motion === "off" ? 0
-      : firstEntry ? motionDurations.introCinematic : motionDurations.fast;
+    const duration = motion === "off" ? 0 : motionDurations.introCinematic;
     setEnterDuration(duration);
     setEnterStage(0);
-    if (firstEntry && duration >= 1000) {
+    if (duration >= 1000) {
       // The cinematic is skippable; give keyboard users immediate access to Skip.
       window.requestAnimationFrame(() => skipButtonRef.current?.focus({ preventScroll: true }));
     } else {
@@ -226,9 +225,9 @@ export function MainMenuScreen() {
     else openPanel("exit");
   }, [backToMain, enterPortfolio, hasEntered, openPanel, panel, menuState, skipEnter]);
 
-  /* Advance the staged loading lines across the first-visit cinematic. */
+  /* Advance the staged loading lines across the world-entry cinematic. */
   useEffect(() => {
-    if (menuState !== "entering" || hasEntered) return;
+    if (menuState !== "entering") return;
     if (enterDuration < 1000) return;
     const interval = window.setInterval(() => {
       setEnterStage((stage) => Math.min(stage + 1, ENTER_STAGES.length - 1));
@@ -274,7 +273,7 @@ export function MainMenuScreen() {
       <WorldBackground paused={paused} />
 
       <div className="world-loading" role="status" aria-live="polite">
-        {menuState === "entering" && !hasEntered ? <>
+        {menuState === "entering" ? <>
           <span><LocalizedText en={ENTER_STAGES[enterStage].en} id={ENTER_STAGES[enterStage].id} /></span>
           <i aria-hidden="true" style={{ animationDuration: `${enterDuration}ms` }} />
           {enterDuration >= 1000 ? (
