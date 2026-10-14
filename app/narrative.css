@@ -209,3 +209,9 @@ body:has(.main-menu-root) .hero-entry { animation-play-state: paused; }
   .project-wipe { display: none; }
 }
 :root:not([data-motion="full"]) .project-wipe { display: none; }
+
+/* Touch press feedback on project cards (hover doesn't fire on touch screens). */
+.project-card:active {
+  transform: translateY(-2px) scale(0.985);
+  transition-duration: 100ms;
+}
