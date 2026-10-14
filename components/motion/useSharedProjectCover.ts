@@ -5,7 +5,23 @@ import { projects } from "@/data/projects";
 import { worldMotionEnabled } from "./scroll-progress";
 import { motionDurations } from "./motion";
 
-type Flight = { slug: string; source: HTMLImageElement; clone: HTMLImageElement; bounds: DOMRect; timer: number; animation?: Animation; target?: HTMLImageElement };
+type Flight = { slug: string; source: HTMLImageElement; clone: HTMLImageElement; wipe: HTMLElement | null; bounds: DOMRect; timer: number; animation?: Animation; target?: HTMLImageElement };
+
+/** Pixel-step wipe overlay for the project transition (Minecraft-style). */
+function createWipe(): HTMLElement {
+  const wipe = document.createElement("div");
+  wipe.className = "project-wipe";
+  wipe.setAttribute("aria-hidden", "true");
+  document.body.append(wipe);
+  // Force reflow so the wipe-in animation triggers.
+  void wipe.offsetWidth;
+  wipe.classList.add("wipe-in");
+  return wipe;
+}
+
+function removeWipe(wipe: HTMLElement | null) {
+  wipe?.remove();
+}
 
 /** A DOM shared-cover transition that never takes ownership of navigation/history. */
 export function useSharedProjectCover(pathname: string) {
@@ -17,6 +33,7 @@ export function useSharedProjectCover(pathname: string) {
     clearTimeout(current.timer);
     current.animation?.cancel();
     current.clone.remove();
+    removeWipe(current.wipe);
     current.target?.removeAttribute("data-cover-in-flight");
     current.target?.closest(".case-cover")?.removeAttribute("data-shared-cover-target");
     document.documentElement.removeAttribute("data-shared-cover");
@@ -44,7 +61,8 @@ export function useSharedProjectCover(pathname: string) {
     Object.assign(clone.style, { left: `${bounds.left}px`, top: `${bounds.top}px`, width: `${bounds.width}px`, height: `${bounds.height}px` });
     document.body.append(clone);
     document.documentElement.dataset.sharedCover = "pending";
-    flight.current = { slug, source, clone, bounds, timer: window.setTimeout(clear, 1800) };
+    const wipe = createWipe();
+    flight.current = { slug, source, clone, wipe, bounds, timer: window.setTimeout(clear, 1800) };
   }, [clear]);
 
   useEffect(() => {
@@ -70,6 +88,13 @@ export function useSharedProjectCover(pathname: string) {
       document.documentElement.dataset.sharedCover = "animating";
       const transform = `translate(${destination.left - current.bounds.left}px, ${destination.top - current.bounds.top}px) scale(${destination.width / current.bounds.width}, ${destination.height / current.bounds.height})`;
       current.animation = current.clone.animate([{ transform: "none" }, { transform }], { duration: motionDurations.page, easing: "cubic-bezier(0.22, 1, 0.36, 1)", fill: "forwards" });
+      // Wipe out to reveal the detail page once the cover lands.
+      if (current.wipe) {
+        const wipe = current.wipe;
+        wipe.classList.remove("wipe-in");
+        wipe.classList.add("wipe-out");
+        window.setTimeout(() => wipe.remove(), 450);
+      }
       current.animation.finished.then(() => { if (flight.current === current) clear(); }).catch(() => {});
     };
     // Let Next's commit and scroll restoration settle, without delaying the route.
