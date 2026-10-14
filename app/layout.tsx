@@ -5,6 +5,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
 import { MainMenuScreen } from "@/components/game-menu/MainMenuScreen";
 import { MotionProvider } from "@/components/motion/MotionProvider";
+import { AchievementToast } from "@/components/motion/AchievementToast";
 import { PageTransition } from "@/components/motion/PageTransition";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { LocalizedText } from "@/components/ui/LocalizedText";
@@ -146,6 +147,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
       <body>
         <MotionProvider />
         <MainMenuScreen />
+        <AchievementToast />
         <a className="skip-link" href="#main-content">
           <LocalizedText en="Skip to main content" />
         </a>

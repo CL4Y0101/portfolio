@@ -1,6 +1,16 @@
 import type { Achievement } from "@/lib/types";
 
+/** Unlocked as a toast after the first world-entry intro; referenced by AchievementToast. */
+export const bestUiUxAchievement: Achievement = {
+  title: "Best Design UI/UX",
+  issuer: "Hackathon PENS 2026",
+  date: "October 2026",
+  detail: "Awarded for the Tessera project with team Positif dan Professional.",
+  featured: true,
+};
+
 export const achievements: Achievement[] = [
+  bestUiUxAchievement,
   {
     title: "English Proficiency Test — Rank #1",
     issuer: "Politeknik Negeri Jember, 2025",

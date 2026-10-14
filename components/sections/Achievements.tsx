@@ -1,10 +1,10 @@
-import { Award, GraduationCap, UsersRound } from "lucide-react";
+import { Award, GraduationCap, Trophy, UsersRound } from "lucide-react";
 import { achievements, leadership } from "@/data/achievements";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { LocalizedText } from "@/components/ui/LocalizedText";
 import { Milestone } from "@/components/motion/Milestone";
 
-const achievementIcons = [Award, GraduationCap, GraduationCap];
+const achievementIcons = [Trophy, Award, GraduationCap, GraduationCap];
 
 export function Achievements() {
   return (

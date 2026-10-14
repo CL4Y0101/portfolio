@@ -90,3 +90,92 @@ body:has(.main-menu-root) .hero-entry { animation-play-state: paused; }
   .end-portal-frame { animation: none !important; }
   .spawn-hud { font-size: 0.6rem; gap: 7px 14px; }
 }
+
+/* ---- First-visit world-entry cinematic (~5s, always skippable) ---- */
+:root { --motion-intro: 4800ms; }
+.main-menu-root[data-state="entering"][data-entry="first"] { animation-duration: var(--motion-intro); }
+.main-menu-root[data-state="entering"][data-entry="first"] .menu-world { animation-duration: var(--motion-intro); }
+.main-menu-root[data-state="entering"][data-entry="first"] .world-loading i { animation-duration: var(--motion-intro); }
+:root:not([data-motion="full"]) { --motion-intro: 140ms; }
+html[data-graphics="low"] { --motion-intro: 140ms; }
+@media (max-width: 1000px), (max-height: 800px), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  :root { --motion-intro: 140ms; }
+}
+
+/* Skip control shown during the world-entry cinematic. */
+.world-loading .world-skip {
+  pointer-events: auto;
+  padding: 8px 20px;
+  font: 600 0.72rem var(--font-geist-mono), monospace;
+  letter-spacing: 0.06em;
+  color: #fff;
+  text-shadow: 0 1px 2px #000;
+  background: #ffffff1c;
+  border: 1px solid #ffffff85;
+  cursor: pointer;
+}
+.world-loading .world-skip:is(:hover, :focus-visible) { background: #ffffff38; }
+.world-loading .world-skip:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+/* ---- Achievement toast: post-intro advancement popup ---- */
+.achievement-toast {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 950;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: min(360px, calc(100vw - 40px));
+  padding: 12px 10px 12px 12px;
+  color: #f5f1e8;
+  background: #232120;
+  border: 2px solid #0d0c0b;
+  border-left: 6px solid #e9b949;
+  box-shadow: inset 2px 2px 0 #ffffff17, inset -2px -2px 0 #00000040, 0 14px 34px #00000066;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 220ms ease-out, transform 260ms var(--ease-enter);
+}
+.achievement-toast[data-shown="true"] { opacity: 1; transform: none; }
+.achievement-toast-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  color: #1d1a12;
+  background: #e9b949;
+  box-shadow: inset -3px -3px 0 #b8892e, inset 3px 3px 0 #f6d47c;
+}
+.achievement-toast-copy { min-width: 0; flex: 1; }
+.achievement-toast-kicker {
+  margin: 0;
+  font: 600 0.62rem var(--font-geist-mono), monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #e9b949;
+}
+.achievement-toast-title { margin: 2px 0 0; font-weight: 700; font-size: 0.92rem; color: #fff; }
+.achievement-toast-sub { margin: 2px 0 0; font-size: 0.72rem; color: #cfc8b8; }
+.achievement-toast-actions { display: flex; flex: none; gap: 6px; }
+.achievement-toast-button {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  color: #e8e2d4;
+  background: transparent;
+  border: 1px solid #ffffff2e;
+  cursor: pointer;
+}
+.achievement-toast-button:is(:hover, :focus-visible) { background: #ffffff14; }
+.achievement-toast-button:focus-visible { outline: 2px solid #e9b949; outline-offset: 2px; }
+.achievement-toast-button[aria-pressed="true"] { color: #e9b949; border-color: #e9b949; }
+@media (max-width: 480px) {
+  .achievement-toast { right: 12px; left: 12px; bottom: 12px; max-width: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .achievement-toast { transform: none; transition: opacity 120ms linear; }
+}
+:root:not([data-motion="full"]) .achievement-toast { transform: none; transition: opacity 120ms linear; }
