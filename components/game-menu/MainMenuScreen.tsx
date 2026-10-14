@@ -183,10 +183,11 @@ export function MainMenuScreen() {
     const firstEntry = !hasEntered;
     try { window.localStorage.setItem(MENU_SEEN_KEY, "1"); } catch { /* abaikan */ }
     setMenuState("entering");
-    // Sinematik intro main di semua device (termasuk HP); cuma dimatikan kalau motion off/reduced.
+    // Sinematik intro main tiap first visit di semua device, kecuali motion dimatikan total.
+    // (prefers-reduced-motion tetap menonaktifkan zoom/efek gerak via CSS.)
     const motion = document.documentElement.dataset.motion;
     const duration = motion === "off" ? 0
-      : firstEntry && motion === "full" ? motionDurations.introCinematic : motionDurations.fast;
+      : firstEntry ? motionDurations.introCinematic : motionDurations.fast;
     setEnterDuration(duration);
     setEnterStage(0);
     if (firstEntry && duration >= 1000) {

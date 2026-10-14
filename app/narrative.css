@@ -99,11 +99,6 @@ body:has(.main-menu-root) .hero-entry { animation-play-state: paused; }
 .main-menu-root[data-state="entering"][data-entry="first"] { animation-duration: var(--motion-intro); }
 .main-menu-root[data-state="entering"][data-entry="first"] .menu-world { animation-duration: var(--motion-intro); }
 .main-menu-root[data-state="entering"][data-entry="first"] .world-loading i { animation-duration: var(--motion-intro); }
-:root:not([data-motion="full"]) { --motion-intro: 140ms; }
-html[data-graphics="low"] { --motion-intro: 140ms; }
-@media (prefers-reduced-motion: reduce) {
-  :root { --motion-intro: 140ms; }
-}
 
 /* Skip control shown during the world-entry cinematic. */
 .world-loading .world-skip {
