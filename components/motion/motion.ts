@@ -5,6 +5,8 @@ export const motionDurations = {
   reveal: 520,
   page: 680,
   world: 1050,
+  /** First-visit world-generation cinematic; always paired with a skip control. */
+  introCinematic: 4800,
 } as const;
 
 export const motionStagger = {

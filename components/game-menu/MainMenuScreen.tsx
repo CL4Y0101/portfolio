@@ -29,6 +29,16 @@ type MenuPanel = "main" | "options" | "achievements" | "about" | "exit";
 type MenuState = "active" | "entering";
 type MenuAction = "start" | "options" | "achievements" | "about" | "exit";
 
+/** Dispatched on window when the first world-entry intro finishes (or is skipped). */
+export const introCompleteEvent = "portfolio-intro-complete";
+
+/** Staged status lines for the first-visit world-generation cinematic. */
+const ENTER_STAGES = [
+  { en: "Generating world…", id: "Menyiapkan dunia…" },
+  { en: "Loading chunks…", id: "Memuat chunk…" },
+  { en: "Spawning player…", id: "Memunculkan pemain…" },
+] as const;
+
 const MENU_SEEN_KEY = "portfolio-menu-seen";
 
 function getMenuSeenSnapshot(): string {
@@ -54,10 +64,13 @@ export function MainMenuScreen() {
   const returnFocusRef = useRef<HTMLElement | null>(null);
   const pendingFocusRef = useRef<"hero" | "previous" | null>(null);
   const transitionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const skipButtonRef = useRef<HTMLButtonElement>(null);
+  const [enterDuration, setEnterDuration] = useState(0);
   const [visible, setVisible] = useState(pathname === "/");
   const [hasEntered, setHasEntered] = useState(false);
   const [panel, setPanel] = useState<MenuPanel>("main");
   const [menuState, setMenuState] = useState<MenuState>("active");
+  const [enterStage, setEnterStage] = useState(0);
   const [selectedAction, setSelectedAction] = useState<MenuAction>("start");
   const [preferences, setPreferences] = useState<GamePreferences>(defaultGamePreferences);
   const [paused, setPaused] = useState(false);
@@ -151,25 +164,43 @@ export function MainMenuScreen() {
     }
   }, [preferences.sound]);
 
+  const finishEnter = useCallback((wasFirstEntry: boolean, restorePreviousFocus: boolean) => {
+    if (transitionTimerRef.current) {
+      clearTimeout(transitionTimerRef.current);
+      transitionTimerRef.current = null;
+    }
+    pendingFocusRef.current = restorePreviousFocus || !wasFirstEntry ? "previous" : "hero";
+    setHasEntered(true);
+    setVisible(false);
+    setMenuState("active");
+    setPanel("main");
+    setEnterStage(0);
+    if (wasFirstEntry) window.dispatchEvent(new CustomEvent(introCompleteEvent));
+  }, []);
+
   const enterPortfolio = useCallback((restorePreviousFocus = false) => {
     if (transitionTimerRef.current) return;
     playTick();
+    const firstEntry = !hasEntered;
     try { window.localStorage.setItem(MENU_SEEN_KEY, "1"); } catch { /* abaikan */ }
     setMenuState("entering");
-    containerRef.current?.focus({ preventScroll: true });
     const duration = document.documentElement.dataset.motion === "off" ? 0
-      : !hasEntered && worldMotionEnabled() ? motionDurations.world : motionDurations.fast;
+      : firstEntry && worldMotionEnabled() ? motionDurations.introCinematic : motionDurations.fast;
+    setEnterDuration(duration);
+    setEnterStage(0);
+    if (firstEntry && duration >= 1000) {
+      // The cinematic is skippable; give keyboard users immediate access to Skip.
+      window.requestAnimationFrame(() => skipButtonRef.current?.focus({ preventScroll: true }));
+    } else {
+      containerRef.current?.focus({ preventScroll: true });
+    }
+    transitionTimerRef.current = setTimeout(() => finishEnter(firstEntry, restorePreviousFocus), duration);
+  }, [playTick, hasEntered, finishEnter]);
 
-    if (transitionTimerRef.current) clearTimeout(transitionTimerRef.current);
-    transitionTimerRef.current = setTimeout(() => {
-      transitionTimerRef.current = null;
-      pendingFocusRef.current = restorePreviousFocus || hasEntered ? "previous" : "hero";
-      setHasEntered(true);
-      setVisible(false);
-      setMenuState("active");
-      setPanel("main");
-    }, duration);
-  }, [playTick, hasEntered]);
+  const skipEnter = useCallback(() => {
+    if (menuState !== "entering") return;
+    finishEnter(!hasEntered, false);
+  }, [menuState, hasEntered, finishEnter]);
 
   const openPanel = useCallback((nextPanel: MenuPanel) => {
     playTick();
@@ -183,11 +214,24 @@ export function MainMenuScreen() {
   }, [playTick]);
 
   const handleEscape = useCallback(() => {
-    if (menuState === "entering") return;
+    if (menuState === "entering") {
+      skipEnter();
+      return;
+    }
     if (panel !== "main") backToMain();
     else if (hasEntered) enterPortfolio(true);
     else openPanel("exit");
-  }, [backToMain, enterPortfolio, hasEntered, openPanel, panel, menuState]);
+  }, [backToMain, enterPortfolio, hasEntered, openPanel, panel, menuState, skipEnter]);
+
+  /* Advance the staged loading lines across the first-visit cinematic. */
+  useEffect(() => {
+    if (menuState !== "entering" || hasEntered) return;
+    if (enterDuration < 1000) return;
+    const interval = window.setInterval(() => {
+      setEnterStage((stage) => Math.min(stage + 1, ENTER_STAGES.length - 1));
+    }, enterDuration / ENTER_STAGES.length);
+    return () => window.clearInterval(interval);
+  }, [menuState, hasEntered, enterDuration]);
 
   useMenuFocusManager(containerRef, active, panel, handleEscape);
 
@@ -228,8 +272,19 @@ export function MainMenuScreen() {
 
       <div className="world-loading" role="status" aria-live="polite">
         {menuState === "entering" && !hasEntered ? <>
-          <span><LocalizedText en="Generating world…" id="Menyiapkan dunia…" /></span>
-          <i aria-hidden="true" />
+          <span><LocalizedText en={ENTER_STAGES[enterStage].en} id={ENTER_STAGES[enterStage].id} /></span>
+          <i aria-hidden="true" style={{ animationDuration: `${enterDuration}ms` }} />
+          {enterDuration >= 1000 ? (
+            <button
+              ref={skipButtonRef}
+              type="button"
+              className="world-skip"
+              data-game-focusable
+              onClick={skipEnter}
+            >
+              <LocalizedText en="Skip intro" />
+            </button>
+          ) : null}
         </> : null}
       </div>
 

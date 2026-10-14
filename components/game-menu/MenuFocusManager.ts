@@ -18,7 +18,9 @@ export function useMenuFocusManager(
     const container = containerRef.current;
     if (!container) return;
 
-    const focusables = () => Array.from(container.querySelectorAll<HTMLElement>(focusableSelector));
+    const focusables = () => Array.from(container.querySelectorAll<HTMLElement>(focusableSelector))
+      /* The menu shell is inert during the world-entry cinematic; only the skip control stays usable. */
+      .filter((element) => !element.closest("[inert]"));
     const focusFrame = window.requestAnimationFrame(() => {
       const initialFocus = focusKey === "main"
         ? container.querySelector<HTMLElement>(`.main-menu-buttons ${focusableSelector}`)
