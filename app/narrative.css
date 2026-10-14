@@ -82,7 +82,10 @@ body:has(.main-menu-root) .hero-entry { animation-play-state: paused; }
 :root[data-graphics="low"] .world-loading i,
 :root[data-graphics="low"] .main-menu-root[data-state="entering"] .main-menu-shell { animation: none; }
 :root[data-graphics="low"] .main-menu-root[data-state="entering"] { animation-duration: 140ms; }
-@media (max-width: 1000px), (max-height: 800px), (pointer: coarse), (prefers-reduced-motion: reduce) {
+@media (max-width: 1000px), (max-height: 800px), (pointer: coarse) {
+  .spawn-hud { font-size: 0.6rem; gap: 7px 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
   .main-menu-root[data-state="entering"] { animation-duration: 140ms; }
   .main-menu-root[data-state="entering"] .menu-world { animation: none; }
   .main-menu-root[data-state="entering"] .main-menu-shell { animation: none; }
@@ -98,7 +101,7 @@ body:has(.main-menu-root) .hero-entry { animation-play-state: paused; }
 .main-menu-root[data-state="entering"][data-entry="first"] .world-loading i { animation-duration: var(--motion-intro); }
 :root:not([data-motion="full"]) { --motion-intro: 140ms; }
 html[data-graphics="low"] { --motion-intro: 140ms; }
-@media (max-width: 1000px), (max-height: 800px), (pointer: coarse), (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion: reduce) {
   :root { --motion-intro: 140ms; }
 }
 
