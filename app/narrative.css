@@ -21,9 +21,10 @@ body:has(.main-menu-root) .hero-entry { animation-play-state: paused; }
   pointer-events: none;
 }
 .world-loading i { width: min(240px, 70vw); height: 5px; background: #fff; transform-origin: left; animation: world-load var(--motion-world) linear both; }
-.main-menu-root[data-state="entering"] { animation: world-crossfade var(--motion-world) linear both; }
-.main-menu-root[data-state="entering"][data-entry="first"] .menu-world { animation: world-approach var(--motion-world) var(--ease-enter) both; }
-.main-menu-root[data-state="entering"][data-entry="return"] { animation-duration: var(--motion-focus); }
+/* Fade only the menu content + background on enter; .world-loading stays visible for the cinematic. */
+.main-menu-root[data-state="entering"] .main-menu-shell { animation: world-crossfade var(--motion-world) linear both; }
+.main-menu-root[data-state="entering"][data-entry="first"] .menu-world { animation: world-approach var(--motion-intro) var(--ease-enter) both; }
+.main-menu-root[data-state="entering"][data-entry="return"] .main-menu-shell { animation-duration: var(--motion-focus); }
 @keyframes world-load { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @keyframes world-approach { to { transform: scale(1.08) translateY(-8px); } }
 @keyframes world-crossfade { 0%, 80% { opacity: 1; } 100% { opacity: 0; } }
@@ -96,7 +97,6 @@ body:has(.main-menu-root) .hero-entry { animation-play-state: paused; }
 
 /* ---- First-visit world-entry cinematic (~5s, always skippable) ---- */
 :root { --motion-intro: 4800ms; }
-.main-menu-root[data-state="entering"][data-entry="first"] { animation-duration: var(--motion-intro); }
 .main-menu-root[data-state="entering"][data-entry="first"] .menu-world { animation-duration: var(--motion-intro); }
 .main-menu-root[data-state="entering"][data-entry="first"] .world-loading i { animation-duration: var(--motion-intro); }
 
