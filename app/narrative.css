@@ -177,3 +177,35 @@ body:has(.main-menu-root) .hero-entry { animation-play-state: paused; }
   .achievement-toast { transform: none; transition: opacity 120ms linear; }
 }
 :root:not([data-motion="full"]) .achievement-toast { transform: none; transition: opacity 120ms linear; }
+
+/* ---- Project transition: pixel-step wipe (Minecraft-style) ---- */
+.project-wipe {
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  pointer-events: none;
+  background-color: #0e1353;
+  background-image:
+    repeating-linear-gradient(0deg, transparent 0 28px, rgba(0, 0, 0, 0.35) 28px 32px),
+    repeating-linear-gradient(90deg, transparent 0 28px, rgba(0, 0, 0, 0.35) 28px 32px),
+    linear-gradient(135deg, #16205e 0%, #0e1353 60%, #0a0f42 100%);
+  transform: translateY(101%);
+}
+.project-wipe.wipe-in {
+  animation: project-wipe-in 380ms steps(7, end) forwards;
+}
+.project-wipe.wipe-out {
+  animation: project-wipe-out 380ms steps(7, end) forwards;
+}
+@keyframes project-wipe-in {
+  from { transform: translateY(101%); }
+  to { transform: translateY(0); }
+}
+@keyframes project-wipe-out {
+  from { transform: translateY(0); }
+  to { transform: translateY(-101%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .project-wipe { display: none; }
+}
+:root:not([data-motion="full"]) .project-wipe { display: none; }
