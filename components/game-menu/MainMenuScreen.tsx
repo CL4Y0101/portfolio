@@ -11,7 +11,6 @@ import { OptionsPanel } from "@/components/game-menu/OptionsPanel";
 import { WorldBackground } from "@/components/game-menu/WorldBackground";
 import { GlassPanel } from "@/components/game-ui/GlassPanel";
 import { motionDurations } from "@/components/motion/motion";
-import { worldMotionEnabled } from "@/components/motion/scroll-progress";
 import { RevealText } from "@/components/ui/RevealText";
 import { LanguageToggle } from "@/components/ui/LanguageToggle";
 import { LocalizedText } from "@/components/ui/LocalizedText";
@@ -184,8 +183,10 @@ export function MainMenuScreen() {
     const firstEntry = !hasEntered;
     try { window.localStorage.setItem(MENU_SEEN_KEY, "1"); } catch { /* abaikan */ }
     setMenuState("entering");
-    const duration = document.documentElement.dataset.motion === "off" ? 0
-      : firstEntry && worldMotionEnabled() ? motionDurations.introCinematic : motionDurations.fast;
+    // Sinematik intro main di semua device (termasuk HP); cuma dimatikan kalau motion off/reduced.
+    const motion = document.documentElement.dataset.motion;
+    const duration = motion === "off" ? 0
+      : firstEntry && motion === "full" ? motionDurations.introCinematic : motionDurations.fast;
     setEnterDuration(duration);
     setEnterStage(0);
     if (firstEntry && duration >= 1000) {
