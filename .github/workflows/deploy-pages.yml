@@ -42,6 +42,10 @@ jobs:
           npm run lint
           npm run typecheck
 
+      - name: Sync GitHub contributions
+        continue-on-error: true
+        run: npm run contributions:sync
+
       - name: Build static site
         run: npm run build
         env:
