@@ -39,6 +39,9 @@ const ENTER_STAGES = [
   { en: "Spawning player…", id: "Memunculkan pemain…" },
 ] as const;
 
+/* Bar loading segmented: segmen menyala per kelas, mekanisme sama dengan peta chunk. */
+const MC_BAR_SEGMENT_COUNT = 24;
+
 /* Peta chunk ala layar loading Minecraft: sel terisi dari tengah ke luar. */
 const MC_GRID_SIZE = 13;
 
@@ -285,6 +288,7 @@ export function MainMenuScreen() {
   }, [menuState, enterDuration]);
 
   const filledCells = Math.round((enterProgress / 100) * MC_CELLS.length);
+  const filledSegments = Math.round((enterProgress / 100) * MC_BAR_SEGMENT_COUNT);
 
   useMenuFocusManager(containerRef, active, panel, handleEscape);
 
@@ -332,7 +336,11 @@ export function MainMenuScreen() {
           </div>
           <span className="mc-status"><LocalizedText en={ENTER_STAGES[enterStage].en} id={ENTER_STAGES[enterStage].id} /></span>
           <span className="mc-percent" aria-hidden="true">{enterProgress}%</span>
-          <div className="mc-bar" aria-hidden="true"><span className="mc-bar-fill" style={{ width: `${enterProgress}%` }} /></div>
+          <div className="mc-bar" aria-hidden="true">
+            {Array.from({ length: MC_BAR_SEGMENT_COUNT }, (_, index) => (
+              <span key={index} className={index < filledSegments ? "mc-seg on" : "mc-seg"} />
+            ))}
+          </div>
           <span className="mc-tip"><LocalizedText en="Tip: scroll to discover every chunk of the story" id="Tips: scroll buat nemuin semua chunk ceritanya" /></span>
           {enterDuration >= 1000 ? (
             <button

@@ -43,8 +43,10 @@ body:has(.main-menu-root) .hero-entry { animation-play-state: paused; }
 .mc-grid i.tone-water { background: #3f76e4; }
 .mc-status { text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.6); }
 .mc-percent { font-size: 1.05rem; font-weight: 700; text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.6); }
-.mc-bar { width: min(340px, 78vw); height: 14px; background: #170f08; border: 2px solid rgba(255, 255, 255, 0.55); box-shadow: inset 0 0 0 2px #000; overflow: hidden; }
-.mc-bar-fill { display: block; height: 100%; background: repeating-linear-gradient(90deg, #7be382 0 14px, #5ecf6a 14px 18px); background-size: 18px 100%; transition: width 90ms linear; }
+.mc-bar { display: flex; gap: 2px; width: min(340px, 78vw); height: 14px; padding: 2px; background: #170f08; border: 2px solid rgba(255, 255, 255, 0.55); box-shadow: inset 0 0 0 2px #000; }
+.mc-seg { flex: 1 1 0; background: transparent; }
+.mc-seg.on { background: #6fce62; }
+.mc-seg.on:nth-child(even) { background: #7be382; }
 .mc-tip { font-size: 0.72rem; font-weight: 500; color: #e8dcc8; opacity: 0.85; text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.6); }
 @keyframes mc-screen-in { from { opacity: 0; } }
 @keyframes mc-cell-pop { from { transform: scale(0.4); } }
