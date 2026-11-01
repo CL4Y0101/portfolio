@@ -175,10 +175,12 @@ export function GlassFolder({
               id={`${files.length - lockedCount} berkas${lockedCount ? ` + ${lockedCount} pending` : ""}`}
             />
           </span>
-          <span className={styles.label}><LocalizedText en={label.en} id={label.id} /></span>
-          {meta ? <span className={styles.meta}><LocalizedText en={meta.en} id={meta.id} /></span> : null}
         </div>
       </div>
+<div className={styles.caption}>
+    <p className={styles.captionLabel}><LocalizedText en={label.en} id={label.id} /></p>
+  {meta ? <p className={styles.captionMeta}><LocalizedText en={meta.en} id={meta.id} /></p> : null}
+</div>
 
       <Dialog open={viewer !== null} onClose={() => setViewer(null)} labelledBy={`${uid}-viewer-title`}>
         {viewerFile ? (
