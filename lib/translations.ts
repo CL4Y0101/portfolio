@@ -253,6 +253,10 @@ const translations: Record<string, string> = {
   "Select": "Pilih",
   "Confirm": "Konfirmasi",
   "Open main menu": "Buka menu utama",
+  "Grand Finalist, Top 9": "Grand Finalist, 9 Besar",
+  "AquaSeq eDNA shrimp-disease early warning, with team Disubmit Kok Tir Aman Ajah.": "Sistem peringatan dini penyakit udang berbasis eDNA AquaSeq, bersama tim Disubmit Kok Tir Aman Ajah.",
+  "Achievement archive.": "Arsip pencapaian.",
+  "Certificates and photos, filed per event. Open a folder to browse its files.": "Sertifikat dan foto, diarsipkan per event. Buka foldernya untuk melihat berkas di dalamnya.",
 };
 
 export function translate(en: string): string {

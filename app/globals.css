@@ -1073,6 +1073,27 @@ h3 {
   color: #f4faf8 !important;
 }
 
+.archive-block {
+  margin-top: clamp(44px, 6vw, 76px);
+}
+
+.archive-title {
+  margin-bottom: 8px;
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+}
+
+.archive-description {
+  margin-bottom: 30px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.archive-folders {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 34px;
+}
+
 .leadership-card {
   display: grid;
   grid-template-columns: 48px minmax(220px, 0.55fr) minmax(0, 1fr);

@@ -1,10 +1,11 @@
-import { Award, GraduationCap, Trophy, UsersRound } from "lucide-react";
-import { achievements, leadership } from "@/data/achievements";
+import { Award, GraduationCap, Medal, Trophy, UsersRound } from "lucide-react";
+import { achievementArchives, achievements, leadership } from "@/data/achievements";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { LocalizedText } from "@/components/ui/LocalizedText";
+import { GlassFolder } from "@/components/ui/glass-folder-cards";
 import { Milestone } from "@/components/motion/Milestone";
 
-const achievementIcons = [Trophy, Award, GraduationCap, GraduationCap];
+const achievementIcons = [Trophy, Award, GraduationCap, GraduationCap, Medal];
 
 export function Achievements() {
   return (
@@ -30,6 +31,27 @@ export function Achievements() {
               </Milestone>
             );
           })}
+        </div>
+
+        <div className="archive-block" data-scroll-reveal>
+          <h3 className="archive-title"><LocalizedText en="Achievement archive." /></h3>
+          <p className="archive-description">
+            <LocalizedText en="Certificates and photos, filed per event. Open a folder to browse its files." />
+          </p>
+          <div className="archive-folders">
+            {achievementArchives.map((archive, index) => (
+              <GlassFolder
+                key={archive.label.en}
+                label={archive.label}
+                meta={archive.meta}
+                status={archive.status}
+                tone={archive.tone}
+                cover={archive.cover}
+                files={archive.files}
+                appearDelay={index * 150}
+              />
+            ))}
+          </div>
         </div>
 
         <article className="leadership-card" data-scroll-reveal>

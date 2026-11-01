@@ -6,10 +6,12 @@ import { FeaturedProjects } from "@/components/sections/FeaturedProjects";
 import { Hero } from "@/components/sections/Hero";
 import { OpenSource } from "@/components/sections/OpenSource";
 import { Skills } from "@/components/sections/Skills";
+import { MinecraftRidges } from "@/components/ui/minecraft-ridges";
 
 export default function HomePage() {
   return (
     <main id="main-content" className="portfolio-story">
+      <MinecraftRidges />
       <Hero />
       <FeaturedProjects />
       <Experience />
