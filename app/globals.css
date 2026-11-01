@@ -4733,6 +4733,7 @@ body.game-menu-open {
   width: 100%;
   aspect-ratio: 1 / 1.08;
   object-fit: cover;
+  object-position: 50% 68%;
   filter: saturate(0.82) contrast(1.05);
 }
 

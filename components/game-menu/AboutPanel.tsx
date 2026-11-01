@@ -20,7 +20,7 @@ export function AboutPanel({ onBack, onEnter }: { onBack: () => void; onEnter: (
 
       <div className="menu-about-grid">
         <div className="menu-profile-image">
-          <Image src={profile.profileImage} alt={`Voxel-style portrait of ${profile.name}`} width={1280} height={1280} priority sizes="(max-width: 700px) 42vw, 260px" />
+          <Image src={profile.profileImage} alt={`Minecraft-style pixel portrait of ${profile.name}`} width={560} height={742} priority sizes="(max-width: 700px) 42vw, 260px" />
         </div>
         <div className="menu-profile-copy">
           <p className="menu-profile-role"><LocalizedText en="Software Developer · Informatics Engineering Student" /></p>
