@@ -10,6 +10,7 @@ import { useMenuFocusManager } from "@/components/game-menu/MenuFocusManager";
 import { OptionsPanel } from "@/components/game-menu/OptionsPanel";
 import { WorldBackground } from "@/components/game-menu/WorldBackground";
 import { GlassPanel } from "@/components/game-ui/GlassPanel";
+import { playIntroSound } from "@/lib/achievement-sound";
 import { motionDurations } from "@/components/motion/motion";
 import { RevealText } from "@/components/ui/RevealText";
 import { LanguageToggle } from "@/components/ui/LanguageToggle";
@@ -211,6 +212,9 @@ export function MainMenuScreen() {
   const enterPortfolio = useCallback((restorePreviousFocus = false) => {
     if (transitionTimerRef.current) return;
     playTick();
+    // Jingle level-up pas intro mulai; dipanggil sinkron di dalam handler klik
+    // Start supaya browser mobile mengizinkan playback (kebijakan autoplay).
+    playIntroSound();
     const firstEntry = !hasEntered;
     try { window.localStorage.setItem(MENU_SEEN_KEY, "1"); } catch { /* abaikan */ }
     setMenuState("entering");

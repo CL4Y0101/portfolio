@@ -15,6 +15,7 @@
 export const SOUND_URL = "/sounds/achievement.mp3";
 
 let fileMissing = false;
+let lastFileStartedAt = 0;
 
 function playFile(url: string): Promise<void> {
   return new Promise((resolve, reject) => {
@@ -22,7 +23,23 @@ function playFile(url: string): Promise<void> {
     audio.addEventListener("ended", () => resolve(), { once: true });
     audio.addEventListener("error", () => reject(new Error(`cannot load ${url}`)), { once: true });
     const started = audio.play();
+    lastFileStartedAt = Date.now();
     if (started) started.catch(reject);
+  });
+}
+
+/**
+ * Plays the custom clip as the world-entry intro sound. Must be called from
+ * inside a user-gesture handler (the Start button click) so mobile browsers
+ * allow playback. No synth fallback: the intro stays silent if the file is
+ * missing. Ungated by the sound preference on purpose: the site owner asked
+ * for this jingle on every world entry.
+ */
+export function playIntroSound(): void {
+  if (fileMissing) return;
+  if (Date.now() - lastFileStartedAt < 5000) return;
+  playFile(SOUND_URL).catch(() => {
+    fileMissing = true;
   });
 }
 
@@ -54,6 +71,8 @@ function playSynthChime(): void {
 
 /** Plays the custom clip when present, otherwise the synthesized chime. */
 export async function playAchievementSound(): Promise<void> {
+  // The same clip just started (intro entry or a previous toast): do not overlap it.
+  if (Date.now() - lastFileStartedAt < 5000) return;
   try {
     if (!fileMissing) {
       await playFile(SOUND_URL);
