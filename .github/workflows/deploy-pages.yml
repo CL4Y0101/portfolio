@@ -5,10 +5,12 @@ on:
     branches: [main]
   workflow_dispatch:
   schedule:
-    - cron: "0 3 * * *"
+    # Weekly rebuild (Mon 03:00 UTC / 10:00 WIB) so the contribution
+    # skyline re-syncs even when nothing was pushed that week.
+    - cron: "0 3 * * 1"
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -37,20 +39,38 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Refresh the contribution snapshot before building so every deploy
+      # (push, manual, or the weekly scheduled run) ships current data.
+      # A failed scrape never blocks a deploy: the committed JSON is used.
+      - name: Sync contribution data
+        run: npm run contributions:sync
+        continue-on-error: true
+
       - name: Validate
         run: |
           npm run lint
           npm run typecheck
-
-      - name: Sync GitHub contributions
-        continue-on-error: true
-        run: npm run contributions:sync
 
       - name: Build static site
         run: npm run build
         env:
           NEXT_TELEMETRY_DISABLED: 1
           NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
+
+      # On scheduled/manual runs, commit the refreshed snapshot back so the
+      # copy in the repo stays current too, not just the deployed site.
+      - name: Commit refreshed contribution data
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        run: |
+          if git diff --quiet -- data/contributions.json; then
+            echo "Contribution data already up to date"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/contributions.json
+          git commit -m "chore: sync GitHub contribution data"
+          git push
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
