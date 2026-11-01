@@ -5,8 +5,8 @@ export const motionDurations = {
   reveal: 520,
   page: 680,
   world: 1050,
-  /** First-visit world-generation cinematic; always paired with a skip control. */
-  introCinematic: 4800,
+  /** World-generation loading screen (Minecraft-style); always paired with a skip control. Compact screens use 1200ms. */
+  introCinematic: 1900,
 } as const;
 
 export const motionStagger = {

@@ -35,8 +35,33 @@ export const introCompleteEvent = "portfolio-intro-complete";
 const ENTER_STAGES = [
   { en: "Generating world…", id: "Menyiapkan dunia…" },
   { en: "Loading chunks…", id: "Memuat chunk…" },
+  { en: "Planting trees…", id: "Menanam pohon…" },
   { en: "Spawning player…", id: "Memunculkan pemain…" },
 ] as const;
+
+/* Peta chunk ala layar loading Minecraft: sel terisi dari tengah ke luar. */
+const MC_GRID_SIZE = 13;
+
+type McCell = { tone: string; rank: number };
+
+const MC_CELLS: McCell[] = (() => {
+  const center = (MC_GRID_SIZE - 1) / 2;
+  const scored: { tone: string; score: number }[] = [];
+  for (let y = 0; y < MC_GRID_SIZE; y += 1) {
+    for (let x = 0; x < MC_GRID_SIZE; x += 1) {
+      const hash = ((x * 73856093) ^ (y * 19349663)) >>> 0;
+      const ring = Math.max(Math.abs(x - center), Math.abs(y - center));
+      const pick = hash % 100;
+      const tone = pick < 52 ? "grass-a" : pick < 72 ? "grass-b" : pick < 82 ? "dirt" : pick < 89 ? "sand" : pick < 95 ? "stone" : "water";
+      scored.push({ tone, score: ring * 1000 + (hash % 997) });
+    }
+  }
+  const ranks = new Array<number>(scored.length);
+  [...scored].sort((a, b) => a.score - b.score).forEach((cell, index) => {
+    ranks[scored.indexOf(cell)] = index;
+  });
+  return scored.map((cell, index) => ({ tone: cell.tone, rank: ranks[index] }));
+})();
 
 const MENU_SEEN_KEY = "portfolio-menu-seen";
 
@@ -70,6 +95,7 @@ export function MainMenuScreen() {
   const [panel, setPanel] = useState<MenuPanel>("main");
   const [menuState, setMenuState] = useState<MenuState>("active");
   const [enterStage, setEnterStage] = useState(0);
+  const [enterProgress, setEnterProgress] = useState(0);
   const [selectedAction, setSelectedAction] = useState<MenuAction>("start");
   const [preferences, setPreferences] = useState<GamePreferences>(defaultGamePreferences);
   const [paused, setPaused] = useState(false);
@@ -175,6 +201,7 @@ export function MainMenuScreen() {
     setMenuState("active");
     setPanel("main");
     setEnterStage(0);
+    setEnterProgress(0);
     if (wasFirstEntry) window.dispatchEvent(new CustomEvent(introCompleteEvent));
   }, []);
 
@@ -184,12 +211,15 @@ export function MainMenuScreen() {
     const firstEntry = !hasEntered;
     try { window.localStorage.setItem(MENU_SEEN_KEY, "1"); } catch { /* abaikan */ }
     setMenuState("entering");
-    // Sinematik intro main penuh setiap tap Start di semua device, kecuali motion dimatikan total.
+    // Layar loading ala Minecraft main setiap tap Start, kecuali motion dimatikan total.
+    // Layar kecil/coarse dapat versi pendek 1,2 detik; desktop 1,9 detik.
     // (prefers-reduced-motion tetap menonaktifkan zoom/efek gerak via CSS.)
     const motion = document.documentElement.dataset.motion;
-    const duration = motion === "off" ? 0 : motionDurations.introCinematic;
+    const compactScreen = window.matchMedia("(pointer: coarse), (max-width: 1000px)").matches;
+    const duration = motion === "off" ? 0 : compactScreen ? 1200 : motionDurations.introCinematic;
     setEnterDuration(duration);
     setEnterStage(0);
+    setEnterProgress(0);
     if (duration >= 1000) {
       // The cinematic is skippable; give keyboard users immediate access to Skip.
       window.requestAnimationFrame(() => skipButtonRef.current?.focus({ preventScroll: true }));
@@ -235,6 +265,27 @@ export function MainMenuScreen() {
     return () => window.clearInterval(interval);
   }, [menuState, hasEntered, enterDuration]);
 
+  /* Progres persen + peta chunk: easing lambat di awal, cepat di tengah. */
+  useEffect(() => {
+    if (menuState !== "entering") return;
+    if (enterDuration <= 0) {
+      setEnterProgress(100);
+      return;
+    }
+    let frame = 0;
+    const start = performance.now();
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / enterDuration);
+      const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      setEnterProgress(Math.round(eased * 100));
+      if (t < 1) frame = window.requestAnimationFrame(tick);
+    };
+    frame = window.requestAnimationFrame(tick);
+    return () => window.cancelAnimationFrame(frame);
+  }, [menuState, enterDuration]);
+
+  const filledCells = Math.round((enterProgress / 100) * MC_CELLS.length);
+
   useMenuFocusManager(containerRef, active, panel, handleEscape);
 
   const updatePreferences = useCallback((nextPreferences: GamePreferences) => {
@@ -274,8 +325,15 @@ export function MainMenuScreen() {
 
       <div className="world-loading" role="status" aria-live="polite">
         {menuState === "entering" ? <>
-          <span><LocalizedText en={ENTER_STAGES[enterStage].en} id={ENTER_STAGES[enterStage].id} /></span>
-          <i aria-hidden="true" style={{ animationDuration: `${enterDuration}ms` }} />
+          <div className="mc-grid" aria-hidden="true">
+            {MC_CELLS.map((cell, index) => (
+              <i key={index} className={cell.rank < filledCells ? `on tone-${cell.tone}` : undefined} />
+            ))}
+          </div>
+          <span className="mc-status"><LocalizedText en={ENTER_STAGES[enterStage].en} id={ENTER_STAGES[enterStage].id} /></span>
+          <span className="mc-percent" aria-hidden="true">{enterProgress}%</span>
+          <div className="mc-bar" aria-hidden="true"><i style={{ width: `${enterProgress}%` }} /></div>
+          <span className="mc-tip"><LocalizedText en="Tip: scroll to discover every chunk of the story" id="Tips: scroll buat nemuin semua chunk ceritanya" /></span>
           {enterDuration >= 1000 ? (
             <button
               ref={skipButtonRef}
