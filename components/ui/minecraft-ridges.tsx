@@ -76,10 +76,10 @@ const PALETTES: Record<"dark" | "light", Palette> = {
     bird: "#0d0b09",
     stars: true,
     layers: [
-      { top: "#7e8ba3", body: "#46536e", cap: "#dfe7f5" },
-      { top: "#4c7a3d", body: "#43301f" },
-      { top: "#3f6d33", body: "#332619" },
-      { top: "#356129", body: "#271c11" },
+      { top: "#7e8ba3", body: "#55648a", cap: "#dfe7f5" },
+      { top: "#578c46", body: "#43301f" },
+      { top: "#4a7d3a", body: "#332619" },
+      { top: "#3f702f", body: "#271c11" },
     ],
   },
   light: {
@@ -176,8 +176,8 @@ export function MinecraftRidges() {
 
       // square sun just above the far ridge, sinking fastest on scroll
       const sunS = BLK * 4;
-      const sunX = Math.floor(W * 0.72);
-      const sunY = Math.floor(H - band * 1.12 + scrollY * 0.12);
+      const sunX = Math.floor(W * 0.5 - (BLK * 4) / 2);
+      const sunY = Math.floor(H - band * 0.94 - BLK * 4 + scrollY * 0.12);
       ctx.fillStyle = pal.sunGlow;
       ctx.globalAlpha = 0.22;
       ctx.fillRect(sunX - BLK, sunY - BLK, sunS + BLK * 2, sunS + BLK * 2);
@@ -213,11 +213,11 @@ export function MinecraftRidges() {
           ctx.fillRect(c * BLK, topY, BLK, H - topY);
           ctx.fillStyle = colors.top;
           ctx.fillRect(c * BLK, topY, BLK, BLK);
-          if (colors.cap && fbm(c * 0.3, L.seed + 4) > 0.62) {
+          if (colors.cap && fbm(c * 0.3, L.seed + 4) > 0.55) {
             ctx.fillStyle = colors.cap;
             ctx.fillRect(c * BLK, topY, BLK, BLK);
           }
-          ctx.fillStyle = "rgba(0,0,0,0.16)";
+          ctx.fillStyle = "rgba(0,0,0,0.12)";
           for (let y = topY + BLK; y < H; y += BLK) {
             if (hashi(c * 31 + y, L.seed) > 0.72) ctx.fillRect(c * BLK, y, BLK, BLK);
           }
