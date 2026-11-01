@@ -115,7 +115,7 @@ export function GlassFolder({
             const style = {
               "--slot": slot,
               "--tilt": `${slot * 2}deg`,
-              zIndex: i + 1,
+              zIndex: file.lockedNote ? 0 : i + 1,
             } as React.CSSProperties;
             if (file.lockedNote) {
               return (
