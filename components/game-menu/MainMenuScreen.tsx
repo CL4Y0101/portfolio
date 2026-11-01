@@ -332,7 +332,7 @@ export function MainMenuScreen() {
           </div>
           <span className="mc-status"><LocalizedText en={ENTER_STAGES[enterStage].en} id={ENTER_STAGES[enterStage].id} /></span>
           <span className="mc-percent" aria-hidden="true">{enterProgress}%</span>
-          <div className="mc-bar" aria-hidden="true"><i style={{ width: `${enterProgress}%` }} /></div>
+          <div className="mc-bar" aria-hidden="true"><span className="mc-bar-fill" style={{ width: `${enterProgress}%` }} /></div>
           <span className="mc-tip"><LocalizedText en="Tip: scroll to discover every chunk of the story" id="Tips: scroll buat nemuin semua chunk ceritanya" /></span>
           {enterDuration >= 1000 ? (
             <button
