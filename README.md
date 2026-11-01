@@ -51,9 +51,12 @@ The Open Source section renders a 2D/3D contribution skyline
 from `data/contributions.json`.
 
 The JSON is refreshed from the public GitHub contribution calendar by
-`scripts/sync-contributions.mjs` (no token needed). A pre-commit hook keeps it
-fresh on every commit — the data rides along with the commit, so each push
-deploys an up-to-date skyline:
+`scripts/sync-contributions.mjs` (no token needed). The deploy workflow syncs
+it before every build and commits the refreshed snapshot back on scheduled
+runs; it also rebuilds weekly (Monday 03:00 UTC) so the skyline stays current
+even without a push. A pre-commit hook can also keep it fresh on local
+commits — the data rides along with the commit, so each push deploys an
+up-to-date skyline:
 
 ```bash
 npm run setup:hooks          # once per clone: use .githooks/
