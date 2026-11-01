@@ -20,7 +20,36 @@ body:has(.main-menu-root) .hero-entry { animation-play-state: paused; }
   text-shadow: 0 2px 4px #000;
   pointer-events: none;
 }
-.world-loading i { width: min(240px, 70vw); height: 5px; background: #fff; transform-origin: left; animation: world-load var(--motion-world) linear both; }
+/* Layar loading ala Minecraft: latar dirt, peta chunk terisi dari tengah. */
+.main-menu-root[data-state="entering"] .world-loading {
+  inset: 0;
+  place-content: center;
+  gap: 13px;
+  padding: 24px;
+  background-color: #2c1a0e;
+  background-image: repeating-conic-gradient(#3a2415 0% 25%, #2c1a0e 0% 50%);
+  background-size: 32px 32px;
+  box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.55);
+  animation: mc-screen-in 160ms ease both;
+}
+.mc-grid { display: grid; grid-template-columns: repeat(13, 13px); gap: 2px; padding: 6px; background: rgba(0, 0, 0, 0.35); box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6); }
+.mc-grid i { width: 13px; height: 13px; background: #170f08; }
+.mc-grid i.on { animation: mc-cell-pop 180ms ease both; }
+.mc-grid i.tone-grass-a { background: #5da24a; }
+.mc-grid i.tone-grass-b { background: #4c8a3e; }
+.mc-grid i.tone-dirt { background: #7a5230; }
+.mc-grid i.tone-sand { background: #d6c27a; }
+.mc-grid i.tone-stone { background: #8a8a8a; }
+.mc-grid i.tone-water { background: #3f76e4; }
+.mc-status { text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.6); }
+.mc-percent { font-size: 1.05rem; font-weight: 700; text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.6); }
+.mc-bar { display: flex; gap: 2px; width: min(340px, 78vw); height: 14px; padding: 2px; background: #170f08; border: 2px solid rgba(255, 255, 255, 0.55); box-shadow: inset 0 0 0 2px #000; }
+.mc-seg { flex: 1 1 0; background: transparent; }
+.mc-seg.on { background: #6fce62; }
+.mc-seg.on:nth-child(even) { background: #7be382; }
+.mc-tip { font-size: 0.72rem; font-weight: 500; color: #e8dcc8; opacity: 0.85; text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.6); }
+@keyframes mc-screen-in { from { opacity: 0; } }
+@keyframes mc-cell-pop { from { transform: scale(0.4); } }
 /* Fade only the menu content + background on enter; .world-loading stays visible for the cinematic. */
 .main-menu-root[data-state="entering"] .main-menu-shell { animation: world-crossfade var(--motion-world) linear both; }
 .main-menu-root[data-state="entering"][data-entry="first"] .menu-world { animation: world-approach var(--motion-intro) var(--ease-enter) both; }
@@ -79,8 +108,8 @@ body:has(.main-menu-root) .hero-entry { animation-play-state: paused; }
 :root:not([data-motion="full"]) .main-menu-root[data-state="entering"] .menu-world,
 :root[data-graphics="low"] .main-menu-root[data-state="entering"] .menu-world { animation: none; }
 :root:not([data-motion="full"]) .main-menu-root[data-state="entering"] .main-menu-shell { animation: none; }
-:root:not([data-motion="full"]) .world-loading i { animation: none; }
-:root[data-graphics="low"] .world-loading i,
+:root:not([data-motion="full"]) .mc-grid i { animation: none; }
+:root[data-graphics="low"] .mc-grid i,
 :root[data-graphics="low"] .main-menu-root[data-state="entering"] .main-menu-shell { animation: none; }
 :root[data-graphics="low"] .main-menu-root[data-state="entering"] { animation-duration: 140ms; }
 @media (max-width: 1000px), (max-height: 800px), (pointer: coarse) {
@@ -90,15 +119,14 @@ body:has(.main-menu-root) .hero-entry { animation-play-state: paused; }
   .main-menu-root[data-state="entering"] { animation-duration: 140ms; }
   .main-menu-root[data-state="entering"] .menu-world { animation: none; }
   .main-menu-root[data-state="entering"] .main-menu-shell { animation: none; }
-  .world-loading i { animation: none; }
+  .mc-grid i { animation: none; }
   .end-portal-frame { animation: none !important; }
   .spawn-hud { font-size: 0.6rem; gap: 7px 14px; }
 }
 
-/* ---- First-visit world-entry cinematic (~5s, always skippable) ---- */
-:root { --motion-intro: 4800ms; }
+/* ---- World-entry loading screen (Minecraft-style, always skippable) ---- */
+:root { --motion-intro: 1900ms; }
 .main-menu-root[data-state="entering"][data-entry="first"] .menu-world { animation-duration: var(--motion-intro); }
-.main-menu-root[data-state="entering"][data-entry="first"] .world-loading i { animation-duration: var(--motion-intro); }
 
 /* Skip control shown during the world-entry cinematic. */
 .world-loading .world-skip {
