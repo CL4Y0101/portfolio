@@ -174,10 +174,10 @@ export function MinecraftRidges() {
         }
       }
 
-      // square sun just above the far ridge, sinking fastest on scroll
-      const sunS = BLK * 4;
-      const sunX = Math.floor(W * 0.5 - (BLK * 4) / 2);
-      const sunY = Math.floor(H - band * 0.94 - BLK * 4 + scrollY * 0.12);
+      // square sun sitting on the far ridge line, sinking fastest on scroll
+      const sunS = BLK * 5;
+      const sunX = Math.floor(W * 0.14);
+      const sunY = Math.floor(H - band * 0.68 - (BLK * 5) / 2 + scrollY * 0.12);
       ctx.fillStyle = pal.sunGlow;
       ctx.globalAlpha = 0.22;
       ctx.fillRect(sunX - BLK, sunY - BLK, sunS + BLK * 2, sunS + BLK * 2);
