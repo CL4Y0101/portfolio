@@ -106,6 +106,7 @@ export function GlassFolder({
         style={{ transitionDelay: `${appearDelay}ms` }}
       >
         <div className={styles.back} aria-hidden="true">
+          {/* eslint-disable-next-line @next/next/no-img-element -- static export with images.unoptimized; next/image adds no benefit */}
           {cover ? <img src={cover} alt="" loading="lazy" /> : null}
         </div>
 
@@ -144,6 +145,7 @@ export function GlassFolder({
                 onClick={() => setViewer(i)}
                 aria-label={file.name.en}
               >
+                {/* eslint-disable-next-line @next/next/no-img-element -- static export with images.unoptimized; next/image adds no benefit */}
                 {file.image ? <img src={file.image} alt="" loading="lazy" /> : null}
                 <span className={styles.fileName}><LocalizedText en={file.name.en} id={file.name.id} /></span>
                 {file.meta ? <span className={styles.fileMeta}><LocalizedText en={file.meta.en} id={file.meta.id} /></span> : null}
@@ -194,6 +196,7 @@ export function GlassFolder({
               </p>
             ) : viewerFile.image ? (
               <>
+                {/* eslint-disable-next-line @next/next/no-img-element -- static export with images.unoptimized; next/image adds no benefit */}
                 <img className={styles.viewerImg} src={viewerFile.image} alt={viewerFile.name.en} />
                 {viewerFile.meta ? (
                   <p className={styles.viewerNote}>

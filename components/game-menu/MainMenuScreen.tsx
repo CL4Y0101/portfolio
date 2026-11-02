@@ -226,7 +226,7 @@ export function MainMenuScreen() {
     const duration = motion === "off" ? 0 : compactScreen ? 1200 : motionDurations.introCinematic;
     setEnterDuration(duration);
     setEnterStage(0);
-    setEnterProgress(0);
+    setEnterProgress(duration <= 0 ? 100 : 0);
     if (duration >= 1000) {
       // The cinematic is skippable; give keyboard users immediate access to Skip.
       window.requestAnimationFrame(() => skipButtonRef.current?.focus({ preventScroll: true }));
@@ -274,11 +274,7 @@ export function MainMenuScreen() {
 
   /* Progres persen + peta chunk: easing lambat di awal, cepat di tengah. */
   useEffect(() => {
-    if (menuState !== "entering") return;
-    if (enterDuration <= 0) {
-      setEnterProgress(100);
-      return;
-    }
+    if (menuState !== "entering" || enterDuration <= 0) return;
     let frame = 0;
     const start = performance.now();
     const tick = (now: number) => {

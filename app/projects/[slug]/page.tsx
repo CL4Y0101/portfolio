@@ -40,7 +40,11 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
 
   if (!project) return {};
 
-  const image = project.screenshots[0]?.src.replace(/^\/portfolio/, "") ?? "/images/projects/kandu-production.png";
+  // metadataBase (SITE_URL) sudah menunjuk ke domain produksi, jadi URL gambar
+  // OG tidak boleh membawa basePath; lepaskan prefiks build yang dipasang withBasePath.
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+  const rawImage = project.screenshots[0]?.src ?? "/images/projects/kandu-production.png";
+  const image = basePath && rawImage.startsWith(basePath) ? rawImage.slice(basePath.length) : rawImage;
 
   return {
     title: project.title,
