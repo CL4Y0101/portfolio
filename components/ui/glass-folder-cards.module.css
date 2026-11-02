@@ -246,7 +246,19 @@
   align-items: center;
   text-align: center;
   max-width: min(92vw, 760px);
-  margin: 0 auto;
+  margin: min(6vh, 56px) auto;
+  padding: 20px 18px 22px;
+  background: #fffdf6;
+  color: #2c2317;
+  border: 2px solid #57492f;
+  border-radius: 18px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+
+:global(:root[data-theme="dark"]) .viewer {
+  background: #171310;
+  color: #f2ead9;
+  border-color: #8a7a52;
 }
 
 .viewerTitle {
@@ -277,12 +289,37 @@
 .viewerClose {
   font: inherit;
   font-size: 13px;
-  padding: 8px 14px;
+  font-weight: 600;
+  padding: 9px 16px;
   cursor: pointer;
-  background: transparent;
-  border: 2px solid currentColor;
-  border-radius: 6px;
-  color: inherit;
+  background: #2c2317;
+  border: 2px solid #2c2317;
+  border-radius: 8px;
+  color: #f5efe2;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.viewerNav button:hover,
+.viewerClose:hover {
+  background: #57492f;
+}
+
+.viewerNav button:active,
+.viewerClose:active {
+  transform: translateY(1px);
+}
+
+:global(:root[data-theme="dark"]) .viewerNav button,
+:global(:root[data-theme="dark"]) .viewerClose {
+  background: #f2ead9;
+  border-color: #f2ead9;
+  color: #241c12;
+}
+
+:global(:root[data-theme="dark"]) .viewerNav button:hover,
+:global(:root[data-theme="dark"]) .viewerClose:hover {
+  background: #ffffff;
 }
 
 @media (max-width: 400px) {
