@@ -123,11 +123,8 @@ export const achievementArchives: AchievementArchive[] = [
       },
       {
         name: { en: "GenoHack certificate", id: "Sertifikat GenoHack" },
-        meta: { en: "Not yet issued", id: "Belum terbit" },
-        lockedNote: {
-          en: "The GenoHack certificate has not been issued by the organizers yet. This file stays locked until the official certificate is out.",
-          id: "Sertifikat GenoHack belum terbit dari panitia. File ini dikunci sampai sertifikat resminya keluar.",
-        },
+        meta: { en: "Hackathon Deeptech Genomik 2026", id: "Hackathon Deeptech Genomik 2026" },
+        image: "/images/achievements/genohack-cert.png",
       },
     ],
   },
