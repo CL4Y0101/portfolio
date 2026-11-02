@@ -79,13 +79,13 @@ export function CommandPalette({ open, onOpen, onClose }: CommandPaletteProps) {
 
   const commands = useMemo<Command[]>(() => {
     const base: Command[] = [
-    { id: "home", label: "Go to Home", group: "Navigate", keywords: "start intro", icon: Home, run: () => navigate("/#home") },
-    { id: "work", label: "View Projects", group: "Navigate", keywords: "work portfolio", icon: FolderKanban, run: () => navigate("/#work") },
-    { id: "experience", label: "View Experience", group: "Navigate", keywords: "career timeline", icon: BriefcaseBusiness, run: () => navigate("/#experience") },
-    { id: "skills", label: "View Skills", group: "Navigate", keywords: "capabilities technology", icon: Code2, run: () => navigate("/#skills") },
-    { id: "education", label: "View Education", group: "Navigate", keywords: "study school", icon: GraduationCap, run: () => navigate("/#education") },
-    { id: "about", label: "View About", group: "Navigate", keywords: "profile bio", icon: UserRound, run: () => navigate("/#about") },
-    { id: "contact", label: "View Contact", group: "Navigate", keywords: "email collaborate", icon: Mail, run: () => navigate("/#contact") },
+    { id: "home", label: "Go to Home", group: "Navigate", keywords: "start intro", icon: Home, run: () => navigate("/portfolio#home") },
+    { id: "work", label: "View Projects", group: "Navigate", keywords: "work portfolio", icon: FolderKanban, run: () => navigate("/portfolio#work") },
+    { id: "experience", label: "View Experience", group: "Navigate", keywords: "career timeline", icon: BriefcaseBusiness, run: () => navigate("/portfolio#experience") },
+    { id: "skills", label: "View Skills", group: "Navigate", keywords: "capabilities technology", icon: Code2, run: () => navigate("/portfolio#skills") },
+    { id: "education", label: "View Education", group: "Navigate", keywords: "study school", icon: GraduationCap, run: () => navigate("/portfolio#education") },
+    { id: "about", label: "View About", group: "Navigate", keywords: "profile bio", icon: UserRound, run: () => navigate("/portfolio#about") },
+    { id: "contact", label: "View Contact", group: "Navigate", keywords: "email collaborate", icon: Mail, run: () => navigate("/portfolio#contact") },
     ...projects.map<Command>((project) => ({
       id: `project-${project.slug}`,
       label: `Open ${project.title}`,

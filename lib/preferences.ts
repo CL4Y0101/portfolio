@@ -14,6 +14,21 @@ export const gamePreferencesKey = "portfolio-game-preferences";
 export const preferencesChangeEvent = "portfolio-preferences-change";
 export const openMainMenuEvent = "portfolio-open-main-menu";
 
+/** The portfolio landing lives on its own route; the root route is the main menu page. */
+export const portfolioPath = "/portfolio";
+/** Session flag: the visitor explicitly asked for the menu (compass, world actions), so the menu page must not auto-skip to the portfolio. */
+export const mainMenuOpenRequestKey = "portfolio-open-main-menu-request";
+/** Session flag: after a first entry, the portfolio page should move focus to the hero title. */
+export const heroFocusRequestKey = "portfolio-focus-hero";
+
+export function requestMainMenuOpen() {
+  try {
+    window.sessionStorage.setItem(mainMenuOpenRequestKey, "1");
+  } catch {
+    // Storage unavailable: the menu page still opens, it just may auto-skip for returning visitors.
+  }
+}
+
 export const defaultGamePreferences: GamePreferences = {
   theme: "system",
   motion: "full",

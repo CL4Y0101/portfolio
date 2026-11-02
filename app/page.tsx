@@ -1,25 +1,12 @@
-import { About } from "@/components/sections/About";
-import { Achievements } from "@/components/sections/Achievements";
-import { Contact } from "@/components/sections/Contact";
-import { Experience } from "@/components/sections/Experience";
-import { FeaturedProjects } from "@/components/sections/FeaturedProjects";
-import { Hero } from "@/components/sections/Hero";
-import { OpenSource } from "@/components/sections/OpenSource";
-import { Skills } from "@/components/sections/Skills";
-import { MinecraftRidges } from "@/components/ui/minecraft-ridges";
+import { MainMenuScreen } from "@/components/game-menu/MainMenuScreen";
 
-export default function HomePage() {
-  return (
-    <main id="main-content" className="portfolio-story">
-      <MinecraftRidges />
-      <Hero />
-      <FeaturedProjects />
-      <Experience />
-      <Skills />
-      <Achievements />
-      <About />
-      <OpenSource />
-      <Contact />
-    </main>
-  );
+/**
+ * Root route is the main menu page: the Minecraft-style world menu stands
+ * on its own page, and Start navigates to the portfolio landing at
+ * /portfolio. The menu root renders fixed full-screen, so it is returned
+ * directly without a wrapping landmark (its own inert logic manages the
+ * rest of the page while it is open).
+ */
+export default function MenuPage() {
+  return <MainMenuScreen />;
 }

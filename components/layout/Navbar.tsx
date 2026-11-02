@@ -14,15 +14,15 @@ import { LocalizedText } from "@/components/ui/LocalizedText";
 import { useLanguage } from "@/components/ui/useLanguage";
 import { translate } from "@/lib/translations";
 import { CommandPalette } from "@/components/navigation/CommandPalette";
-import { openMainMenuEvent } from "@/lib/preferences";
+import { openMainMenuEvent, requestMainMenuOpen } from "@/lib/preferences";
 
 const navigation = [
-  { label: "Home", href: "/#home" },
-  { label: "Work", href: "/#work" },
-  { label: "Experience", href: "/#experience" },
-  { label: "Skills", href: "/#skills" },
-  { label: "About", href: "/#about" },
-  { label: "Contact", href: "/#contact" },
+  { label: "Home", href: "/portfolio#home" },
+  { label: "Work", href: "/portfolio#work" },
+  { label: "Experience", href: "/portfolio#experience" },
+  { label: "Skills", href: "/portfolio#skills" },
+  { label: "About", href: "/portfolio#about" },
+  { label: "Contact", href: "/portfolio#contact" },
 ];
 
 export function Navbar() {
@@ -148,7 +148,7 @@ export function Navbar() {
   return (
     <header className={`site-header ${ui.hud}`} data-scrolled={isScrolled ? "true" : "false"} data-world-entry>
       <nav className="shell nav-shell" ref={navShellRef} data-collapsed={isCollapsed ? "true" : "false"} aria-label="Primary navigation">
-        <Link className="site-brand" href="/#home" aria-label={`${profile.shortName} — ${label("Home")}`} inert={isCollapsed} aria-hidden={isCollapsed || undefined} onClick={() => setIsOpen(false)}>
+        <Link className="site-brand" href="/portfolio#home" aria-label={`${profile.shortName} — ${label("Home")}`} inert={isCollapsed} aria-hidden={isCollapsed || undefined} onClick={() => setIsOpen(false)}>
           <span className="brand-avatar"><Image src={profile.profileImage} alt="" width={40} height={40} priority /></span>
           <span className="brand-copy">
             <strong>{profile.shortName}</strong>
@@ -182,7 +182,7 @@ export function Navbar() {
             title={label("Open main menu")}
           >
             <GameIcon name="compass" />
-          </button> : <Link className="icon-button main-menu-trigger" href="/" aria-label={label("Return to portfolio")} title={label("Return to portfolio")}>
+          </button> : <Link className="icon-button main-menu-trigger" href="/" onClick={() => requestMainMenuOpen()} aria-label={label("Open portfolio main menu")} title={label("Open main menu")}>
             <GameIcon name="compass" />
           </Link>}
           <button className="command-trigger" type="button" onClick={openPalette} aria-label={label("Open command palette")}>

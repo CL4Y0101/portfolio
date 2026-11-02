@@ -77,7 +77,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         <WorldAtmosphere />
         <div className="shell case-hero-grid">
           <div className="case-hero-copy">
-            <Link className="back-link" href="/#work">
+            <Link className="back-link" href="/portfolio#work">
               <ArrowLeft aria-hidden="true" size={16} /> <LocalizedText en="Back to selected work" />
             </Link>
             <div className="case-badges">
@@ -247,7 +247,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               {nextProject.screenshots[0] ? <Image className="next-project-cover" data-project-cover={nextProject.slug} src={nextProject.screenshots[0].src} alt="" width={96} height={60} /> : null}
               <LocalizedText en="Next case study" /> <ExternalLink aria-hidden="true" size={16} />
             </Link>
-            <Link className="button button-secondary" href="/#work">
+            <Link className="button button-secondary" href="/portfolio#work">
               <LocalizedText en="View selected work" />
             </Link>
           </div>

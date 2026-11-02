@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { AboutPanel } from "@/components/game-menu/AboutPanel";
 import { AchievementsPanel } from "@/components/game-menu/AchievementsPanel";
@@ -19,7 +19,10 @@ import { profile } from "@/data/profile";
 import {
   applyGamePreferences,
   defaultGamePreferences,
+  heroFocusRequestKey,
+  mainMenuOpenRequestKey,
   openMainMenuEvent,
+  portfolioPath,
   readGamePreferences,
   resetGamePreferences,
   type GamePreferences,
@@ -68,6 +71,8 @@ const MC_CELLS: McCell[] = (() => {
 })();
 
 const MENU_SEEN_KEY = "portfolio-menu-seen";
+/* Per tab session: the root visit already auto-skipped once, so a later deliberate return shows the menu instead of bouncing again. */
+const AUTO_SKIP_KEY = "portfolio-auto-skipped";
 
 function getMenuSeenSnapshot(): string {
   try {
@@ -88,9 +93,9 @@ function subscribeMenuSeen(onChange: () => void): () => void {
 
 export function MainMenuScreen() {
   const pathname = usePathname();
+  const router = useRouter();
   const containerRef = useRef<HTMLElement>(null);
-  const returnFocusRef = useRef<HTMLElement | null>(null);
-  const pendingFocusRef = useRef<"hero" | "previous" | null>(null);
+  const entryDecisionRef = useRef(false);
   const transitionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const skipButtonRef = useRef<HTMLButtonElement>(null);
   const [enterDuration, setEnterDuration] = useState(0);
@@ -103,11 +108,12 @@ export function MainMenuScreen() {
   const [selectedAction, setSelectedAction] = useState<MenuAction>("start");
   const [preferences, setPreferences] = useState<GamePreferences>(defaultGamePreferences);
   const [paused, setPaused] = useState(false);
+  const [explicitOpen, setExplicitOpen] = useState(false);
   const onHomepage = pathname === "/";
   /* Menu intro hanya sekali per visitor; dibaca pasca-hydration agar SSR tetap konsisten. */
   const menuSeen = useSyncExternalStore(subscribeMenuSeen, getMenuSeenSnapshot, getMenuSeenServerSnapshot);
   /* Jangan skip saat transisi entering: menu harus tetap mounted selama sinematik. */
-  const skipIntro = menuSeen === "1" && !hasEntered && menuState !== "entering";
+  const skipIntro = menuSeen === "1" && !hasEntered && !explicitOpen && menuState !== "entering";
   const active = onHomepage && visible && !skipIntro;
 
   useEffect(() => {
@@ -128,7 +134,6 @@ export function MainMenuScreen() {
   useEffect(() => {
     const handleOpenMenu = () => {
       if (!onHomepage) return;
-      returnFocusRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
       setPreferences(readGamePreferences());
       setHasEntered(true);
       setPanel("main");
@@ -141,6 +146,46 @@ export function MainMenuScreen() {
     return () => window.removeEventListener(openMainMenuEvent, handleOpenMenu);
   }, [onHomepage]);
 
+  /* Keputusan masuk di halaman menu: pengunjung lama diteruskan ke halaman
+     porto (perilaku lama: menu terlewati), kecuali mereka datang ke sini
+     dengan sengaja (tombol kompas / world actions) atau sudah pernah
+     diteruskan sekali di sesi tab ini. */
+  useEffect(() => {
+    if (entryDecisionRef.current) return;
+    /* Keputusan diambil di dalam rAF, pola yang sama dengan pemuatan
+       preferensi di file ini, agar tidak ada setState sinkron di effect. */
+    const frame = window.requestAnimationFrame(() => {
+      if (entryDecisionRef.current) return;
+      let openRequested = false;
+      try {
+        openRequested = window.sessionStorage.getItem(mainMenuOpenRequestKey) === "1";
+      } catch { /* abaikan */ }
+      if (openRequested) {
+        entryDecisionRef.current = true;
+        try { window.sessionStorage.removeItem(mainMenuOpenRequestKey); } catch { /* abaikan */ }
+        setExplicitOpen(true);
+        setHasEntered(true);
+        setVisible(true);
+        return;
+      }
+      /* Selama status kunjungan belum final, jangan putuskan apa pun dulu. */
+      if (menuSeen !== "1") return;
+      let autoSkipped = false;
+      try {
+        autoSkipped = window.sessionStorage.getItem(AUTO_SKIP_KEY) === "1";
+      } catch { /* abaikan */ }
+      entryDecisionRef.current = true;
+      if (autoSkipped) {
+        setHasEntered(true);
+        setVisible(true);
+        return;
+      }
+      try { window.sessionStorage.setItem(AUTO_SKIP_KEY, "1"); } catch { /* abaikan */ }
+      router.replace(portfolioPath);
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [menuSeen, router]);
+
   useEffect(() => {
     if (!active) return;
     const siblings = Array.from(document.body.children).filter((element) => !element.classList.contains("main-menu-root"));
@@ -151,22 +196,6 @@ export function MainMenuScreen() {
       siblings.forEach((element) => { (element as HTMLElement).inert = false; });
       document.body.classList.remove("game-menu-open");
     };
-  }, [active]);
-
-  useEffect(() => {
-    if (active || !pendingFocusRef.current) return;
-    const pendingFocus = pendingFocusRef.current;
-    pendingFocusRef.current = null;
-    const frame = window.requestAnimationFrame(() => {
-      const focusTarget = pendingFocus === "previous"
-        ? returnFocusRef.current
-        : document.querySelector<HTMLElement>("#hero-title");
-      if (focusTarget && pendingFocus === "hero" && !focusTarget.hasAttribute("tabindex")) {
-        focusTarget.setAttribute("tabindex", "-1");
-      }
-      focusTarget?.focus({ preventScroll: true });
-    });
-    return () => window.cancelAnimationFrame(frame);
   }, [active]);
 
   useEffect(() => () => {
@@ -199,15 +228,18 @@ export function MainMenuScreen() {
       clearTimeout(transitionTimerRef.current);
       transitionTimerRef.current = null;
     }
-    pendingFocusRef.current = restorePreviousFocus || !wasFirstEntry ? "previous" : "hero";
+    if (wasFirstEntry) {
+      window.dispatchEvent(new CustomEvent(introCompleteEvent));
+      if (!restorePreviousFocus) {
+        try { window.sessionStorage.setItem(heroFocusRequestKey, "1"); } catch { /* abaikan */ }
+      }
+    }
     setHasEntered(true);
-    setVisible(false);
-    setMenuState("active");
-    setPanel("main");
-    setEnterStage(0);
-    setEnterProgress(0);
-    if (wasFirstEntry) window.dispatchEvent(new CustomEvent(introCompleteEvent));
-  }, []);
+    /* Menu sekarang halaman sendiri: masuk ke porto berarti pindah rute.
+       Menu sengaja tidak disembunyikan dulu, layar loading tetap tampil
+       sampai rute porto benar-benar berganti. */
+    router.push(portfolioPath);
+  }, [router]);
 
   const enterPortfolio = useCallback((restorePreviousFocus = false) => {
     if (transitionTimerRef.current) return;
@@ -221,9 +253,10 @@ export function MainMenuScreen() {
     // Layar loading ala Minecraft main setiap tap Start, kecuali motion dimatikan total.
     // Layar kecil/coarse dapat versi pendek 1,2 detik; desktop 1,9 detik.
     // (prefers-reduced-motion tetap menonaktifkan zoom/efek gerak via CSS.)
+    // Jalur kembali (Back / Esc setelah pernah masuk) tanpa sinematik, langsung pindah.
     const motion = document.documentElement.dataset.motion;
     const compactScreen = window.matchMedia("(pointer: coarse), (max-width: 1000px)").matches;
-    const duration = motion === "off" ? 0 : compactScreen ? 1200 : motionDurations.introCinematic;
+    const duration = restorePreviousFocus || motion === "off" ? 0 : compactScreen ? 1200 : motionDurations.introCinematic;
     setEnterDuration(duration);
     setEnterStage(0);
     setEnterProgress(duration <= 0 ? 100 : 0);

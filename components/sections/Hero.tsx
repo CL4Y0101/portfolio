@@ -25,7 +25,7 @@ export function Hero() {
           <p className="hero-intro hero-entry hero-entry-4"><LocalizedText en={profile.introduction} /></p>
 
           <div className="hero-actions hero-entry hero-entry-5">
-            <Button href="/#work">
+            <Button href="/portfolio#work">
               <LocalizedText en="View selected work" /> <ArrowDownRight aria-hidden="true" size={17} />
             </Button>
             <CvDownloadLink className="button button-secondary">

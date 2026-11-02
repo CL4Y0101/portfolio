@@ -8,7 +8,7 @@ export function Footer() {
     <footer className="site-footer">
       <div className="shell footer-grid">
         <div>
-          <Link className="footer-name" href="/#home">
+          <Link className="footer-name" href="/portfolio#home">
             {profile.name}
           </Link>
           <p><LocalizedText en="Software development, systems, and deployment." /></p>

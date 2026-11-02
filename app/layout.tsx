@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import type { ReactNode } from "react";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
-import { MainMenuScreen } from "@/components/game-menu/MainMenuScreen";
 import { MotionProvider } from "@/components/motion/MotionProvider";
 import { AchievementToast } from "@/components/motion/AchievementToast";
 import { PageTransition } from "@/components/motion/PageTransition";
@@ -146,7 +145,6 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
       </head>
       <body>
         <MotionProvider />
-        <MainMenuScreen />
         <AchievementToast />
         <a className="skip-link" href="#main-content">
           <LocalizedText en="Skip to main content" />
