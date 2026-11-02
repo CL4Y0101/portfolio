@@ -90,7 +90,7 @@ export const achievementArchives: AchievementArchive[] = [
         image: "/images/achievements/pens-team-1.jpg",
       },
       {
-        name: { en: "Team photo at the backdrop (2)", id: "Foto tim di backdrop (2)" },
+        name: { en: "Team photo with Pak Aji at the backdrop", id: "Foto tim bersama Pak Aji di backdrop" },
         meta: { en: "Team Positif dan Professional", id: "Tim Positif dan Professional" },
         image: "/images/achievements/pens-team-2.jpg",
       },
